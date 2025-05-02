@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Calendar Sidebar</title>
+</head>
+<body>
+    <div class="header"></div>
+    <div class="container">
+        <div class="sidebar">
+            <input type="text" class="search-bar" placeholder="search" />
+            <div class="calendar">
+                <div class="calendar-header">
+                    <span id="calendar-month-year"></span>
+                    <button id="current-date" class="location-button">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </button>
+                </div>
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>S</th>
+                            <th>M</th>
+                            <th>T</th>
+                            <th>W</th>
+                            <th>T</th>
+                            <th>F</th>
+                            <th>S</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-body"></tbody>
+                </table>
+                <div class="calendar-navigation">
+                    <button id="prev-month"><i class="fa-solid fa-caret-left"></i></button>
+                    <button id="next-month"><i class="fa-solid fa-caret-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <!-- Additional content can go here -->
+    </div>
+    <script src="script.js"></script>
+
+</body>
+</html>

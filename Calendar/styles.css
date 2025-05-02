@@ -1,0 +1,136 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Thin Header - Same color as the sidebar */
+.header {
+    width: 100%;
+    height: 40px; /* Thin height */
+    background-color: #f8f8f8; /* Same color as sidebar */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+/* Container to hold sidebar and content */
+.container {
+    display: flex;
+    height: 100vh;
+    padding-top: 40px; /* Offset for header */
+    font-family: Arial, sans-serif; /* Ensure Arial font */
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 240px; /* Shrink the width of the sidebar */
+    background-color: #f8f8f8; /* Off-white color */
+    padding: 15px;
+    height: calc(100% - 40px); /* Make sidebar longer */
+    position: fixed;
+    left: 0;
+    top: 40px; /* Below the header */
+    overflow-y: auto;
+    border-bottom-right-radius: 20px; /* Curved bottom-right corner */
+}
+
+/* Search Bar Styling */
+.search-bar {
+    width: 100%; /* Full width */
+    padding: 8px; /* Padding inside the input */
+    margin-bottom: 10px; /* Space below the input */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 14px; /* Font size */
+    background-color: #f0f0f0; /* Optional: add a light background color for visibility */
+}
+
+/* Remove default focus styles */
+.search-bar:focus {
+    outline: none; /* Remove the default outline */
+    background-color: #f0f0f0; /* Maintain the background color */
+}
+
+/* Calendar styling */
+.calendar {
+    margin-top: 10px;
+}
+
+/* Calendar header styling */
+.calendar-header {
+    font-size: 14px; /* Smaller font size */
+    font-weight: bold; /* Bold text */
+    margin-bottom: 5px; /* Space below the year */
+}
+
+/* Location button styling */
+.location-button {
+    background: none; /* No background */
+    border: none; /* No border */
+    margin-left: 5px; /* Space between buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    color: #333; /* Icon color */
+}
+
+/* Calendar table styling */
+.calendar-table {
+    width: 100%; /* Full width to fit the sidebar */
+    border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+    width: 14.28%; /* Divide evenly across 7 days */
+    padding: 5px; /* Reduced padding for compactness */
+    text-align: center;
+    font-size: 12px; /* Smaller font to fit better */
+}
+
+/* Bold styling for day headers */
+.calendar-table th {
+    font-weight: bold;
+    background: none; /* Remove the grey background */
+}
+
+/* Remove all table borders for a cleaner look */
+.calendar-table th,
+.calendar-table td {
+    border: none;
+}
+
+/* Highlight the current date */
+.today {
+    background-color: #b0d3e9; /* Darker shade than #d7ebfd */
+    color: #ffffff; /* Make text white for contrast */
+    border-radius: 10px; /* Curved corners */
+    padding: 5px; /* Add some padding for better appearance */
+}
+
+/* Greyed-out dates */
+.greyed {
+    color: #a9a9a9; /* Light grey color for previous/next month dates */
+}
+
+/* Styling for the navigation arrows */
+.calendar-navigation {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-top: 10px;
+}
+
+/* Style buttons in the navigation */
+.calendar-navigation button {
+    background: none; /* No background */
+    border: none; /* No border */
+    font-size: 20px; /* Adjust size of the icons */
+    color: #333; /* Icon color */
+    cursor: pointer; /* Pointer cursor */
+    margin-right: 5px; /* Space between buttons */
+}
+
+.calendar-navigation button:hover {
+    color: #007BFF; /* Highlight arrows on hover */
+}
