@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"> <!-- Main styles -->
+    <link rel="stylesheet" href="projects.css"> <!-- Page-specific styles -->
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Pathways | Projects</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <a href="index.html"><img src="images/Pathwaystl.png" alt="Pathways Logo" class="logo" /></a>
+            <div class="icon-buttons">
+                <button class="icon-btn"><i class="fas fa-cog"></i></button>
+                <a href="workspaces.html" class="icon-btn">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <div class="section-title">General</div>
+            <a href="hub.html" class="nav-link">Home</a>
+            <a href="infom.html" class="nav-link">Information</a>
+            <hr class="separator"> <!-- Line separator -->
+
+            <div class="section-title">Workspaces</div>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="#" class="nav-link">Templates</a>
+            <hr class="separator"> <!-- Line separator -->
+
+            <div class="section-title">Private</div>
+            <a href="#" class="nav-link">Account</a>
+            <a href="#" class="nav-link">Finance</a>
+            <a href="#" class="nav-link">Settings</a>
+            <hr class="separator"> <!-- Line separator -->
+
+            <div class="section-title">For Developers</div>
+            <a href="wallpapers.html" class="nav-link">Launchpad <i class="fa-solid fa-rocket"></i></a>
+        </nav>
+        
+        <!-- Percentage Box with Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-text">0%</span> <!-- Default 0% -->
+                <span class="edit-text" onclick="toggleTaskWindow()">click to edit tasks</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 0%;"></div> <!-- Default width 0% -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content">
+        <h1 class="page-title">Projects</h1>
+
+    </div>
+
+    <script src="website/tasks.js"></script> <!-- Link to tasks.js -->
+    <script src="website/projects.js"></script> <!-- Link to new script -->
+</body>
+</html>

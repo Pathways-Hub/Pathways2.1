@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathways</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="workstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+<header id="header">
+    <div class="toggle-button-container">
+        <a href="hub.html"><img src="images/Pathwaystl.png" alt="Logo" id="headerImage" style="width: 100px; height: auto;" /></a>
+        <button id="icon" class="icon-button">
+            <i class="fa-regular fa-square-plus"></i>
+        </button>
+        <input type="text" class="editable-title" value="Untitled Workspace" />
+        <button id="information" class="icon-button" title="Information" onclick="window.location.href='infom.html';">
+            <i class="fa-solid fa-info"></i>
+        </button>
+        <!-- Star Toggle Icon -->
+        <button id="starButton" class="icon-button" title="Star">
+            <i class="fa-regular fa-star"></i>
+        </button>
+        <button id="comment" class="icon-button" title="Comment">
+            <i class="fa-regular fa-comment-dots"></i>
+        </button>
+        <!-- 3-dots button to toggle additional icons -->
+        <button id="moreIconsButton" class="icon-button" title="More Options">
+            <i class="fa-solid fa-ellipsis-v"></i>
+        </button>
+        <!-- Hidden additional icons -->
+        <div id="extraIcons" style="display: none;">
+                <button class="icon-button" id="paintBucketButton">
+                    <i class="fas fa-fill-drip"></i>
+                </button>
+                <button class="icon-button" id="binButton">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="icon-button" id="lineToolButton">
+                    <i class="fas fa-slash"></i>
+                </button>
+                <button class="icon-button" id="squareToolButton">
+                    <i class="fa-regular fa-square"></i>
+                </button>
+                <button id="photoImportButton" class="icon-button">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <button id="photoButton" class="icon-button">
+                    <i class="fas fa-image"></i>
+                </button>
+                <button id="pencilButton" class="icon-button">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button id="eraserButton" class="icon-button">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <button id="musicButton" class="icon-button">
+                    <i class="fas fa-music"></i>
+                </button>
+                <button id="cameraButton" class="icon-button">
+                    <i class="fa fa-video"></i>
+                </button>
+                <button id="tableButton" class="icon-button">
+                    <i class="fas fa-table"></i>
+                </button>
+                <button id="stickynote" class="icon-button">
+                    <i class="fas fa-sticky-note"></i>
+                </button>
+                <button id="progress" class="icon-button">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                </button>      
+                <button id="pallets" class="icon-button">
+                    <i class="fa-solid fa-swatchbook"></i>
+                </button>      
+                <button id="export" class="icon-button"  title="Export">
+                    <i class="fas fa-share"></i>
+                </button>
+                <button id="save" class="icon-button" title="Save">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button id="load" class="icon-button" title="Load">
+                    <i class="fa-solid fa-upload"></i>
+                </button>      
+            </div>
+        </div>
+
+        
+    
+        <!-- Brush button on the far right -->
+        <div class="brush-button-container">
+            <button id="pmenu" class="icon-button" title="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+            <!-- Account Dropdown -->
+        <div class="account-dropdown-container">
+            <button id="accountButton" class="icon-button" title="Account">
+                <i class="fa-regular fa-user-circle"></i>
+            </button>
+            <div id="accountDropdown" class="account-dropdown">
+                <a href="#">Profile</a>
+                <a href="#">Settings</a>
+                <a href="#">Log Out</a>
+                <a id="downloadButton" href="#"><i class="fa-solid fa-circle-down"></i> Download</a>
+            </div>
+        </div>
+    </header>    
+
+    <!-- Tool Function Scripts -->
+    <script src="Workspace/script.js"></script>
+    <script src="Workspace/toolbar.js"></script>
+    <script src="Workspace/buttonlaws.js"></script>
+    <script src="Workspace/linetool.js"></script>
+    <script src="Workspace/pencil.js"></script>
+    <script src="Workspace/musicimport.js"></script>
+    <script src="Workspace/photoimport.js"></script>
+    <script src="Workspace/youtubeimport.js"></script>
+    <script src="Workspace/table.js"></script>
+    <script src="Workspace/sticky.js"></script>
+    <script src="Workspace/progress.js"></script>
+    <script src="Workspace/saveload.js"></script>
+    <script src="Workspace/export.js"></script>
+    <script src="Workspace/open.js"></script>
+    <script src="Workspace/square.js"></script>
+    <script src="Workspace/themes.js"></script>
+    <script src="Workspace/pallets.js"></script>
+    <script src="Workspace/pre.js"></script>
+
+    <!-- Necessary Sripts -->
+    <script src="website/mobsup.js"></script>
+    <script src="website/save.js"></script>
+
+    <!-- Pop-up Scripts -->
+    <script src="website/downpop.js"></script>
+    <script src="website/inbox.js"></script>
+
+    <!-- Script to handle extra icon visibility -->
+    <script>
+        document.getElementById('moreIconsButton').addEventListener('click', () => {
+            const extraIcons = document.getElementById('extraIcons');
+            extraIcons.style.display = extraIcons.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        // Script to handle star icon toggle
+        document.getElementById('starButton').addEventListener('click', () => {
+            const starIcon = document.querySelector('#starButton i');
+            if (starIcon.classList.contains('fa-regular')) {
+                starIcon.classList.remove('fa-regular');
+                starIcon.classList.add('fa-solid');
+                starIcon.style.color = 'gold';
+            } else {
+                starIcon.classList.remove('fa-solid');
+                starIcon.classList.add('fa-regular');
+                starIcon.style.color = '';
+            }
+        });
+    </script>
+
+    <!-- Script to handle page title updates -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const titleInput = document.querySelector('.editable-title');
+
+            const updatePageTitle = () => {
+                document.title = titleInput.value || 'Untitled Workspace';
+            };
+
+            updatePageTitle();
+
+            titleInput.addEventListener('input', updatePageTitle);
+        });
+    </script>
+</body>
+</html>

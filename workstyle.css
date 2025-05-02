@@ -1,0 +1,608 @@
+/* General body styling */
+body {
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background-color: white; /* Background color of the page */
+    font-family: Arial, sans-serif; /* Font family */
+    position: relative; /* Position relative for child elements */
+    background-image: none; /* No background image */
+    background-size: 10px 10px; /* Size of background image (not used) */
+    background-position: 0 0; /* Position of background image (not used) */
+    overflow: hidden; /* Hide overflow */
+    transition: background-image 0.3s; /* Smooth transition for background image changes */
+}
+
+/* Header styling */
+header {
+    position: fixed; /* Fixed position at the top of the page */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width */
+    background-color: #ffffff; /* Light gray background */
+    padding: 5px 10px; /* Padding inside the header */
+    z-index: 1002; /* Ensure header is above other content */
+    box-sizing: border-box; /* Include padding in width/height calculations */
+    border-bottom: none; /* No border at the bottom */
+    display: flex; /* Flexbox layout */
+    justify-content: space-between; /* Space out items */
+    align-items: center; /* Center items vertically */
+    transition: transform 0.3s ease-in-out; /* Smooth transition for header hiding/showing */
+}
+
+/* Hidden state for header */
+.header-hidden {
+    transform: translateY(0%); /* Move header out of view */
+}
+
+/* Header title styling */
+header h1 {
+    margin: 0; /* Remove default margin */
+    font-size: 18px; /* Font size for title */
+    color: #000000; /* Dark gray color */
+    text-align: left; /* Align text to the left */
+}
+
+/* Editable title styling */
+.editable-title {
+    margin: 0 10px; /* Margin on left and right */
+    border: none; /* No border */
+    background: transparent; /* Transparent background */
+    font-size: 18px; /* Font size */
+    color: #333; /* Dark gray color */
+    font-family: Arial, sans-serif; /* Font family */
+    outline: none; /* Remove focus outline */
+    padding: 0; /* No padding */
+}
+/* Change text color to off-white in dark mode */
+body.dark-mode .editable-title {
+    color: #f0f0f0; /* Off-white color */
+}
+
+
+/* Grid and hide header button styling */
+.grid-toggle-button, .hide-header-button {
+    background: transparent; /* Transparent background */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 18px; /* Font size */
+}
+
+/* Input area and text preview styling */
+.input-area, .text-preview {
+    font-size: 20px; /* Font size */
+    color: black; /* Text color */
+    font-family: Arial, sans-serif; /* Font family */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Styling for input area */
+.input-area {
+    position: absolute; /* Absolute positioning */
+    outline: none; /* Remove focus outline */
+    border: none; /* No border */
+    background: transparent; /* Transparent background */
+    resize: none; /* Prevent resizing */
+    overflow: hidden; /* Hide overflow */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Styling for text preview */
+.text-preview {
+    position: absolute; /* Absolute positioning */
+    cursor: pointer; /* Pointer cursor on hover */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Ellipsis for overflowing text */
+    min-width: 100px; /* Minimum width */
+    background: transparent; /* Transparent background */
+}
+
+/* Container for buttons */
+.button-container {
+    position: absolute; /* Absolute positioning */
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 5px; /* Space between buttons */
+    z-index: 1000; /* Ensure buttons are above other content */
+}
+
+/* Button styling within button container */
+.button-container button {
+    font-size: 14px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    padding: 10px 15px; /* Padding inside buttons */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for background color and shadow */
+    display: flex; /* Flexbox layout */
+    align-items: center; /* Center items vertically */
+    gap: 5px; /* Space between icon and text */
+    position: relative; /* Relative positioning */
+}
+
+/* Hover effect for buttons */
+.button-container button:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+/* Specific button styles */
+.button-container .button2 {
+    background-color: #add8e6; /* Light blue background */
+    color: #000; /* Black text */
+}
+
+.button-container .button3 {
+    background-color: #ff4c4c; /* Red background */
+    color: #fff; /* White text */
+}
+
+.button-container .button4 {
+    background-color: #90ee90; /* Light green background */
+    color: #000; /* Black text */
+}
+
+.button-container .button5 {
+    background-color: #ffd700; /* Yellow background */
+    color: #000; /* Black text */
+}
+
+/* Icon styling inside buttons */
+.button-container i {
+    font-size: 16px; /* Font size for icons */
+}
+
+/* Tooltip styling */
+.tooltip {
+    display: none; /* Hide tooltip by default */
+    position: absolute; /* Absolute positioning */
+    background-color: #f0f0f0; /* Light gray background */
+    color: #666; /* Gray text color */
+    font-size: 12px; /* Font size */
+    border-radius: 3px; /* Rounded corners */
+    padding: 5px; /* Padding inside tooltip */
+    white-space: nowrap; /* Prevent text wrapping */
+    z-index: 1001; /* Ensure tooltip is above other content */
+    opacity: 0; /* Transparent by default */
+    transition: opacity 0.3s; /* Smooth transition for opacity */
+    bottom: -35px; /* Position above the button */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+}
+
+/* Show tooltip on hover for specific button */
+.button-container .button3:hover .tooltip {
+    display: block; /* Show tooltip */
+    opacity: 1; /* Fully opaque */
+}
+
+/* Edit box styling */
+.edit-box {
+    position: absolute; /* Absolute positioning */
+    background-color: #f0f0f0; /* Light gray background */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the edit box */
+    z-index: 1001; /* Ensure edit box is above other content */
+    font-size: 20px; /* Font size */
+    width: 300px; /* Fixed width */
+    box-sizing: border-box; /* Include padding in width/height calculations */
+    display: none; /* Hidden by default */
+}
+
+/* Container for toggle buttons */
+.toggle-button-container {
+    display: flex; /* Flexbox layout */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between items */
+}
+
+/* Styling for icon button */
+.icon-button {
+    font-size: 20px; /* Smaller font size for icons */
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 10%; /* Circular button */
+    width: 30px; /* Smaller width */
+    height: 30px; /* Smaller height */
+    display: flex; /* Flexbox layout */
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    color: rgb(0, 0, 0); /* Black icon color */
+    z-index: 1001; /* Ensure button is above other content */
+}
+
+/* Font size for icons inside the icon button */
+.icon-button i {
+    font-size: 18px; /* Smaller font size */
+}
+
+/* Hover effect for icon button */
+.icon-button:hover {
+    color: rgb(136, 136, 136); /* Black icon color */
+}
+
+/* Container for blue icon buttons */
+.blue-icon-buttons-container {
+    position: absolute; /* Absolute positioning */
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 5px; /* Space between buttons */
+    z-index: 1001; /* Ensure buttons are above other content */
+}
+
+/* Styling for blue icon buttons */
+.blue-icon-button {
+    width: 30px; /* Width */
+    height: 30px; /* Height */
+    background-color: #add8e6; /* Light blue background */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    color: rgb(0, 0, 0); /* Black icon color */
+    display: flex; /* Flexbox layout */
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    font-size: 20px; /* Font size */
+}
+
+/* Font size for icons inside blue icon buttons */
+.blue-icon-button i {
+    font-size: 18px; /* Font size */
+}
+
+/* Main buttons container at the bottom of the page */
+.main-buttons {
+    position: fixed; /* Fixed position */
+    bottom: 20px; /* Space from bottom */
+    left: 20px; /* Space from left */
+    display: flex; /* Flexbox layout */
+    gap: 10px; /* Space between buttons */
+}
+
+/* Styling for buttons inside the main buttons container */
+.main-buttons button {
+    padding: 10px 15px; /* Padding inside buttons */
+    font-size: 16px; /* Font size */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    background-color: #d3d3d3; /* Light gray background */
+    color: #fff; /* White text */
+}
+
+/* Font color for icons inside main buttons */
+.main-buttons .settings-btn i,
+.main-buttons .share-btn i,
+.main-buttons .save-btn i {
+    color: #fff; /* White icon color */
+}
+
+/* Specific styling for different main buttons */
+.main-buttons .settings-btn {
+    background-color: #d3d3d3; /* Light gray background */
+}
+
+.main-buttons .share-btn {
+    background-color: #d3d3d3; /* Light gray background */
+}
+
+.main-buttons .save-btn {
+    background-color: #d3d3d3; /* Light gray background */
+}
+
+/* Line styling */
+.line {
+    height: 2px; /* Line thickness */
+    background-color: black; /* Line color */
+    transform-origin: 0 0;
+}
+
+/* Selected line styling */
+.line-selected {
+    outline: 2px solid red; /* Red border to indicate selection */
+}
+
+/* CSS for image selection */
+.selected {
+    border: 2px solid red; /* Red border to indicate selection */
+}
+
+/* Main buttons container at the bottom of the page */
+.main-buttons {
+    position: fixed; /* Fixed position */
+    bottom: 20px; /* Space from bottom */
+    left: 20px; /* Space from left */
+    display: flex; /* Flexbox layout */
+    gap: 10px; /* Space between buttons */
+    z-index: 1001; /* Ensure buttons are above other content */
+}
+
+/* Styling for buttons inside the main buttons container */
+.main-buttons button {
+    padding: 10px 15px; /* Padding inside buttons */
+    font-size: 16px; /* Font size */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    background-color: #d3d3d3; /* Light gray background */
+    color: #fff; /* White text */
+    z-index: 1002; /* Ensure these buttons are above text and drawings */
+}
+
+/* Ensure buttons are above other content */
+.settings-btn,
+.share-btn,
+.save-btn {
+    z-index: 1002; /* Higher z-index to stay on top */
+}
+
+/* Line styling For Drawn Lines */
+.line {
+    position: absolute;
+    background-color: black;
+    height: 2px;
+    z-index: 1000;
+}
+
+/* Line when selected */
+.line.selected {
+    outline: 2px solid red; /* Outline to indicate selection */
+    background-color: grey; /* Change color when selected */
+}
+
+/* Add this CSS to your stylesheet */
+.text-multi-selected {
+    outline: 2px solid red; /* Border to indicate multi-selection */
+    outline-offset: 2px;
+}
+
+.table-selected {
+    border: 3px solid red !important; /* Ensure it overrides other styles */
+}
+
+.selected-line {
+    stroke: red;
+}
+
+/* Style for the sticky note */
+.sticky-note {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(255, 182, 193, 0.8); /* Soft red color */
+    position: fixed;
+    z-index: 1001; /* Ensure it appears above other elements */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add a slight shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+}
+/* Style for the sticky note title */
+.sticky-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd; /* Optional: Add a bottom border */
+    cursor: text;
+    outline: none; /* Remove the default outline on focus */
+    word-wrap: break-word;
+}
+/* Style for the smaller text */
+.sticky-content {
+    font-size: 12px;
+    color: #555;
+    padding: 5px 10px;
+    cursor: text;
+    outline: none; /* Remove the default outline on focus */
+    word-wrap: break-word;
+}
+
+/* Add to your CSS file or within <style> tags */
+.sticky-note-selected {
+    border: 2px solid red; /* Border to indicate selection */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Optional: Add a shadow for better visibility */
+}
+
+/* Add to style.css or the appropriate stylesheet */
+.sticky-title, .sticky-content, .editable-title {
+    user-select: text; /* Allow text selection */
+    margin: 0; /* Remove any extra margin */
+    padding: 0; /* Remove any extra padding */
+}
+
+/* Container for the brush button and other buttons on the right */
+.brush-button-container {
+    display: flex; /* Use flexbox for horizontal alignment */
+    gap: px; /* Add space between the buttons */
+    margin-left: auto; /* Push this container to the far right */
+    align-items: center; /* Align buttons vertically within the header */
+}
+
+/* Buttons styling (optional for customization) */
+#brushButton, #export, #save, #load {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#brushButton:hover, #export:hover, #save:hover, #load:hover {
+    background-color: #e6e6e6;
+}
+
+/* General body styling */
+body.light-mode {
+    background-color: white; /* Light background for light mode */
+    color: black; /* Text color in light mode */
+}
+
+body.dark-mode {
+    background-color: #121212; /* Dark background for dark mode */
+    color: white; /* Text color in dark mode */
+}
+
+
+/* Icon button styles for light and dark mode */
+body.light-mode .icon-button {
+    color: rgb(0, 0, 0); /* Dark icon color in light mode */
+}
+
+body.dark-mode .icon-button {
+    color: rgb(255, 255, 255); /* Light icon color in dark mode */
+}
+
+/* Menu Text Styling to ensure it does not change in dark mode */
+#curved-menu {
+    color: black; /* Make sure menu text stays black regardless of mode */
+}
+
+body.dark-mode #curved-menu {
+    color: black; /* Prevent menu text from turning white in dark mode */
+}
+
+/* Change logo when dark mode is enabled */
+body.dark-mode #headerImage {
+    content: url('images/pathways light.png');
+}
+
+/* Account Dropdown Styles */
+.account-dropdown-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px; /* Adjust for spacing */
+}
+
+#accountButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: inherit;
+}
+
+.account-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.account-dropdown a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.account-dropdown a:hover {
+    background-color: #f5f5f5;
+}
+
+.account-dropdown-container:hover .account-dropdown {
+    display: block;
+}
+
+/* Greyed-out background */
+#popupOverlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent grey */
+    z-index: 9999; /* Ensure the overlay is on top of everything */
+}
+
+/* Popup container */
+#popupContainer {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 500px; /* Increased width */
+    height: 550px; /* Increased height for more space */
+    border-radius: 20px;
+    z-index: 10000; /* Ensure the popup is on top of everything */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: left; /* Align content to the left */
+    overflow: hidden; /* Ensures the video aligns perfectly */
+}
+
+/* Video section */
+#popupVideo {
+    width: 100%;
+    height: 270px; /* Adjusted to maintain proper aspect ratio */
+    object-fit: cover; /* Makes sure the video covers the area */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: block;
+}
+
+/* Title section */
+#popupTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 20px;
+    text-align: left; /* Align title to the left */
+}
+
+/* New description text styling */
+#popupDescription {
+    font-size: 1rem;
+    margin-top: 10px; /* Add some space between title and description */
+    margin-left: 20px; /* Space from the left edge */
+    margin-right: 20px; /* Space from the right edge */
+    color: #333; /* Slightly darker color for readability */
+    text-align: left; /* Align the description to the left */
+}
+
+/* Button container */
+#popupButtons {
+    margin-top: 20px; /* Decreased margin for more compact design */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Decreased space between buttons */
+    align-items: flex-start; /* Align the buttons to the left */
+    margin-left: 20px; /* Add space from the left edge */
+}
+
+/* Individual buttons */
+.popupButton {
+    display: flex;
+    align-items: center;
+    background-color: #ebf5fe;
+    color: #087fe7;
+    padding: 7px 10px; /* Smaller padding */
+    border-radius: 5px; /* Slight curve */
+    text-decoration: none;
+    font-size: 0.9rem; /* Smaller font size */
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    width: 45%; /* Reduced button width to half */
+    justify-content: flex-start; /* Align text to the left */
+}
+
+/* Align the icon to the left and add some space between the text */
+.popupButton i {
+    margin-right: 10px;
+}
+
+/* Hover effect for buttons */
+.popupButton:hover {
+    background-color: #d7ebfd;
+    color: #005bb5;
+}
+
+/* Hover effect for icons */
+.popupButton:hover i {
+    color: #005bb5;
+}

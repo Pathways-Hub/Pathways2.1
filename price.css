@@ -1,0 +1,286 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px; /* Adds padding for body content */
+    background-color: white;
+    height: auto; /* Set to auto for dynamic height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 60px; /* To account for the fixed header */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Header Styles */
+header {
+    width: 100%;
+    padding: 5px 20px; /* Padding for header */
+    background-color: #ffffff; /* White background for header */
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    position: fixed; /* Fixed position at the top */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    height: 40px; /* Fixed height for the header */
+    box-sizing: border-box; /* Include padding in height calculation */
+    z-index: 1000; /* Keep header above other content */
+}
+
+/* Logo styling */
+.logo {
+    height: 25px; /* Height of the logo */
+    margin-right: 20px; /* Space between logo and navigation */
+}
+
+/* Navigation styles */
+.nav-links {
+    list-style: none; /* Remove bullet points */
+    margin: 0; /* Reset margin */
+    padding: 0; /* Reset padding */
+    display: flex; /* Flex display for horizontal alignment */
+    align-items: center; /* Align items vertically centered */
+    gap: 20px; /* Space between navigation items */
+}
+
+.nav-links li {
+    position: relative; /* Relative positioning for dropdowns if needed */
+}
+
+.nav-links a {
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Text color for links */
+    font-size: 14px; /* Font size for links */
+    font-weight: bold; /* Bold text for navigation links */
+    padding: 8px; /* Padding for navigation links */
+    transition: color 0.3s; /* Transition for hover effect */
+}
+
+.nav-links a:hover {
+    color: #000; /* Change color on hover */
+}
+
+/* Dropdown styles */
+.dropdown-content {
+    display: none; /* Hide dropdown by default */
+    position: absolute; /* Positioning for dropdown items */
+    background-color: #fff; /* Background color for dropdown */
+    min-width: 150px; /* Minimum width for dropdown */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for dropdown */
+    z-index: 1000; /* Keep dropdown above other content */
+    border: 1px solid #ddd; /* Border for dropdown */
+}
+
+.dropdown-content li {
+    display: block; /* Block display for dropdown items */
+}
+
+.dropdown-content a {
+    color: #333; /* Color for dropdown links */
+    padding: 10px; /* Padding for dropdown links */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Block display for dropdown links */
+    font-size: 14px; /* Font size for dropdown links */
+    font-weight: bold; /* Bold dropdown links */
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1; /* Background color on hover */
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+    display: block; /* Show dropdown on hover */
+}
+
+/* Pricing container */
+.pricing-container {
+    display: flex; /* Flexbox for pricing plans */
+    justify-content: center; /* Center pricing plans */
+    align-items: center; /* Align items vertically */
+    margin-top: 20px; /* Space above pricing plans */
+    gap: 20px; /* Space between pricing plans */
+    padding: 50px 20px; /* Padding for pricing container */
+}
+
+.pricing-plan {
+    background-color: white; /* White background for pricing plans */
+    border-radius: 20px; /* Rounded corners */
+    padding: 30px; /* Padding inside pricing plans */
+    text-align: center; /* Center text */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow for pricing plans */
+    width: 250px; /* Fixed width for pricing plans */
+}
+
+.pricing-plan h2 {
+    font-size: 1.8rem; /* Font size for plan title */
+    color: #333; /* Color for plan title */
+}
+
+.price {
+    font-size: 3rem; /* Font size for price */
+    color: #0583fe; /* Color for price */
+    margin: 10px 0; /* Margin above and below price */
+}
+
+.month {
+    font-size: 0.9rem; /* Font size for month text */
+    color: #777; /* Color for month text */
+    margin-bottom: 20px; /* Margin below month text */
+}
+
+.features {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Reset padding */
+    margin: 0 0 20px 0; /* Reset margin */
+    font-size: 0.9rem; /* Font size for features */
+    color: #555; /* Color for features */
+}
+
+.features li {
+    margin-bottom: 10px; /* Margin below each feature */
+}
+
+/* Button styles */
+.buy-button {
+    background-color: #000; /* Black background for button */
+    color: white; /* White text for button */
+    padding: 10px 25px; /* Padding for button */
+    border: none; /* No border */
+    border-radius: 20px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1rem; /* Font size for button */
+    transition: background-color 0.3s; /* Transition for background color */
+}
+
+.buy-button:hover {
+    background-color: #333; /* Darker background on hover */
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .pricing-container {
+        flex-direction: column; /* Stack items on smaller screens */
+        align-items: center; /* Center items */
+        gap: 40px; /* Space between items */
+    }
+}
+
+/* Styling for the image container at the bottom */
+.image-container {
+    text-align: center; /* Center image */
+    margin-top: 50px; /* Space between pricing plans and image */
+}
+
+.bottom-image {
+    max-width: 100%; /* Responsive image */
+    height: auto; /* Auto height for image */
+    margin: 0 auto; /* Center image */
+    display: block; /* Block display for image */
+    padding: 20px; /* Optional padding for image */
+}
+
+/* Popular badge */
+.popular-badge {
+    background-color: #087fe7; /* Background color for popular badge */
+    color: white; /* Text color for badge */
+    padding: 5px 10px; /* Padding for badge */
+    font-size: 0.9rem; /* Font size for badge */
+    position: absolute; /* Positioning for badge */
+    top: -10px; /* Position at the top */
+    left: 50%; /* Center badge horizontally */
+    transform: translateX(-50%); /* Center badge */
+    border-radius: 10px; /* Rounded corners for badge */
+}
+
+.popular {
+    border: 2px solid #087fe7; /* Border for popular plans */
+    position: relative; /* Positioning context for badge */
+}
+
+/* Popular badge for yearly plan */
+.most-popular-badge-yearly {
+    background-color: #087fe7; /* Background color for yearly popular badge */
+    color: white; /* Text color for yearly badge */
+    padding: 5px 10px; /* Padding for yearly badge */
+    font-size: 0.9rem; /* Font size for yearly badge */
+    position: absolute; /* Positioning for yearly badge */
+    top: -15px; /* Position at the top */
+    left: 50%; /* Center badge horizontally */
+    transform: translateX(-50%); /* Center badge */
+    border-radius: 10px; /* Rounded corners for yearly badge */
+}
+
+/* Most popular yearly plan styling */
+.most-popular-yearly {
+    border: 2px solid #087fe7; /* Border for most popular yearly plan */
+    background-color: #ebf5fe; /* Background color for most popular yearly plan */
+    color: #087fe7; /* Text color for yearly plan */
+    position: relative; /* Positioning context for badge */
+}
+
+/* Yearly pricing container */
+.yearly-container {
+    background-color: #f8f8f8; /* Background color for yearly plans */
+    border-radius: 10px; /* Rounded corners for yearly plans */
+    padding: 15px; /* Padding for yearly plans */
+    margin-top: 20px; /* Space above yearly plans */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Shadow for yearly plans */
+}
+
+/* Styling for the yearly plan text */
+.yearly-container h3 {
+    font-size: 1.2rem; /* Font size for yearly plan title */
+    color: #333; /* Color for yearly plan title */
+    margin: 0 0 10px 0; /* Margin below yearly plan title */
+}
+
+/* Yearly price */
+.yearly-price {
+    font-size: 2.5rem; /* Font size for yearly price */
+    color: #0583fe; /* Color for yearly price */
+    margin: 10px 0; /* Margin above and below yearly price */
+}
+
+.yearly-month {
+    font-size: 0.9rem; /* Font size for month text in yearly plan */
+    color: #777; /* Color for month text in yearly plan */
+    margin-bottom: 10px; /* Margin below month text in yearly plan */
+}
+
+/* Yearly buy button */
+.buy-button-yearly {
+    background-color: #000; /* Black background for yearly button */
+    color: white; /* White text for yearly button */
+    padding: 8px 20px; /* Padding for yearly button */
+    border: none; /* No border */
+    border-radius: 20px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1rem; /* Font size for yearly button */
+    transition: background-color 0.3s; /* Transition for background color */
+    margin-top: 10px; /* Space above yearly button */
+}
+
+.buy-button-yearly:hover {
+    background-color: #333; /* Darker background on hover */
+}
+
+/* Icon styles for buttons */
+.black-button i,
+.white-button i {
+    margin-left: 10px; /* Space between text and icon */
+}
+
+/* Ensure the buttons can handle icons */
+.black-button {
+    display: flex; /* Flex display for button */
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center button content */
+}
+
+.white-button {
+    display: flex; /* Flex display for button */
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center button content */
+}

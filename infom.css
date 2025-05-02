@@ -1,0 +1,80 @@
+/* General Layout */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #e0e0e0; /* Darker off-white background */
+  padding-top: 20px;
+  padding-left: 20px;
+  height: 100vh;
+  position: fixed;
+}
+
+.search-bar {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none; /* Remove the border */
+  border-radius: 4px;
+}
+
+.button {
+  width: 100%;
+  padding: 15px;
+  background-color: #e0e0e0; /* Same color as the sidebar */
+  color: black;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: left; /* Align text to the left */
+  padding-left: 30px; /* Add space for the line */
+  position: relative;
+}
+
+.button.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: black; /* Line color for selected button */
+}
+
+.content {
+  margin-left: 270px;
+  padding: 20px;
+  width: calc(100% - 270px);
+}
+
+.slide {
+  display: none;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.slide:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.Logo {
+  height: 40px; /* Adjust the height of the logo */
+  margin-top: 10px; /* Adjust space above the logo */
+  margin-left: 0; /* Align the logo to the left */
+  display: block; /* Ensure it behaves like a block element */
+  width: auto; /* Maintain the logo's aspect ratio */
+}

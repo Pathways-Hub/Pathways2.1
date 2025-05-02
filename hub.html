@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="helements.css" />
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <title>Pathways | Hub</title>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-container">
+      <a href="index.html"><img src="images/Pathwaystl.png" alt="Pathways Logo" class="logo" /></a>
+      <div class="icon-buttons">
+        <a href="workspaces.html" class="icon-btn">
+          <i class="fas fa-plus"></i>
+        </a>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <div class="section-title">General</div>
+      <a href="hub.html" class="nav-link">Home</a>
+      <a href="infom.html" class="nav-link">Information</a>
+      <hr class="separator" />
+
+      <a href="projects.html" class="nav-link">Projects</a>
+      <a href="#" class="nav-link">Templates</a>
+      <hr class="separator" />
+
+      <a href="#" class="nav-link">Account</a>
+      <a href="#" class="nav-link">Finance</a>
+      <a href="#" class="nav-link">Settings</a>
+      <hr class="separator" />
+
+      <a href="wallpapers.html" class="nav-link">Launchpad <i class="fa-solid fa-rocket"></i></a>
+    </nav>
+
+    <!-- Percentage Box with Progress Bar Inside -->
+    <div class="progress-container">
+      <div class="progress-header">
+        <span class="progress-text">0%</span>
+        <span class="edit-text" onclick="toggleTaskWindow()">click to edit tasks</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Extra Box Above Task Window -->
+    <div class="extra-container">
+      <div class="lofi-label">Lofi Radio</div>
+      <div class="control-buttons">
+        <a href="https://www.youtube.com/watch?v=iWjQKl4VEio" target="_blank">
+          <button class="control-btn"><i class="fa-solid fa-link"></i></button>
+        </a>        
+        <button class="control-btn"><i class="fas fa-play"></i></button>
+        <button class="control-btn"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+
+    <!-- Task Editing Window -->
+    <div class="task-window" id="taskWindow">
+      <button class="close-btn">&times;</button>
+      <h3>Manage Tasks</h3>
+      <ul id="taskList"></ul>
+      <input type="text" id="taskInput" placeholder="New Task" />
+      <taskbutton onclick="addTask()"><i class="fa-solid fa-plus"></i> Add Task</taskbutton>
+    </div>
+  </div>
+
+  <iframe
+    id="youtubeVideo"
+    width="0"
+    height="0"
+    src="https://www.youtube.com/embed/iWjQKl4VEio?enablejsapi=1&autoplay=0&mute=0"
+    frameborder="0"
+    allow="autoplay"
+    allowfullscreen>
+  </iframe>
+
+  <h1 class="main-title">Home</h1>
+
+  <a href="workspaces.html" class="big-create-btn">
+    <span class="button-top-text">+</span>
+  </a>  
+
+  
+  <a class="open-create-btn">
+    <span class="h-button-top-text">#</span>
+  </a>
+  
+  <a class="t1-create-btn">
+    <span class="t-button-top-text">To Do template</span>
+  </a>
+  
+  <a class="t2-create-btn">
+    <span class="t-button-top-text">Progress template</span>
+  </a>
+  
+  <a class="t3-create-btn">
+    <span class="t-button-top-text">Designer template</span>
+  </a>
+  
+  <a class="t4-create-btn">
+    <span class="t-button-top-text">Brainstorm template</span>
+  </a>  
+
+  <script src="website/tasks.js"></script>
+  <script src="website/webelements.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script> 
+
+</body>
+</html>

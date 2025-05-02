@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathways</title>
+    <link rel="stylesheet" href="price.css"> <!-- Ensure this path is correct -->
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <!-- Add Font Awesome CDN for icons if needed -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo"/></a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="price.html">Pricing</a></li>
+                <li><a href="hub.html">Hub</a></li> 
+                <li><a href="about.html">About</a></li> 
+                <li class="dropdown">
+                    <a href="#">Download <i class="fas fa-caret-down"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="#">Workspaces</a></li>
+                        <li><a href="#">Interfaces</a></li>
+                        <li><a href="calendar.html">Dates</a></li>
+                        <li><a href="#">Papers</a></li>
+                        <li><a href="#">Wallpapers</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+<div class="pricing-container">
+    <div class="pricing-plan">
+        <h2>
+            Hobbiest
+        </h2>
+        <p class="price">£0</p>
+        <p class="month">a month</p>
+        <ul class="features">
+            <li>Limited Features</li>
+            <li>2 device limit</li>
+            <li></li>
+        </ul>
+        <button class="buy-button">Get Started</button>
+        <!-- Yearly Pricing Rectangle -->
+        <div class="yearly-container">
+            <h3>Yearly Plan</h3>
+            <p class="yearly-price">£0</p>
+            <p class="yearly-month">a year</p>
+        </div>
+    </div>
+
+    <div class="pricing-plan popular">
+        <div class="popular-badge">Most Popular</div>
+        <h2>
+            Freelancer
+        </h2>
+        <p class="price">£5.60</p>
+        <p class="month">a month</p>
+        <ul class="features">
+            <li>All <b>basic</b> features</li>
+            <li>10 device limit</li>
+            <li></li>
+        </ul>
+        <button class="buy-button">Get Started</button>
+        <!-- Yearly Pricing Rectangle -->
+        <div class="yearly-container">
+            <h3>Yearly Plan</h3>
+            <p class="yearly-price">£50</p>
+            <p class="yearly-month">a year</p>
+            <button class="buy-button-yearly">Get Yearly</button>
+        </div>
+    </div>
+
+    <div class="pricing-plan">
+        <h2>
+            Business
+        </h2>
+        <p class="price">£11.60</p>
+        <p class="month">a month</p>
+        <ul class="features">
+            <li>All Features Unlocked</li>
+            <li>No device limit</li>
+            <li></li>
+        </ul>
+        <button class="buy-button">Get Started</button>
+        <!-- Yearly Pricing Rectangle -->
+        <div class="yearly-container most-popular-yearly">
+            <div class="most-popular-badge-yearly">Most Popular</div> <!-- Most Popular Badge for Yearly -->
+            <h3>Yearly Plan</h3>
+            <p class="yearly-price">£100</p>
+            <p class="yearly-month">a year</p>
+            <button class="buy-button-yearly">Get Yearly</button>
+        </div>
+    </div>
+    <script>
+        function setResponsiveBackground() {
+            // Set the background image as a style attribute for responsive behavior
+            document.body.style.backgroundImage = "url('website/price.png')";
+            document.body.style.backgroundSize = "cover"; // Cover the whole background
+            document.body.style.backgroundPosition = "center"; // Center the image
+            document.body.style.backgroundRepeat = "no-repeat"; // Avoid repeating
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                alert(`Selected file: ${file.name}`);
+                // Handle the file as needed
+            }
+        }
+
+        // Call setResponsiveBackground on load
+        setResponsiveBackground();
+
+        // Optional: Call it again on resize if you'd like it to be responsive to screen resizing
+        window.onresize = setResponsiveBackground;
+    </script>
+
+</body>
+</html>

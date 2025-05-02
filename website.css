@@ -1,0 +1,271 @@
+/* General body settings */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-image: url('website/backdrop2.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Styling for the header */
+header {
+    width: 100%;
+    padding: 5px 20px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    height: 40px;
+    z-index: 1000;
+}
+
+.logo {
+    height: 25px;
+    margin-right: 20px;
+}
+
+nav {
+    flex-grow: 1;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border: 1px solid #ddd;
+}
+
+.dropdown-content li {
+    display: block;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.nav-links li:hover .dropdown-content {
+    display: block;
+}
+
+/* Hero Section - Responsive & Centered */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 5vh 5vw;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Updated container to center content and scale properly */
+.container {
+    color: black;
+    max-width: 90vw;
+    width: 100%;
+}
+
+/* Responsive heading */
+.container h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    margin: 0;
+}
+
+/* Responsive subheading */
+.container p {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 0;
+}
+
+/* Button container styling */
+.button-container {
+    margin-top: 4vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+/* Get Started button (Red) */
+.black-button {
+    background-color: #e63946;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.black-button:hover {
+    background-color: #ff6b6b;
+}
+
+/* Learn More button (Lighter Yellow) */
+.white-button {
+    background-color: #f8e38c;
+    color: #a67c00;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.white-button:hover {
+    background-color: #fff4b5;
+}
+
+.pill {
+    display: inline-block;
+    background-color: #eaf4fe;
+    color: #087ee6;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 50px;
+    height: 12px;
+    line-height: 12px;
+    white-space: nowrap;
+}
+
+.test-section {
+    background-color: white;
+    color: black;
+    text-align: center;
+    padding: 50px 20px;
+    min-height: 50vh;
+}
+
+.test-section h2 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+/* Logo Scrolling Section */
+.logo-scrolling-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: white;
+}
+
+.logo-scrolling-section h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+/* Container for logos */
+.logo-scrolling-container {
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    width: 60%; /* <-- smaller width */
+    margin: 0 auto; /* center it */
+    position: relative;
+}
+
+/* Feather (fade) on left and right sides */
+.logo-scrolling-container::before,
+.logo-scrolling-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.logo-scrolling-container::before {
+    left: 0;
+    background: linear-gradient(to right, white 0%, transparent 100%);
+}
+
+.logo-scrolling-container::after {
+    right: 0;
+    background: linear-gradient(to left, white 0%, transparent 100%);
+}
+
+/* Scrolling wrapper */
+.logo-scrolling-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    animation: scrollLeft 18s linear infinite;
+}
+
+.logo-scrolling-wrapper::after {
+    content: "";
+    display: block;
+    width: 20px;
+}
+
+/* Individual logo styling */
+.logo-item {
+    height: 100px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.logo-item:hover {
+    opacity: 1;
+}
+
+/* Animation */
+@keyframes scrollLeft {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}

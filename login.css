@@ -1,0 +1,156 @@
+/* Reset & base */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: linear-gradient(to top, #e0e0e0, #ffffff);
+}
+
+/* Header */
+header {
+    width: 100%;
+    padding: 5px 20px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    height: 40px;
+    z-index: 1000;
+}
+
+.logo {
+    height: 25px;
+    margin-right: 20px;
+}
+
+nav {
+    flex-grow: 1;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border: 1px solid #ddd;
+}
+
+.dropdown-content li {
+    display: block;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.nav-links li:hover .dropdown-content {
+    display: block;
+}
+
+/* Login layout */
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding-top: 60px;
+    box-sizing: border-box;
+}
+
+.center-logo {
+    margin-bottom: 30px;
+}
+
+.center-logo img {
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+}
+
+/* Login box */
+.login-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    color: #333;
+}
+
+/* Buttons */
+.login-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Universal login button styles */
+.login-btn {
+    padding: 14px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid #ddd;
+    border-radius: 50px;
+    background-color: #ffffff;
+    color: #000000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.25s ease;
+}
+
+.login-btn i {
+    font-size: 1.2rem;
+    color: #000000; /* icons now black too */
+}
+
+/* Hover effect for all buttons */
+.login-btn:hover {
+    background-color: #f7f7f7;
+    border-color: #bbb;
+}
+

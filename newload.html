@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Menu</title>
+    <link rel="icon" type="pathways/image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="newload.css">
+    <!-- Link to Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <a href="hub.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo" /></a>
+        <p>Pathway's <strong>Workspaces</strong> <i class="fa-solid fa-pen"></i></p>
+        <button id="newWorkspace" onclick="window.location.href='workspaces.html';">
+            <i class="fas fa-plus"></i> New Workspace
+        </button>
+        <button id="loadExisting" onclick="document.getElementById('fileInput').click();">
+            <i class="fas fa-folder-open"></i> Load Existing
+        </button>
+        <input type="file" id="fileInput" accept=".txt" style="display:none;" onchange="loadFile(event)">
+    </div>
+
+    <script>
+        function setResponsiveBackground() {
+            // Set the background image as a style attribute for responsive behavior
+            document.body.style.backgroundImage = "url('Workspace/images/wb.png')";
+            document.body.style.backgroundSize = "cover"; // Cover the whole background
+            document.body.style.backgroundPosition = "center"; // Center the image
+            document.body.style.backgroundRepeat = "no-repeat"; // Avoid repeating
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                alert(`Selected file: ${file.name}`);
+                // Handle the file as needed
+            }
+        }
+
+        // Call setResponsiveBackground on load
+        setResponsiveBackground();
+
+        // Optional: Call it again on resize if you'd like it to be responsive to screen resizing
+        window.onresize = setResponsiveBackground;
+    </script>
+</body>
+</html>

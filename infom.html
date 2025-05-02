@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Page</title>
+    <link rel="stylesheet" href="infom.css">
+    <!-- Add FontAwesome for the icons -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="hub.html"><img src="images/Pathwaystl.png" alt="Logo" class="Logo"/></a>
+            <p>Help & Information</p>
+            <input type="text" class="search-bar" placeholder="Search...">
+            <button class="button" onclick="showSlide(1)">Workspaces</button>
+            <button class="button" onclick="showSlide(2)">Interfaces</button>
+            <button class="button" onclick="showSlide(3)">Dates</button>
+            <button class="button" onclick="showSlide(4)">Papers</button>
+            <button class="button" onclick="showSlide(5)">Tabs</button>
+            <button class="button" onclick="showSlide(6)">Profile</button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content">
+            <div class="slide" id="slide1">
+                <h2><i class="fa-solid fa-wave-square"></i> Workspaces</h2>
+                <p>Workspaces are organized areas where tasks, projects, and resources are managed. They help to streamline the work process by centralizing everything needed for a specific project or task. Each workspace is designed to keep all relevant materials and tools easily accessible and organized.</p>
+                
+                <!-- New Title and Icon for Tools -->
+                <h2><i class="fa-solid fa-font"></i> Text & Formating</h2>
+                <p><i class="fa-solid fa-computer-mouse"></i> - Text. Clicking anywhere in the white canvas area will open up a new text box. After typing press enter to finish and place your text box. To cancel, click somewhere else in the canvas.</p>
+                <p><i class="fa-solid fa-bold"></i> - Bold. Clicking this will create a text box that will automaticly be bold.</p>
+                <p><i class="fa-solid fa-italic"></i> - Italic. Clicking this will create a text box that will automaticly be in italic.</p>
+                <p><i class="fa-solid fa-list-ul"></i> - Bullet Point. This will make a text box that looks normal till you press enter. After pressing enter bullet points will show up at every line.</p>
+                <p><i class="fa-solid fa-underline"></i> - Underline. Clicking this will create a text box that will automaticly be Underlined.</p>
+                <p><i class="fa-solid fa-computer-mouse"></i> - Clicking on existing text will select it and open a quick menu letting you. <i class="fa-solid fa-arrow-pointer"></i> Move, <i class="fa-solid fa-clone"></i> Duplicate, <i class="fa-solid fa-copy"></i> Copy and <i class="fas fa-trash"></i> Delete text.</p>
+                <p>When text is selected it can be changed colour with the colour tool aswell as deleted with the delete tool (both in the header).</p>
+                <h2><i class="fa-solid fa-toolbox"></i> Tools</h2>
+                <p>The following tools are available within your workspace to enhance the creation and management of your content:</p>
+                <p><i class="fa-regular fa-rectangle-xmark"></i> / <i class="fa-solid fa-table-cells"></i> - Snap-grid toggle. When on, text snaps to a set dotted grid enabling a cleaner layout.</p>
+                <p><i class="fa-solid fa-fill-drip"></i> - Colour Tool. When pressed, any compatible element that's selected will cycle through different colours.</p>
+                <p><i class="fa-solid fa-trash"></i> - Delete Tool. When pressed, any compatible element that's selected will be removed from your workspace.</p>
+                <p><i class="fas fa-slash"></i> - Line Tool. Creates an editable line shape to help structure your workspace. The two blue circles allow you to change the two points and the square in the middle allows you to drag the line around, holding Shift and draging the square will add a curve to your line.</p>
+                <p><i class="fa-regular fa-square"></i> - Square Tool. Creates an editable square shape that can be resized and modified. The four blue circles allow you to change the four points and the square in the middle allows you to drag the shape around.</p>
+                <p><i class="fas fa-globe"></i> - Web Photo Import. Allows you to import images directly from a URL.</p>
+                <p><i class="fas fa-image"></i> - Photo Import. Lets you import images from your local device files.</p>
+                <p><i class="fas fa-pencil-alt"></i> + <i class="fas fa-eraser"></i> - Drawing Tools. Use the pencil to draw freely and the eraser to remove your marks.</p>
+                <p><i class="fas fa-music"></i> - Music Tool. Lets you import and manage music files within your workspace.</p>
+                <p><i class="fa fa-video"></i> - Video Tool. Allows you to import and manage video files within your workspace.</p>
+                <p><i class="fas fa-table"></i> - Table Tool. Creates editable tables for organizing data within your workspace.</p>
+                <p><i class="fas fa-sticky-note"></i> - Sticky Note Tool. Lets you add virtual sticky notes for quick reminders and notes.</p>
+                <p><i class="fa-solid fa-circle-half-stroke"></i> - Progress Tool. Allows you to create a task tile with a description and change its status to track progress.</p>
+                <h2><i class="fas fa-save"></i> Save & Export</h2>
+                <p><i class="fas fa-share"></i> - Export. Allows you to export your project or workspace to various file formats for sharing or backup purposes.</p>
+                <p><i class="fas fa-save"></i> - Save. Saves your current workspace or project to your local storage to ensure your work is preserved.</p>
+                <p><i class="fas fa-share"></i> - Export. Exports your project or workspace as a PNG image for easy sharing or saving.</p>
+                <h2><i class="fa-solid fa-cubes"></i> Other</h2>
+                <p><i class="fa-solid fa-font"></i> - Title. Next to the Pathways logo theres some editable text, changing this changes the title/name of the workspace.</p>
+                <p><i class="fa-solid fa-info"></i> - Information. Leads to this page.</p>
+            </div>
+            <div class="slide" id="slide2">
+                <h2><i class="fa-solid fa-mobile-screen-button"></i> Interfaces</h2>
+            </div>
+            <div class="slide" id="slide3">
+                <h2><i class="fa-solid fa-calendar-days"></i> Dates</h2>
+            </div>
+            <div class="slide" id="slide4">
+                <h2><i class="fa-solid fa-file"></i> Papers</h2>
+            </div>
+            <div class="slide" id="slide5">
+                <h2><i class="fa-solid fa-paperclip"></i> Tabs</h2>
+            </div>
+            <div class="slide" id="slide6">
+                <h2><i class="fa-solid fa-user"></i> Account</h2>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function showSlide(slideNumber) {
+            // Hide all slides
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.style.display = 'none');
+            
+            // Remove the active class from all buttons
+            const buttons = document.querySelectorAll('.button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show the selected slide
+            document.getElementById('slide' + slideNumber).style.display = 'block';
+            
+            // Add the active class to the clicked button
+            const button = document.querySelector('.button:nth-of-type(' + slideNumber + ')');
+            button.classList.add('active');
+        }
+
+        // Initially display the first slide
+        showSlide(1);
+    </script>
+</body>
+</html>
