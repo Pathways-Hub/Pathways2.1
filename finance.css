@@ -1,0 +1,362 @@
+/* General Reset */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+.sidebar {
+    background-color: #ffffff;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    border-right: 1px solid #e6e6e6;
+    position: relative;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 100px;
+}
+
+.icon-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #333333;
+    font-size: 16px;
+}
+
+.icon-btn:hover {
+    color: #000000;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333333;
+    font-size: 14px;
+    padding: 5px 0;
+    text-align: left;
+    width: 100%;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+/* Section Titles and Separators */
+.section-title {
+    font-weight: bold;
+    font-size: 10px;
+    color: #767676;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.separator {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+/* Progress Container */
+.progress-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 80%;
+    padding: 15px 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #e6e6e6;
+    text-align: left;
+}
+
+.progress-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.progress-text {
+    font-size: 16px;
+    color: #333333;
+    font-weight: normal;
+}
+
+.edit-text {
+    font-size: 10px;
+    color: #999999;
+    cursor: pointer;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 2px;
+    background-color: #c4c4c4;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #000000;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Task Window */
+.task-window {
+    position: absolute;
+    bottom: 20px;
+    left: 260px;
+    width: 220px;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    display: none;
+    overflow: hidden;
+}
+
+.task-window h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333333;
+    font-weight: normal;
+    padding-right: 25px;
+}
+
+.task-window .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #cccccc;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.task-window .close-btn:hover {
+    color: #ff4d4d;
+}
+
+#taskList {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+#taskList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333333;
+}
+
+#taskList li .task-text {
+    text-align: left;
+    flex: 1;
+}
+
+#taskList li button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ff4d4d;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+#taskInput {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+taskbutton {
+    background-color: #333333;
+    color: white;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+taskbutton:hover {
+    background-color: #555555;
+}
+
+#taskInput:focus {
+    border-color: #007bff;
+}
+
+/* Extra Container (Lofi Radio Box) */
+.extra-container {
+    position: absolute;
+    bottom: 100px;
+    left: 20px;
+    width: 220px;
+    height: 80px;
+    background-image: url("https://art.ngfiles.com/images/3064000/3064395_vulpsvulps_warm-evening.gif?f1677194398");
+    background-size: cover;
+    background-position: center;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 6px;
+    margin-top: auto;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.extra-container:hover .control-buttons {
+    opacity: 1;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 6px;
+    cursor: pointer;
+    font-size: 12px;
+    backdrop-filter: blur(1px);
+    transition: background-color 0.2s ease;
+    color: #000000;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.lofi-label {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #000000;
+    font-size: 14px;
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    pointer-events: none;
+    backdrop-filter: blur(1px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.extra-container:hover .lofi-label {
+    opacity: 1;
+}
+
+/* Updated CSS */
+.finance-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+    padding: 5vw; /* Adjust padding to be responsive */
+    perspective: 1000px;
+    box-sizing: border-box;
+}
+
+.card-holder {
+    position: relative;
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    justify-content: flex-start;
+    border: 2px solid #ccc; /* Increased border width */
+    border-radius: 20px;
+    padding: 3vw 3vw 4vw 3vw; /* Adjust padding with relative units */
+    background-color: #fff;
+    box-sizing: border-box;
+    gap: 3vw; /* Adjust gap for responsiveness */
+    width: fit-content; /* Shrink wrap */
+    max-width: 90%;
+    flex-direction: row;
+}
+
+/* Card image slightly larger */
+.finance-image {
+    width: 20vw; /* Image width in relative units (responsive) */
+    height: auto;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    border-radius: 16px;
+}
+
+/* Title styling */
+.card-title {
+    font-size: 30px; /* Slightly smaller than original (20px) */
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+}
+
+/* Change text styling */
+.change-text {
+    font-size: 20px; /* Slightly smaller than before (was 14-16px range) */
+    font-weight: 400; /* Normal/light */
+    color: #333;
+    margin-top: 14px;
+    text-align: left;
+}
+
+.change-link {
+    text-decoration: underline;
+    color: #007bff;
+}
+
+.change-link:hover {
+    color: #0056b3;
+}
