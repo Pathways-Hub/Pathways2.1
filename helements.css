@@ -154,3 +154,52 @@
     font-family: Arial, sans-serif;
   }
 }
+
+.grey-rectangles-container {
+  position: absolute;
+  top: calc(20vh + 12vw); /* Below top buttons */
+  left: 400px;
+  display: flex;
+  gap: 2vw;
+  z-index: 5;
+}
+
+.grey-rectangle {
+  width: 34vw;
+  height: 14vw;
+  border-radius: 20px;          /* Rounded corners */
+  border: 1px solid #000000;    /* 1px black border */
+  background-color: #f0f0f0;    /* Default background for second one */
+}
+
+.date-box {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.date-deco {
+  width: 8vw;
+  height: 8vw;
+  background-color: #CFE8FF; /* Pastel blue */
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#currentDate {
+  font-size: 4vw;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: #000;
+}
+
+#currentDay {
+  margin-top: 1vw;
+  font-size: 1vw; /* Smaller day text */
+  color: #333;
+  text-align: center;
+}
