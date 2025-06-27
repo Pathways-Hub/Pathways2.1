@@ -18,33 +18,75 @@
             <li><a href="price.html">Pricing</a></li>
             <li><a href="hub.html">Hub</a></li> 
             <li><a href="about.html">About</a></li> 
-            <li class="dropdown">
-                <a href="#">Download <i class="fas fa-caret-down"></i></a>
-                <ul class="dropdown-content">
-                    <li><a href="#">Workspaces</a></li>
-                    <li><a href="#">Interfaces</a></li>
-                    <li><a href="calendar.html">Dates</a></li>
-                    <li><a href="#">Papers</a></li>
-                    <li><a href="#">Wallpapers</a></li>
-                </ul>
-            </li>
         </ul>
     </nav>
 </header>
 
-<main class="login-wrapper">
-    <div class="center-logo">
-        <img src="images/Pathwaystl.png" alt="Large Logo">
-    </div>
-    <div class="login-box">
-        <h2>Log In</h2>
-        <div class="login-options">
-            <button class="login-btn google"><i class="fab fa-google"></i> Continue with Google</button>
-            <button class="login-btn apple"><i class="fab fa-apple"></i> Continue with Apple</button>
-            <button class="login-btn pathways"><i class="fa-solid fa-rocket"></i> Login with Pathways</button>
-        </div>
-    </div>
+<main class="login-message">
+    <img src="website/images/logfly.png" alt="Login Image" class="login-image" />
+    <p class="main-text">start your journey</p>
+    <p class="sub-text">create your pathways account</p>
+
+    <button class="google-signin">
+        <i class="fab fa-google"></i>&nbsp;Sign in with Google
+    </button>
+
+    <p class="email-text">or use your email</p>
+
+    <input type="email" class="email-input" placeholder="Enter your email" />
+
+    <button class="continue-btn">continue with email</button>
+
+    <p class="email-text">by pressing continue, you understand that you are agreeing to Pathways <a href="about.html">terms of use</a>.</p>
 </main>
+
+<script>
+  // Your Auth0 config (replace with your own)
+  const auth0Domain = "dev-r8bee5jknga3z6gt.us.auth0.com"; // e.g. dev-abc123.auth0.com
+  const clientId = "uMy940hSA6epDtgQRtePYF9pYEiDMOym";
+  const redirectUri = "http://localhost:5500/login.html";
+
+  // Construct the Auth0 authorize URL
+  function getAuth0Url(connection = null) {
+    const baseUrl = `https://${auth0Domain}/authorize`;
+    const params = new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      scope: "openid profile email",
+      state: Math.random().toString(36).substring(2), // random state for CSRF protection
+      nonce: Math.random().toString(36).substring(2), // random nonce for security
+    });
+
+    if (connection) {
+      // Force specific connection like Google OAuth
+      params.append("connection", connection);
+    }
+    return `${baseUrl}?${params.toString()}`;
+  }
+
+  // Button event listeners
+  document.querySelector(".google-signin").addEventListener("click", () => {
+    // Redirect to Auth0 Universal Login forcing Google social login
+    window.location.href = getAuth0Url("google-oauth2");
+  });
+
+  document.querySelector(".continue-btn").addEventListener("click", () => {
+    const email = document.querySelector(".email-input").value.trim();
+    if (!email) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    // Redirect to Auth0 Universal Login with email prefilled
+    // Note: Auth0 Universal Login doesn't natively support pre-filling email via URL,
+    // but you can send users directly to the hosted page and they'll enter email there.
+
+    // Just redirect to standard login page
+    window.location.href = getAuth0Url();
+  });
+</script>
+
 
 </body>
 </html>

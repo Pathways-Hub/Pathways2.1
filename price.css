@@ -13,85 +13,93 @@ body {
     overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
-/* Header Styles */
 header {
     width: 100%;
-    padding: 5px 20px; /* Padding for header */
-    background-color: #ffffff; /* White background for header */
+    padding: 5px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #cacaca;
     display: flex;
-    align-items: center; /* Align items vertically centered */
-    position: fixed; /* Fixed position at the top */
-    top: 0; /* Align to the top */
-    left: 0; /* Align to the left */
-    height: 40px; /* Fixed height for the header */
-    box-sizing: border-box; /* Include padding in height calculation */
-    z-index: 1000; /* Keep header above other content */
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    height: 60px;
+    z-index: 1000;
 }
 
-/* Logo styling */
+.btn.sign-in {
+    background-color: #000000; /* Black button */
+    color: #ffffff; /* White text */
+    padding: 5px 15px; /* Padding for a smaller button */
+    font-size: 0.9rem; /* Slightly smaller text */
+    font-weight: bold;
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded edges */
+    margin-left: auto; /* Push button to the far right */
+}
+
+.btn.sign-in:hover {
+    background-color: #333333; /* Darker black on hover */
+}
+
 .logo {
-    height: 25px; /* Height of the logo */
-    margin-right: 20px; /* Space between logo and navigation */
+    height: 25px;
+    margin-right: 20px;
 }
 
-/* Navigation styles */
+nav {
+    flex-grow: 1;
+}
+
 .nav-links {
-    list-style: none; /* Remove bullet points */
-    margin: 0; /* Reset margin */
-    padding: 0; /* Reset padding */
-    display: flex; /* Flex display for horizontal alignment */
-    align-items: center; /* Align items vertically centered */
-    gap: 20px; /* Space between navigation items */
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
 }
 
 .nav-links li {
-    position: relative; /* Relative positioning for dropdowns if needed */
+    display: inline;
 }
 
 .nav-links a {
-    text-decoration: none; /* Remove underline from links */
-    color: #333; /* Text color for links */
-    font-size: 14px; /* Font size for links */
-    font-weight: bold; /* Bold text for navigation links */
-    padding: 8px; /* Padding for navigation links */
-    transition: color 0.3s; /* Transition for hover effect */
+    text-decoration: none;
+    color: black;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
-.nav-links a:hover {
-    color: #000; /* Change color on hover */
-}
-
-/* Dropdown styles */
 .dropdown-content {
-    display: none; /* Hide dropdown by default */
-    position: absolute; /* Positioning for dropdown items */
-    background-color: #fff; /* Background color for dropdown */
-    min-width: 150px; /* Minimum width for dropdown */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for dropdown */
-    z-index: 1000; /* Keep dropdown above other content */
-    border: 1px solid #ddd; /* Border for dropdown */
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border: 1px solid #ddd;
 }
 
 .dropdown-content li {
-    display: block; /* Block display for dropdown items */
+    display: block;
 }
 
 .dropdown-content a {
-    color: #333; /* Color for dropdown links */
-    padding: 10px; /* Padding for dropdown links */
-    text-decoration: none; /* Remove underline */
-    display: block; /* Block display for dropdown links */
-    font-size: 14px; /* Font size for dropdown links */
-    font-weight: bold; /* Bold dropdown links */
+    color: #333;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .dropdown-content a:hover {
-    background-color: #f1f1f1; /* Background color on hover */
+    background-color: #f1f1f1;
 }
 
-/* Show dropdown on hover */
-.dropdown:hover .dropdown-content {
-    display: block; /* Show dropdown on hover */
+.nav-links li:hover .dropdown-content {
+    display: block;
 }
 
 /* Pricing container */
@@ -144,7 +152,7 @@ header {
 
 /* Button styles */
 .buy-button {
-    background-color: #000; /* Black background for button */
+    background-color: #000000; /* Black background for button */
     color: white; /* White text for button */
     padding: 10px 25px; /* Padding for button */
     border: none; /* No border */
@@ -155,7 +163,8 @@ header {
 }
 
 .buy-button:hover {
-    background-color: #333; /* Darker background on hover */
+    background-color: #ffbbbb; /* Darker background on hover */
+    color: black
 }
 
 /* Media queries */
@@ -263,7 +272,8 @@ header {
 }
 
 .buy-button-yearly:hover {
-    background-color: #333; /* Darker background on hover */
+    background-color: #ffbbbb; /* Darker background on hover */
+        color: black; /* White text for yearly button */
 }
 
 /* Icon styles for buttons */
@@ -283,4 +293,120 @@ header {
     display: flex; /* Flex display for button */
     align-items: center; /* Center icon vertically */
     justify-content: center; /* Center button content */
+}
+
+
+.plans-intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 40px auto 20px auto;
+    padding: 0 20px;
+    flex-wrap: wrap; /* keeps it responsive */
+    font-family: Arial, sans-serif;
+    color: black;
+}
+
+.plans-text {
+    flex: 1 1 400px;
+}
+
+.plans-text h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: black;
+}
+
+.plans-text p {
+    font-size: 1.1rem;
+    color: black;
+    line-height: 1.5;
+}
+
+.plans-image {
+    flex: 1 1 400px;
+    text-align: right;
+}
+
+.plans-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.fine-print {
+    font-size: 0.7rem;
+    color: #555;
+    margin-top: 5px;
+    font-style: italic;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+
+/* Updated CSS */
+.finance-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+    padding: 5vw; /* Adjust padding to be responsive */
+    perspective: 1000px;
+    box-sizing: border-box;
+}
+
+.card-holder {
+    position: relative;
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    justify-content: flex-start;
+    border: 2px solid #ccc; /* Increased border width */
+    border-radius: 20px;
+    padding: 3vw 3vw 4vw 3vw; /* Adjust padding with relative units */
+    background-color: #fff;
+    box-sizing: border-box;
+    gap: 3vw; /* Adjust gap for responsiveness */
+    width: fit-content; /* Shrink wrap */
+    max-width: 90%;
+    flex-direction: row;
+}
+
+/* Card image slightly larger */
+.finance-image {
+    width: 20vw; /* Image width in relative units (responsive) */
+    height: auto;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    border-radius: 16px;
+}
+
+/* Title styling */
+.card-title {
+    font-size: 30px; /* Slightly smaller than original (20px) */
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+}
+
+/* Change text styling */
+.change-text {
+    font-size: 20px; /* Slightly smaller than before (was 14-16px range) */
+    font-weight: 400; /* Normal/light */
+    color: #333;
+    margin-top: 14px;
+    text-align: left;
+}
+
+.change-link {
+    text-decoration: underline;
+    color: #007bff;
+}
+
+.change-link:hover {
+    color: #0056b3;
 }

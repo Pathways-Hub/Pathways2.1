@@ -1,123 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Pathways</title>
-    <link rel="stylesheet" href="price.css"> <!-- Ensure this path is correct -->
-    <link rel="icon" href="images/favicon.png" type="image/png">
-    <!-- Add Font Awesome CDN for icons if needed -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="price.css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
 </head>
 <body>
-
     <header>
-        <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo"/></a>
+        <a href="index.html"><img src="images/Pathwaystl.png" alt="Pathways Logo" class="logo" /></a>
         <nav>
             <ul class="nav-links">
                 <li><a href="price.html">Pricing</a></li>
-                <li><a href="hub.html">Hub</a></li> 
-                <li><a href="about.html">About</a></li> 
-                <li class="dropdown">
-                    <a href="#">Download <i class="fas fa-caret-down"></i></a>
-                    <ul class="dropdown-content">
-                        <li><a href="#">Workspaces</a></li>
-                        <li><a href="#">Interfaces</a></li>
-                        <li><a href="calendar.html">Dates</a></li>
-                        <li><a href="#">Papers</a></li>
-                        <li><a href="#">Wallpapers</a></li>
-                    </ul>
-                </li>
+                <li><a href="hub.html">Hub</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
         </nav>
-    </header>
+        <!-- Sign In Button -->
+        <a href="login.html" class="btn sign-in"><i class="fa-solid fa-user"></i> Sign In</a>
+    </header> 
 
-<div class="pricing-container">
-    <div class="pricing-plan">
-        <h2>
-            Hobbiest
-        </h2>
-        <p class="price">£0</p>
-        <p class="month">a month</p>
-        <ul class="features">
-            <li>Limited Features</li>
-            <li>2 device limit</li>
-            <li></li>
-        </ul>
-        <button class="buy-button">Get Started</button>
-        <!-- Yearly Pricing Rectangle -->
-        <div class="yearly-container">
-            <h3>Yearly Plan</h3>
-            <p class="yearly-price">£0</p>
-            <p class="yearly-month">a year</p>
+    <!-- New Plan Options Section -->
+    <section class="plans-intro">
+        <div class="plans-text">
+            <h1>Plan options</h1>
+            <p>
+                Choose a plan that fits your needs, whether you're just getting started or scaling your business.
+                Our flexible pricing options are designed to provide value and scalability.
+            </p>
+        </div>
+        <div class="plans-image">
+            <img src="website/images/path_plus_guy.png" alt="Plan Illustration" />
+            <div class="fine-print">*average pathways+ user (a very cool person)*</div>
+        </div>
+    </section>
+
+    <div class="pricing-container">
+        <div class="pricing-plan">
+            <h2>Hobbiest</h2>
+            <p class="price">£0</p>
+            <p class="month">a month</p>
+            <ul class="features">
+                <li>Limited Features</li>
+                <li>2 device limit</li>
+                <li></li>
+            </ul>
+            <button class="buy-button">Get started</button>
+            <div class="yearly-container">
+                <h3>Yearly Plan</h3>
+                <p class="yearly-price">£0</p>
+                <p class="yearly-month">a year</p>
+            </div>
+        </div>
+
+        <div class="pricing-plan popular">
+            <div class="popular-badge">Most Popular</div>
+            <h2>Freelancer</h2>
+            <p class="price">£5.60</p>
+            <p class="month">a month</p>
+            <ul class="features">
+                <li>All <b>basic</b> features</li>
+                <li>10 device limit</li>
+                <li></li>
+            </ul>
+            <button class="buy-button">Get monthly</button>
+            <div class="yearly-container">
+                <h3>Yearly Plan</h3>
+                <p class="yearly-price">£50</p>
+                <p class="yearly-month">a year</p>
+                <button class="buy-button-yearly">Get yearly</button>
+            </div>
+        </div>
+
+        <div class="pricing-plan">
+            <h2>Business</h2>
+            <p class="price">£11.60</p>
+            <p class="month">a month</p>
+            <ul class="features">
+                <li>All Features Unlocked</li>
+                <li>No device limit</li>
+                <li></li>
+            </ul>
+            <button class="buy-button">Get monthly</button>
+            <div class="yearly-container most-popular-yearly">
+                <div class="most-popular-badge-yearly">Most Popular</div>
+                <h3>Yearly Plan</h3>
+                <p class="yearly-price">£100</p>
+                <p class="yearly-month">a year</p>
+                <button class="buy-button-yearly">Get yearly</button>
+            </div>
         </div>
     </div>
 
-    <div class="pricing-plan popular">
-        <div class="popular-badge">Most Popular</div>
-        <h2>
-            Freelancer
-        </h2>
-        <p class="price">£5.60</p>
-        <p class="month">a month</p>
-        <ul class="features">
-            <li>All <b>basic</b> features</li>
-            <li>10 device limit</li>
-            <li></li>
-        </ul>
-        <button class="buy-button">Get Started</button>
-        <!-- Yearly Pricing Rectangle -->
-        <div class="yearly-container">
-            <h3>Yearly Plan</h3>
-            <p class="yearly-price">£50</p>
-            <p class="yearly-month">a year</p>
-            <button class="buy-button-yearly">Get Yearly</button>
+    <div class="finance-content">
+        <div class="card-holder">
+            <img src="website/card_fx.png" alt="Card Image" class="finance-image" />
+            <div class="card-text-top">
+                <h2 class="card-title">Payment Method</h2>
+                <p class="change-text">Change payment method <a href="tabs.html" class="change-link">here</a></p>
+            </div>
         </div>
     </div>
 
-    <div class="pricing-plan">
-        <h2>
-            Business
-        </h2>
-        <p class="price">£11.60</p>
-        <p class="month">a month</p>
-        <ul class="features">
-            <li>All Features Unlocked</li>
-            <li>No device limit</li>
-            <li></li>
-        </ul>
-        <button class="buy-button">Get Started</button>
-        <!-- Yearly Pricing Rectangle -->
-        <div class="yearly-container most-popular-yearly">
-            <div class="most-popular-badge-yearly">Most Popular</div> <!-- Most Popular Badge for Yearly -->
-            <h3>Yearly Plan</h3>
-            <p class="yearly-price">£100</p>
-            <p class="yearly-month">a year</p>
-            <button class="buy-button-yearly">Get Yearly</button>
-        </div>
-    </div>
     <script>
-        function setResponsiveBackground() {
-            // Set the background image as a style attribute for responsive behavior
-            document.body.style.backgroundImage = "url('website/price.png')";
-            document.body.style.backgroundSize = "cover"; // Cover the whole background
-            document.body.style.backgroundPosition = "center"; // Center the image
-            document.body.style.backgroundRepeat = "no-repeat"; // Avoid repeating
-        }
+        const image = document.querySelector('.finance-image');
+        const container = document.querySelector('.finance-content');
 
-        function loadFile(event) {
-            const file = event.target.files[0];
-            if (file) {
-                alert(`Selected file: ${file.name}`);
-                // Handle the file as needed
-            }
-        }
+        container.addEventListener('mousemove', (e) => {
+            const { width, height, left, top } = container.getBoundingClientRect();
+            const x = e.clientX - left;
+            const y = e.clientY - top;
 
-        // Call setResponsiveBackground on load
-        setResponsiveBackground();
+            const rotateX = ((y / height) - 0.5) * 50; // Increased from 20 to 50
+            const rotateY = ((x / width) - 0.5) * -50; // Increased from 20 to 50
 
-        // Optional: Call it again on resize if you'd like it to be responsive to screen resizing
-        window.onresize = setResponsiveBackground;
+            image.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            image.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+        });
     </script>
 
 </body>

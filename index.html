@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathways</title>
+    <title>Pathways │ Pave Your Way </title>
     <link rel="stylesheet" href="website.css"> <!-- Ensure this path is correct -->
     <link rel="stylesheet" href="website/footer.css"> <!-- Ensure this path is correct -->
     <link rel="icon" href="images/favicon.png" type="image/png">
@@ -12,26 +12,51 @@
 </head>
 <body>
 
-<header>
+<header class="site-header">
     <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo" /></a>
+
     <nav>
-        <ul class="nav-links">
-            <li><a href="price.html">Pricing</a></li>
-            <li><a href="hub.html">Hub</a></li> 
-            <li><a href="about.html">About</a></li> 
-            <li class="dropdown">
-                <a href="#">Download <i class="fas fa-caret-down"></i></a>
-                <ul class="dropdown-content">
-                    <li><a href="#">Workspaces</a></li>
-                    <li><a href="#">Interfaces</a></li>
-                    <li><a href="calendar.html">Dates</a></li>
-                    <li><a href="#">Papers</a></li>
-                    <li><a href="#">Wallpapers</a></li>
-                </ul>
-            </li>
-        </ul>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#">Pathways <i class="fa-solid fa-angle-down"></i></a>
+                    <div class="dropdown-content wide-dropdown">
+                        <ul>
+                            <li><a href="#">Career Roadmaps</a></li>
+                            <li><a href="#">Skill Development</a></li>
+                            <li><a href="#">Certifications</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="hub.html">Hub</a></li>
+                <li class="dropdown">
+                    <a href="about.html">About <i class="fa-solid fa-angle-down"></i></a>
+                    <div class="dropdown-content wide-dropdown">
+                        <ul>
+                            <li><a href="#">Our Story</a></li>
+                            <li><a href="#">Mission</a></li>
+                            <li><a href="#">Team</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Business <i class="fa-solid fa-angle-down"></i></a>
+                    <div class="dropdown-content wide-dropdown">
+                        <ul>
+                            <li><a href="#">Partnerships</a></li>
+                            <li><a href="#">Enterprise Tools</a></li>
+                            <li><a href="#">Use Cases</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </nav>
-</header>
+
+    <!-- Sign In Button -->
+    <a href="login.html" class="btn sign-in">Sign In</a>
+</header> 
 
 <!-- Hero Section -->
 <div class="hero-section">
@@ -51,6 +76,72 @@
     </div>
 </div>
 
+<body>
+  <div class="main-wrapper">
+
+    <div class="image-section">
+    <img
+        id="promo-image"
+        class="promo-image"
+        src="website/images/pthws_example.png"
+        alt="Promo"
+    />
+    </div>
+
+    <div class="trio-button-section">
+      <div class="trio-button-container">
+
+        <!-- Travel Planning -->
+        <button class="trio-button selected">
+          <div class="icon-box">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Travel Planning</span>
+          </div>
+          <div class="button-description">
+            Keep destinations, bookings, and itineraries together. Pathways makes trip planning seamless and visual.
+          </div>
+        </button>
+
+        <!-- Track Progress -->
+        <button class="trio-button">
+          <div class="icon-box">
+            <i class="fas fa-chart-line"></i>
+            <span>Track Progress</span>
+          </div>
+          <div class="button-description">
+            See your goals come to life. Pathways tracks progress in real-time so you always know where you stand.
+          </div>
+        </button>
+
+        <!-- Schedule Tasks -->
+        <button class="trio-button">
+          <div class="icon-box">
+            <i class="fas fa-calendar-check"></i>
+            <span>Schedule Tasks</span>
+          </div>
+          <div class="button-description">
+            Plan out everything from big milestones to daily tasks. Stay organized without the overwhelm.
+          </div>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="video-section">
+        <div class="video-wrapper">
+            <video class="promo-video" autoplay loop muted playsinline id="pathwaysVideo">
+                <source src="website/website_animation2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <button class="video-control" id="videoToggle">
+                <i class="fas fa-pause"></i>
+            </button>
+        </div>
+    </div>
+
+  </div>
+</body>
+
     <!-- Footer -->
     <footer>
         <div class="footer-container">
@@ -59,7 +150,8 @@
                 <div class="social-links">
                     <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="social-icon"><i class="far fa-envelope"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
                 </div>
                 <p class="disclaimer">Pathways will never sell your information <a href="about.html">terms and conditions</a>.</p>
             </div>
@@ -111,5 +203,56 @@
 
     <!-- Include the popup.js script -->
     <script src="website/popup.js"></script>
+
+    <script>
+        const video = document.getElementById('pathwaysVideo');
+        const toggleBtn = document.getElementById('videoToggle');
+        const icon = toggleBtn.querySelector('i');
+
+        toggleBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+            } else {
+                video.pause();
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        });
+    </script>
+    <script>
+    // Select buttons and promo image
+        const buttons = document.querySelectorAll('.trio-button');
+        const promoImage = document.getElementById('promo-image');
+
+        const images = [
+        'website/images/pthws_example.png',
+        'website/images/pthws_example2.png',
+        'website/images/pthws_example3.png'
+        ];
+
+        buttons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            // Smooth fade out/in transition for the image source
+            promoImage.style.opacity = 0;
+
+            setTimeout(() => {
+            promoImage.src = images[index];
+
+            // Get the icon box text color
+            const iconBox = button.querySelector('.icon-box');
+            const color = window.getComputedStyle(iconBox).color;
+            promoImage.style.borderColor = color;
+
+            promoImage.style.opacity = 1;
+            }, 300); // Match this with your CSS transition duration
+        });
+        });
+    </script>
+
 </body>
 </html>

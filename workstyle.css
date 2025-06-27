@@ -354,12 +354,6 @@ body.dark-mode .editable-title {
     background-color: grey; /* Change color when selected */
 }
 
-/* Add this CSS to your stylesheet */
-.text-multi-selected {
-    outline: 2px solid red; /* Border to indicate multi-selection */
-    outline-offset: 2px;
-}
-
 .table-selected {
     border: 3px solid red !important; /* Ensure it overrides other styles */
 }
@@ -606,3 +600,32 @@ body.dark-mode #headerImage {
 .popupButton:hover i {
     color: #005bb5;
 }
+
+.remote-cursor {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.05s linear;
+}
+
+  .suggestion-wrapper {
+    position: absolute;
+    pointer-events: none;
+    white-space: no-wrap;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    overflow: hidden;
+  }
+
+  .ghost-text {
+    position: absolute;
+    color: lightgray;
+    z-index: 1;
+  }
+
+  textarea.input-area {
+    position: absolute;
+    background: transparent;
+    resize: none;
+    z-index: 2;
+  }
+  

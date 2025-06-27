@@ -155,20 +155,11 @@
   }
 }
 
-.grey-rectangles-container {
-  position: absolute;
-  top: calc(20vh + 12vw); /* Below top buttons */
-  left: 400px;
-  display: flex;
-  gap: 2vw;
-  z-index: 5;
-}
-
 .grey-rectangle {
   width: 34vw;
   height: 14vw;
   border-radius: 20px;          /* Rounded corners */
-  border: 1px solid #000000;    /* 1px black border */
+  border: 1px solid #e6e6e6;    /* 1px black border */
   background-color: #f0f0f0;    /* Default background for second one */
 }
 
@@ -202,4 +193,63 @@
   font-size: 1vw; /* Smaller day text */
   color: #333;
   text-align: center;
+}
+
+/* Wrap both grey rectangles and text lines inside a parent container */
+.bottom-section {
+  position: absolute;
+  top: calc(20vh + 12vw); /* aligns with button row spacing */
+  left: 400px;
+  width: 72vw; /* enough for 2 grey boxes + spacing */
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vw; /* reduced space between grey boxes and Updates section */
+}
+
+/* Grey rectangles layout */
+.grey-rectangles-container {
+  position: relative;
+  display: flex;
+  gap: 2vw;
+  width: 100%;
+}
+
+/* Updates title */
+.updates-title {
+  font-family: 'Arial', sans-serif;
+  font-size: 1vw;
+  font-weight: normal;
+  color: #000000;
+  margin-bottom: 0vw; /* reduced spacing below the title */
+}
+
+/* Text update lines */
+.text-lines-container {
+  width: 100%;
+  font-family: Arial, sans-serif;
+  font-size: 0.9vw;
+  color: #000; /* Black main text */
+  padding-left: 1vw;
+  line-height: 1.4;
+}
+
+/* Individual update line */
+.text-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vw;
+}
+
+.vertical-line {
+  width: 2px;
+  height: 20px;
+  background-color: #000;
+  margin-right: 10px;
+  border-radius: 0;
+}
+
+.update-date {
+  color: #888; /* Grey date */
+  margin-right: 0.5vw;
 }
