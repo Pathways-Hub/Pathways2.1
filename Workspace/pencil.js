@@ -21,6 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
 
+    // Store all lines drawn
+    const lines = [];
+
+    let currentLine = [];
+
     // Eraser outline element
     const eraserOutline = document.createElement('div');
     eraserOutline.style.position = 'absolute';
@@ -44,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     crosshair.style.display = 'none';
     crosshair.style.zIndex = '1001';
 
-    // Horizontal line
     const hLine = document.createElement('div');
     hLine.style.position = 'absolute';
     hLine.style.top = `${crosshairSize / 2}px`;
@@ -53,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hLine.style.height = '1px';
     hLine.style.backgroundColor = 'black';
 
-    // Vertical line
     const vLine = document.createElement('div');
     vLine.style.position = 'absolute';
     vLine.style.left = `${crosshairSize / 2}px`;
@@ -69,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        redrawAllLines();
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -76,38 +80,65 @@ document.addEventListener('DOMContentLoaded', () => {
     function startAction(event) {
         if (isDrawing || isErasing) {
             const rect = canvas.getBoundingClientRect();
-            const x = (event.clientX || event.touches[0].clientX) - rect.left;
-            const y = (event.clientY || event.touches[0].clientY) - rect.top;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
+            const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
+            const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
+
             isMouseDown = true;
+
+            if (isDrawing) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                currentLine = [{ x, y }];
+            }
         }
     }
 
     function performAction(event) {
         if ((isDrawing || isErasing) && isMouseDown) {
             const rect = canvas.getBoundingClientRect();
-            const x = (event.clientX || event.touches[0].clientX) - rect.left;
-            const y = (event.clientY || event.touches[0].clientY) - rect.top;
+            const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
+            const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
 
             if (isDrawing) {
-                ctx.lineWidth = 2;
                 ctx.lineTo(x, y);
                 ctx.stroke();
+                currentLine.push({ x, y });
             } else if (isErasing) {
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(x, y, eraserSize, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalCompositeOperation = 'source-over';
+                // Find and remove any line containing a point near this location
+                for (let i = lines.length - 1; i >= 0; i--) {
+                    const line = lines[i];
+                    if (line.some(point => Math.hypot(point.x - x, point.y - y) <= eraserSize)) {
+                        lines.splice(i, 1);
+                    }
+                }
+                redrawAllLines();
             }
         }
     }
 
     function stopAction() {
-        if (isDrawing || isErasing) {
+        if (isDrawing && currentLine.length > 0) {
+            lines.push([...currentLine]);
+            currentLine = [];
             ctx.closePath();
-            isMouseDown = false;
+        }
+        isMouseDown = false;
+    }
+
+    function redrawAllLines() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        for (const line of lines) {
+            if (line.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(line[0].x, line[0].y);
+                for (let i = 1; i < line.length; i++) {
+                    ctx.lineTo(line[i].x, line[i].y);
+                }
+                ctx.stroke();
+                ctx.closePath();
+            }
         }
     }
 
@@ -127,13 +158,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById('pencilButton').addEventListener('click', () => {
-        isDrawing = !isDrawing;
-        isErasing = false;
         const pencilIcon = document.getElementById('pencilButton').querySelector('i');
+        const eraserIcon = document.getElementById('eraserButton').querySelector('i');
 
         if (isDrawing) {
+            // Turn OFF drawing
+            isDrawing = false;
+            crosshair.style.display = 'none';
+            document.removeEventListener('mousedown', startAction);
+            document.removeEventListener('mousemove', performAction);
+            document.removeEventListener('mousemove', updateCursorVisuals);
+            document.removeEventListener('mouseup', stopAction);
+            document.removeEventListener('touchstart', startAction);
+            document.removeEventListener('touchmove', performAction);
+            document.removeEventListener('touchmove', updateCursorVisuals);
+            document.removeEventListener('touchend', stopAction);
+            pencilIcon.style.color = 'black';
+            disableTextEditing(false);
+            console.log('Drawing mode deactivated');
+        } else {
+            // Turn ON drawing
+            isDrawing = true;
+            isErasing = false;
             canvas.style.display = 'block';
             crosshair.style.display = 'block';
+            eraserOutline.style.display = 'none';
+            pencilIcon.style.color = 'rgb(77, 77, 77)';
+            eraserIcon.style.color = 'black';
+
             document.addEventListener('mousedown', startAction);
             document.addEventListener('mousemove', performAction);
             document.addEventListener('mousemove', updateCursorVisuals);
@@ -143,66 +195,50 @@ document.addEventListener('DOMContentLoaded', () => {
             document.addEventListener('touchmove', updateCursorVisuals);
             document.addEventListener('touchend', stopAction);
             disableTextEditing(true);
-            pencilIcon.style.color = 'rgb(77, 77, 77)';
             console.log('Drawing mode activated');
-        } else {
-            document.removeEventListener('mousedown', startAction);
-            document.removeEventListener('mousemove', performAction);
-            document.removeEventListener('mousemove', updateCursorVisuals);
-            document.removeEventListener('mouseup', stopAction);
-            document.removeEventListener('touchstart', startAction);
-            document.removeEventListener('touchmove', performAction);
-            document.removeEventListener('touchmove', updateCursorVisuals);
-            document.removeEventListener('touchend', stopAction);
-            crosshair.style.display = 'none';
-            disableTextEditing(false);
-            pencilIcon.style.color = 'black';
-            console.log('Drawing mode deactivated');
         }
     });
 
     document.getElementById('eraserButton').addEventListener('click', () => {
-        isErasing = !isErasing;
-        isDrawing = false;
+        const pencilIcon = document.getElementById('pencilButton').querySelector('i');
         const eraserIcon = document.getElementById('eraserButton').querySelector('i');
 
         if (isErasing) {
-            canvas.style.display = 'block';
-            eraserOutline.style.display = 'block';
-            crosshair.style.display = 'none';
-            document.addEventListener('mousemove', updateCursorVisuals);
-            document.addEventListener('touchmove', updateCursorVisuals);
-            document.addEventListener('mousedown', startAction);
-            document.addEventListener('mousemove', performAction);
-            document.addEventListener('mouseup', stopAction);
-            document.addEventListener('touchstart', startAction);
-            document.addEventListener('touchmove', performAction);
-            document.addEventListener('touchend', stopAction);
-            disableTextEditing(true);
-            eraserIcon.style.color = 'rgb(77, 77, 77)';
-            console.log('Eraser mode activated');
-        } else {
-            document.removeEventListener('mousemove', updateCursorVisuals);
-            document.removeEventListener('touchmove', updateCursorVisuals);
+            // Turn OFF erasing
+            isErasing = false;
             eraserOutline.style.display = 'none';
             document.removeEventListener('mousedown', startAction);
             document.removeEventListener('mousemove', performAction);
+            document.removeEventListener('mousemove', updateCursorVisuals);
             document.removeEventListener('mouseup', stopAction);
             document.removeEventListener('touchstart', startAction);
             document.removeEventListener('touchmove', performAction);
+            document.removeEventListener('touchmove', updateCursorVisuals);
             document.removeEventListener('touchend', stopAction);
-            disableTextEditing(false);
             eraserIcon.style.color = 'black';
+            disableTextEditing(false);
             console.log('Eraser mode deactivated');
+        } else {
+            // Turn ON erasing
+            isErasing = true;
+            isDrawing = false;
+            canvas.style.display = 'block';
+            eraserOutline.style.display = 'block';
+            crosshair.style.display = 'none';
+            eraserIcon.style.color = 'rgb(77, 77, 77)';
+            pencilIcon.style.color = 'black';
+
+            document.addEventListener('mousedown', startAction);
+            document.addEventListener('mousemove', performAction);
+            document.addEventListener('mousemove', updateCursorVisuals);
+            document.addEventListener('mouseup', stopAction);
+            document.addEventListener('touchstart', startAction);
+            document.addEventListener('touchmove', performAction);
+            document.addEventListener('touchmove', updateCursorVisuals);
+            document.addEventListener('touchend', stopAction);
+            disableTextEditing(true);
+            console.log('Eraser mode activated');
         }
     });
 
-    function disableTextEditing(disable) {
-        document.querySelectorAll('[contenteditable]').forEach(el => {
-            el.contentEditable = !disable;
-        });
-        document.querySelectorAll('.text-preview, .input-area').forEach(el => {
-            el.style.pointerEvents = disable ? 'none' : 'auto';
-        });
-    }
 });

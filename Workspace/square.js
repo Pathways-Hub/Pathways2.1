@@ -56,20 +56,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
             }
             square.appendChild(circle);
+        }
+        );
 
-            circle.addEventListener('mousedown', function (e) {
-                e.preventDefault();
-                const startX = e.clientX;
-                const startY = e.clientY;
-                const startWidth = parseInt(window.getComputedStyle(square).width, 10);
-                const startHeight = parseInt(window.getComputedStyle(square).height, 10);
-                const startLeft = parseInt(window.getComputedStyle(square).left, 10);
-                const startTop = parseInt(window.getComputedStyle(square).top, 10);
+        circle.addEventListener('mousedown', function (e) {
+            e.preventDefault();
+            const startX = e.clientX;
+            const startY = e.clientY;
+            const startWidth = parseInt(window.getComputedStyle(square).width, 10);
+            const startHeight = parseInt(window.getComputedStyle(square).height, 10);
+            const startLeft = parseInt(window.getComputedStyle(square).left, 10);
+            const startTop = parseInt(window.getComputedStyle(square).top, 10);
 
-                function resize(e) {
-                    const dx = e.clientX - startX;
-                    const dy = e.clientY - startY;
+            function resize(e) {
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
 
+                if (e.shiftKey) {
+                    const dragDistance = Math.max(Math.abs(dx), Math.abs(dy));
+                    const currentWidth = parseInt(window.getComputedStyle(square).width, 10);
+                    const currentHeight = parseInt(window.getComputedStyle(square).height, 10);
+                    const maxRadius = Math.min(currentWidth, currentHeight) / 2;
+                    const newRadius = Math.min(dragDistance, maxRadius);
+                    square.style.borderRadius = `${newRadius}px`;
+                } else {
                     if (corner === 'top-left') {
                         square.style.width = `${snapToGrid(startWidth - dx)}px`;
                         square.style.height = `${snapToGrid(startHeight - dy)}px`;
@@ -88,15 +98,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         square.style.height = `${snapToGrid(startHeight + dy)}px`;
                     }
                 }
+            }
 
-                function stopResize() {
-                    document.removeEventListener('mousemove', resize);
-                    document.removeEventListener('mouseup', stopResize);
-                }
+            function stopResize() {
+                document.removeEventListener('mousemove', resize);
+                document.removeEventListener('mouseup', stopResize);
+            }
 
-                document.addEventListener('mousemove', resize);
-                document.addEventListener('mouseup', stopResize);
-            });
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
         });
 
         const dragHandle = document.createElement('div');
@@ -192,4 +202,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Example of how to toggle the grid from a button (uncomment if needed)
     // document.getElementById('gridToggleButton').addEventListener('click', toggleGrid);
+    
 });

@@ -152,35 +152,49 @@ document.addEventListener("DOMContentLoaded", () => {
         const { x, y } = getMousePos(e);
 
         if (draggingPoint) {
-            // Move the dragged endpoint
-            draggingPoint.line.points[draggingPoint.pointIndex] = { x, y };
+            const { line, pointIndex } = draggingPoint;
+            const otherIndex = 1 - pointIndex;
+            const fixedPoint = line.points[otherIndex];
+            let dx = x - fixedPoint.x;
+            let dy = y - fixedPoint.y;
+
+            if (shiftKeyPressed) {
+                // Lock angle: extend/retract along original direction only
+                const originalDx = line.points[pointIndex].x - fixedPoint.x;
+                const originalDy = line.points[pointIndex].y - fixedPoint.y;
+                const originalAngle = Math.atan2(originalDy, originalDx);
+
+                // Get new length based on current mouse position
+                const newLength = Math.sqrt(dx * dx + dy * dy);
+
+                // Recalculate the point position with same angle
+                const newX = fixedPoint.x + newLength * Math.cos(originalAngle);
+                const newY = fixedPoint.y + newLength * Math.sin(originalAngle);
+
+                line.points[pointIndex] = { x: newX, y: newY };
+            } else {
+                // Free movement if shift not held
+                line.points[pointIndex] = { x, y };
+            }
         } else if (draggingLine) {
-            // Move the whole line or bend it if shift is pressed
             const dx = x - getMidPoint(draggingLine.points[0], draggingLine.points[1]).x;
             const dy = y - getMidPoint(draggingLine.points[0], draggingLine.points[1]).y;
 
             if (shiftKeyPressed) {
-                // Bend the line by adjusting the control point
                 const midPoint = getMidPoint(draggingLine.points[0], draggingLine.points[1]);
-                const bendFactor = dy / 100; // Control how much the line bends
-
-                // Create a curved line using Bezier control point adjustment
+                const bendFactor = dy / 100;
                 const controlPoint = {
                     x: midPoint.x,
-                    y: midPoint.y + bendFactor * 100, // Bending the line by moving the control point vertically
+                    y: midPoint.y + bendFactor * 100,
                 };
-
-                // Store the updated control point in the line's properties for use in drawing
                 draggingLine.controlPoint = controlPoint;
             } else {
-                // Move the line as usual
                 draggingLine.points[0].x += dx;
                 draggingLine.points[0].y += dy;
                 draggingLine.points[1].x += dx;
                 draggingLine.points[1].y += dy;
             }
         } else {
-            // Check proximity to lines
             for (let line of lines) {
                 if (line.points.length === 2) {
                     line.near = isNearLine(x, y, line.points[0], line.points[1]);
@@ -198,54 +212,80 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function drawScene() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let popupShown = false;
 
         for (let line of lines) {
             if (line.points.length < 2) continue;
 
             const midPoint = getMidPoint(line.points[0], line.points[1]);
 
-            // Draw the red border for selected lines
+            // Draw selected border
             if (line.selected) {
                 ctx.beginPath();
                 ctx.moveTo(line.points[0].x, line.points[0].y);
                 ctx.lineTo(line.points[1].x, line.points[1].y);
                 ctx.strokeStyle = "red";
-                ctx.lineWidth = 4; // Border width
+                ctx.lineWidth = 4;
                 ctx.stroke();
             }
 
-            // If the line has a control point (indicating it's a curve), draw the curve
+            // Draw the actual line (curve or straight)
             if (line.controlPoint) {
                 ctx.beginPath();
                 ctx.moveTo(line.points[0].x, line.points[0].y);
                 ctx.quadraticCurveTo(line.controlPoint.x, line.controlPoint.y, line.points[1].x, line.points[1].y);
-                ctx.strokeStyle = line.color || "black"; // Use the line's color
-                ctx.lineWidth = 2; // Main line width
-                ctx.stroke();
             } else {
-                // Draw a straight line if no control point is set
                 ctx.beginPath();
                 ctx.moveTo(line.points[0].x, line.points[0].y);
                 ctx.lineTo(line.points[1].x, line.points[1].y);
-                ctx.strokeStyle = line.color || "black"; // Use the line's color
-                ctx.lineWidth = 2;
-                ctx.stroke();
             }
+            ctx.strokeStyle = line.color || "black";
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
-            // Draw the points and midpoint only if near the line
+            // Draw blue handles
             if (line.near || line.selected) {
                 for (let point of line.points) {
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, circleRadius + 3, 0, Math.PI * 2);
+                    ctx.strokeStyle = "rgba(128, 128, 128, 0.5)";
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+
                     ctx.beginPath();
                     ctx.arc(point.x, point.y, circleRadius, 0, Math.PI * 2);
                     ctx.fillStyle = "blue";
                     ctx.fill();
                 }
 
+                // Draw midpoint handle
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = "rgba(128, 128, 128, 0.5)";
+                ctx.strokeRect(midPoint.x - rectSize / 2 - 1.5, midPoint.y - rectSize / 2 - 1.5, rectSize + 3, rectSize + 3);
+
                 ctx.fillStyle = "blue";
                 ctx.fillRect(midPoint.x - rectSize / 2, midPoint.y - rectSize / 2, rectSize, rectSize);
+
+                // === Show deg popup ===
+                const dx = line.points[1].x - line.points[0].x;
+                const dy = line.points[1].y - line.points[0].y;
+                let angleDeg = Math.atan2(-dy, dx) * (180 / Math.PI); // invert dy to match canvas coordinates
+                angleDeg = (angleDeg + 360) % 360; // normalize to 0–360
+
+                gradientPopup.style.left = `${midPoint.x}px`;
+                gradientPopup.style.top = `${midPoint.y - 30}px`; // above midpoint
+                gradientPopup.innerText = `Angle: ${angleDeg.toFixed(1)}°`;
+                gradientPopup.style.display = "block";
+                popupShown = true;
             }
         }
+
+    // Hide popup if no line is active
+    if (!popupShown) {
+        gradientPopup.style.display = "none";
     }
+}
+
 
     function clearSelection() {
         selectedLine = null;
@@ -286,3 +326,17 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 });
+
+// Create the gradient popup
+const gradientPopup = document.createElement("div");
+gradientPopup.style.position = "absolute";
+gradientPopup.style.backgroundColor = "grey";
+gradientPopup.style.color = "white";
+gradientPopup.style.padding = "4px 8px";
+gradientPopup.style.borderRadius = "4px";
+gradientPopup.style.fontFamily = "Arial, sans-serif";
+gradientPopup.style.fontSize = "12px";
+gradientPopup.style.whiteSpace = "nowrap";
+gradientPopup.style.pointerEvents = "none";
+gradientPopup.style.display = "none"; // Hidden by default
+document.body.appendChild(gradientPopup);

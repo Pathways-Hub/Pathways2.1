@@ -1,211 +1,257 @@
-const photoButton = document.getElementById('photoButton');
-const photoImportButton = document.getElementById('photoImportButton');
+document.addEventListener('DOMContentLoaded', () => {
+    let currentlySelected = null;
 
-const fileInput = document.createElement('input');
-fileInput.type = 'file';
-fileInput.accept = 'image/*';
-fileInput.style.display = 'none';
+    // Add global styles for selected state and resize handles with hover effect
+    const style = document.createElement('style');
+    style.textContent = `
+        .selected {
+            border: 2px solid red;
+            border-radius: 20px;
+            box-sizing: border-box;
+        }
 
-document.body.appendChild(fileInput);
+        .resize-handle {
+            width: 10px;
+            height: 10px;
+            background-color: blue;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 1003;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
 
-// Handle File Import (Local Image Upload)
-photoButton.addEventListener('click', () => {
-    fileInput.click();
-});
+        /* Show handles only on hover over the image wrapper */
+        div.image-wrapper:hover .resize-handle {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
+        .resize-handle.tl { top: -5px; left: -5px; cursor: nwse-resize; }
+        .resize-handle.tr { top: -5px; right: -5px; cursor: nesw-resize; }
+        .resize-handle.bl { bottom: -5px; left: -5px; cursor: nesw-resize; }
+        .resize-handle.br { bottom: -5px; right: -5px; cursor: nwse-resize; }
+    `;
+    document.head.appendChild(style);
+
+    // Create hidden file input
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+
+    document.getElementById('photoButton').addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
         const reader = new FileReader();
-        reader.onload = function (e) {
-            createImage(e.target.result);
+        reader.onload = (e) => {
+            createImageElement(e.target.result);
         };
         reader.readAsDataURL(file);
+    });
+
+    function createImageElement(src) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('image-wrapper');  // <-- Added wrapper class for hover
+        wrapper.style.position = 'absolute';
+        wrapper.style.left = '50px';
+        wrapper.style.top = '100px';
+        wrapper.style.zIndex = '1001';
+        wrapper.style.display = 'inline-block';
+
+        const img = new Image();
+        img.src = src;
+        img.style.borderRadius = '20px';
+        img.style.cursor = 'move';
+        img.style.display = 'block';
+        img.style.width = '200px';
+        img.style.height = 'auto';
+
+        img.onload = () => {
+            wrapper.appendChild(img);
+            document.body.appendChild(wrapper);
+            makeImageDraggable(wrapper);
+            makeImageSelectable(wrapper, img);
+            addResizeHandles(wrapper, img);
+        };
     }
-});
 
-// Handle Web Image Import (URL Input)
-photoImportButton.addEventListener('click', () => {
-    const url = prompt('Enter the URL of the image:');
-    if (url) {
-        createImage(url);
-    }
-});
+    function makeImageDraggable(wrapper) {
+        let isDragging = false, startX, startY, initialX, initialY;
 
-// Function to create and handle an image
-function createImage(imageSrc) {
-    const img = document.createElement('img');
-    img.src = imageSrc;
-    img.style.position = 'fixed';
-    img.style.top = '50%';
-    img.style.left = '50%';
-    img.style.transform = 'translate(-50%, -50%)';
-    img.style.maxWidth = '90%';
-    img.style.maxHeight = '90%';
-    img.style.borderRadius = '20px';
-    img.style.cursor = 'grab';
-    img.style.zIndex = '1000';
+        wrapper.addEventListener('mousedown', e => {
+            if (e.target.classList.contains('resize-handle')) return;
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            initialX = parseInt(wrapper.style.left);
+            initialY = parseInt(wrapper.style.top);
 
-    // Store initial width and height to preserve aspect ratio
-    let originalWidth = img.width;
-    let originalHeight = img.height;
-
-    const createCircle = (position) => {
-        const circle = document.createElement('div');
-        circle.style.width = '10px';
-        circle.style.height = '10px';
-        circle.style.backgroundColor = 'blue';
-        circle.style.borderRadius = '50%';
-        circle.style.position = 'absolute';
-        circle.style.zIndex = '1001';
-        circle.style.display = 'none'; // Hidden by default
-        circle.dataset.position = position; // Store position info
-        return circle;
-    };
-
-    const corners = {
-        topLeft: createCircle('topLeft'),
-        topRight: createCircle('topRight'),
-        bottomLeft: createCircle('bottomLeft'),
-        bottomRight: createCircle('bottomRight'),
-    };
-
-    Object.values(corners).forEach((circle) => {
-        document.body.appendChild(circle);
-    });
-
-    const updateCornerPositions = () => {
-        const rect = img.getBoundingClientRect();
-        corners.topLeft.style.left = `${rect.left - 5}px`;
-        corners.topLeft.style.top = `${rect.top - 5}px`;
-        corners.topRight.style.left = `${rect.right - 5}px`;
-        corners.topRight.style.top = `${rect.top - 5}px`;
-        corners.bottomLeft.style.left = `${rect.left - 5}px`;
-        corners.bottomLeft.style.top = `${rect.bottom - 5}px`;
-        corners.bottomRight.style.left = `${rect.right - 5}px`;
-        corners.bottomRight.style.top = `${rect.bottom - 5}px`;
-    };
-
-    const isMouseNear = (x, y) => {
-        const rect = img.getBoundingClientRect();
-        const margin = 20; // Range within which circles will show up
-        return (
-            x >= rect.left - margin &&
-            x <= rect.right + margin &&
-            y >= rect.top - margin &&
-            y <= rect.bottom + margin
-        );
-    };
-
-    // Show/hide corners based on mouse proximity
-    document.addEventListener('mousemove', (event) => {
-        if (isMouseNear(event.clientX, event.clientY)) {
-            Object.values(corners).forEach((circle) => (circle.style.display = 'block'));
-        } else {
-            Object.values(corners).forEach((circle) => (circle.style.display = 'none'));
-        }
-    });
-
-    // Dragging functionality for the image
-    let isDragging = false;
-    let offsetX, offsetY;
-
-    img.addEventListener('mousedown', (event) => {
-        // Disable interaction with the background and other elements
-        document.body.style.pointerEvents = 'none';
-
-        isDragging = true;
-        img.style.cursor = 'grabbing';
-        const rect = img.getBoundingClientRect();
-        offsetX = event.clientX - rect.left;
-        offsetY = event.clientY - rect.top;
-        event.preventDefault();
-    });
-
-    document.addEventListener('mousemove', (event) => {
-        if (isDragging) {
-            img.style.left = `${event.clientX - offsetX}px`;
-            img.style.top = `${event.clientY - offsetY}px`;
-            img.style.transform = 'translate(0, 0)';
-            updateCornerPositions();
-        }
-    });
-
-    document.addEventListener('mouseup', () => {
-        // Re-enable interaction with the background after dragging
-        document.body.style.pointerEvents = 'auto';
-
-        isDragging = false;
-        img.style.cursor = 'grab';
-    });
-
-    // Resize functionality
-    let resizing = false;
-    let resizeCorner = null;
-    let startX, startY, startWidth, startHeight;
-
-    const startResize = (event, corner) => {
-        resizing = true;
-        resizeCorner = corner;
-        startX = event.clientX;
-        startY = event.clientY;
-        const rect = img.getBoundingClientRect();
-        startWidth = rect.width;
-        startHeight = rect.height;
-        originalWidth = startWidth; // Store original width for aspect ratio
-        originalHeight = startHeight; // Store original height for aspect ratio
-        event.preventDefault();
-    };
-
-    const resizeImage = (event) => {
-        if (!resizing) return;
-
-        let dx = event.clientX - startX;
-        let dy = event.clientY - startY;
-
-        if (resizeCorner === 'topLeft' || resizeCorner === 'bottomLeft') dx = -dx;
-        if (resizeCorner === 'topLeft' || resizeCorner === 'topRight') dy = -dy;
-
-        // Maintain aspect ratio if Shift key is held
-        if (event.shiftKey) {
-            const aspectRatio = originalWidth / originalHeight;
-            if (resizeCorner === 'topLeft' || resizeCorner === 'bottomLeft') {
-                dy = dx / aspectRatio;
-            } else if (resizeCorner === 'topRight' || resizeCorner === 'bottomRight') {
-                dy = dx / aspectRatio;
+            if (currentlySelected !== wrapper) {
+                deselectCurrentlySelected();
+                currentlySelected = wrapper;
+                wrapper.classList.add('selected');
+                disableTextEditing(true);
             }
+        });
+
+        document.addEventListener('mousemove', e => {
+            if (isDragging) {
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                wrapper.style.left = `${initialX + dx}px`;
+                wrapper.style.top = `${initialY + dy}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+    }
+
+    function makeImageSelectable(wrapper, img) {
+        wrapper.addEventListener('click', (e) => {
+            if (e.target.classList.contains('resize-handle')) return;
+            e.stopPropagation();
+            if (currentlySelected !== wrapper) {
+                deselectCurrentlySelected();
+                currentlySelected = wrapper;
+                wrapper.classList.add('selected');
+                disableTextEditing(true);
+            }
+        });
+    }
+
+    function addResizeHandles(wrapper, img) {
+        ['tl', 'tr', 'bl', 'br'].forEach(corner => {
+            const handle = document.createElement('div');
+            handle.classList.add('resize-handle', corner);
+            wrapper.appendChild(handle);
+
+            let startX, startY, startWidth, startHeight, startLeft, startTop, aspectRatio;
+
+            handle.addEventListener('mousedown', e => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                startX = e.clientX;
+                startY = e.clientY;
+                startWidth = img.offsetWidth;
+                startHeight = img.offsetHeight;
+                aspectRatio = startWidth / startHeight;
+                startLeft = parseInt(wrapper.style.left);
+                startTop = parseInt(wrapper.style.top);
+
+                const move = (ev) => {
+                    const dx = ev.clientX - startX;
+                    const dy = ev.clientY - startY;
+                    let newWidth = startWidth;
+                    let newHeight = startHeight;
+                    let newLeft = startLeft;
+                    let newTop = startTop;
+                    const shiftHeld = ev.shiftKey;
+
+                    if (corner === 'br') {
+                        if (shiftHeld) {
+                            newWidth = startWidth + dx;
+                            newHeight = newWidth / aspectRatio;
+                        } else {
+                            newWidth = startWidth + dx;
+                            newHeight = startHeight + dy;
+                        }
+                    } else if (corner === 'bl') {
+                        if (shiftHeld) {
+                            newWidth = startWidth - dx;
+                            newHeight = newWidth / aspectRatio;
+                            newLeft = startLeft + dx;
+                        } else {
+                            newWidth = startWidth - dx;
+                            newHeight = startHeight + dy;
+                            newLeft = startLeft + dx;
+                        }
+                    } else if (corner === 'tl') {
+                        if (shiftHeld) {
+                            newWidth = startWidth - dx;
+                            newHeight = newWidth / aspectRatio;
+                            newLeft = startLeft + dx;
+                            newTop = startTop + (startHeight - newHeight);
+                        } else {
+                            newWidth = startWidth - dx;
+                            newHeight = startHeight - dy;
+                            newLeft = startLeft + dx;
+                            newTop = startTop + dy;
+                        }
+                    } else if (corner === 'tr') {
+                        if (shiftHeld) {
+                            newWidth = startWidth + dx;
+                            newHeight = newWidth / aspectRatio;
+                            newTop = startTop + (startHeight - newHeight);
+                        } else {
+                            newWidth = startWidth + dx;
+                            newHeight = startHeight - dy;
+                            newTop = startTop + dy;
+                        }
+                    }
+
+                    if (newWidth > 20 && newHeight > 20) {
+                        img.style.width = `${newWidth}px`;
+                        img.style.height = `${newHeight}px`;
+                        wrapper.style.left = `${newLeft}px`;
+                        wrapper.style.top = `${newTop}px`;
+                    }
+                };
+
+                const stop = () => {
+                    document.removeEventListener('mousemove', move);
+                    document.removeEventListener('mouseup', stop);
+                };
+
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', stop);
+            });
+        });
+    }
+
+    function deselectCurrentlySelected() {
+        if (currentlySelected) {
+            currentlySelected.classList.remove('selected');
+            currentlySelected = null;
+            disableTextEditing(false);
         }
+    }
 
-        const newWidth = Math.max(50, startWidth + dx);
-        const newHeight = Math.max(50, startHeight + dy);
+    function disableTextEditing(disable) {
+        document.querySelectorAll('[contenteditable]').forEach(el => {
+            el.contentEditable = !disable;
+        });
+        document.querySelectorAll('.text-preview, .input-area').forEach(el => {
+            el.style.pointerEvents = disable ? 'none' : 'auto';
+        });
+    }
 
-        img.style.width = `${newWidth}px`;
-        img.style.height = `${newHeight}px`;
-
-        updateCornerPositions();
-    };
-
-    const stopResize = () => {
-        resizing = false;
-        resizeCorner = null;
-    };
-
-    Object.entries(corners).forEach(([position, circle]) => {
-        circle.addEventListener('mousedown', (event) => startResize(event, position));
+    document.addEventListener('click', (e) => {
+        if (currentlySelected && !currentlySelected.contains(e.target)) {
+            deselectCurrentlySelected();
+        }
     });
 
-    document.addEventListener('mousemove', resizeImage);
-    document.addEventListener('mouseup', stopResize);
-
-    img.addEventListener('load', updateCornerPositions);
-    window.addEventListener('resize', updateCornerPositions);
-
-    document.body.appendChild(img);
-
-    img.addEventListener('click', () => {
-        document.body.removeChild(img);
-        Object.values(corners).forEach((circle) => document.body.removeChild(circle));
-        document.removeEventListener('mousemove', resizeImage);
-        document.removeEventListener('mouseup', stopResize);
+    document.addEventListener('input', (e) => {
+        if (e.target.isContentEditable) {
+            deselectCurrentlySelected();
+        }
     });
-}
+
+    document.getElementById('binButton').addEventListener('click', () => {
+        if (currentlySelected) {
+            currentlySelected.remove();
+            currentlySelected = null;
+        }
+    });
+});

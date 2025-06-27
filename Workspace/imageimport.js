@@ -1,134 +1,247 @@
-// imageimport.js
-
 document.addEventListener('DOMContentLoaded', () => {
-    let currentlySelected = null; // Track the currently selected image
+    let currentlySelected = null;
 
-    // Event listener for photo import button
+    // Add global styles for selected state and resize handles with hover effect
+    const style = document.createElement('style');
+    style.textContent = `
+        .selected {
+            border: 2px solid red;
+            border-radius: 20px;
+            box-sizing: border-box;
+        }
+
+        .resize-handle {
+            width: 10px;
+            height: 10px;
+            background-color: blue;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 1003;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        /* Show handles only on hover over the image wrapper */
+        div.image-wrapper:hover .resize-handle {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .resize-handle.tl { top: -5px; left: -5px; cursor: nwse-resize; }
+        .resize-handle.tr { top: -5px; right: -5px; cursor: nesw-resize; }
+        .resize-handle.bl { bottom: -5px; left: -5px; cursor: nesw-resize; }
+        .resize-handle.br { bottom: -5px; right: -5px; cursor: nwse-resize; }
+    `;
+    document.head.appendChild(style);
+
+    // On button click, ask for image URL and create image element
     document.getElementById('photoImportButton').addEventListener('click', () => {
-        // Prompt the user to enter an image URL
-        const imageUrl = prompt('Please enter an image URL:');
-
-        if (imageUrl) {
-            const img = new Image();
-            img.src = imageUrl;
-
-            // Set image styling and positioning
-            img.style.position = 'absolute';
-            img.style.left = '50px'; // Example positioning, adjust as needed
-            img.style.top = '100px'; // Example positioning, adjust as needed
-            img.style.maxWidth = '200px'; // Example max size, adjust as needed
-            img.style.zIndex = '1001'; // Ensure it's above other content
-            img.style.cursor = 'move'; // Change cursor to indicate draggable
-
-            // Check if the image loads successfully
-            img.onload = () => {
-                document.body.appendChild(img);
-                makeImageDraggable(img); // Make the image draggable
-                makeImageSelectable(img); // Make the image selectable
-            };
-
-            // Handle image loading error
-            img.onerror = () => {
-                alert('Failed to load the image. Please check the URL and try again.');
-            };
+        const url = prompt("Please enter the image URL:");
+        if (url) {
+            createImageElement(url);
         }
     });
 
-    // Function to make an image draggable
-    function makeImageDraggable(image) {
-        let isDragging = false;
-        let startX, startY, initialX, initialY;
+    function createImageElement(src) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('image-wrapper'); // for hover effect
+        wrapper.style.position = 'absolute';
+        wrapper.style.left = '50px';
+        wrapper.style.top = '100px';
+        wrapper.style.zIndex = '1001';
+        wrapper.style.display = 'inline-block';
 
-        image.addEventListener('mousedown', (e) => {
+        const img = new Image();
+        img.src = src;
+        img.style.borderRadius = '20px';
+        img.style.cursor = 'move';
+        img.style.display = 'block';
+        img.style.width = '200px';
+        img.style.height = 'auto';
+
+        img.onload = () => {
+            wrapper.appendChild(img);
+            document.body.appendChild(wrapper);
+            makeImageDraggable(wrapper);
+            makeImageSelectable(wrapper, img);
+            addResizeHandles(wrapper, img);
+        };
+
+        img.onerror = () => {
+            alert("Failed to load image from the provided URL.");
+        };
+    }
+
+    function makeImageDraggable(wrapper) {
+        let isDragging = false, startX, startY, initialX, initialY;
+
+        wrapper.addEventListener('mousedown', e => {
+            if (e.target.classList.contains('resize-handle')) return;
             isDragging = true;
             startX = e.clientX;
             startY = e.clientY;
-            initialX = parseInt(image.style.left, 10);
-            initialY = parseInt(image.style.top, 10);
-            image.style.zIndex = '1002'; // Bring the image to the front while dragging
+            initialX = parseInt(wrapper.style.left);
+            initialY = parseInt(wrapper.style.top);
 
-            // Select the image when dragging starts
-            if (currentlySelected !== image) {
+            if (currentlySelected !== wrapper) {
                 deselectCurrentlySelected();
-                currentlySelected = image;
-                image.classList.add('selected');
-                disableTextEditing(true); // Disable text editing
+                currentlySelected = wrapper;
+                wrapper.classList.add('selected');
+                disableTextEditing(true);
             }
         });
 
-        document.addEventListener('mousemove', (e) => {
+        document.addEventListener('mousemove', e => {
             if (isDragging) {
-                const deltaX = e.clientX - startX;
-                const deltaY = e.clientY - startY;
-                image.style.left = `${initialX + deltaX}px`;
-                image.style.top = `${initialY + deltaY}px`;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                wrapper.style.left = `${initialX + dx}px`;
+                wrapper.style.top = `${initialY + dy}px`;
             }
         });
 
         document.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false;
-                image.style.zIndex = '1001'; // Reset zIndex after dragging
-            }
+            isDragging = false;
         });
     }
 
-    // Function to make an image selectable
-    function makeImageSelectable(image) {
-        // Select the image on click
-        image.addEventListener('click', (event) => {
-            // Prevent deselection on click
-            event.stopPropagation();
-            if (currentlySelected !== image) {
+    function makeImageSelectable(wrapper, img) {
+        wrapper.addEventListener('click', (e) => {
+            if (e.target.classList.contains('resize-handle')) return;
+            e.stopPropagation();
+            if (currentlySelected !== wrapper) {
                 deselectCurrentlySelected();
-                currentlySelected = image;
-                image.classList.add('selected');
-                disableTextEditing(true); // Disable text editing
+                currentlySelected = wrapper;
+                wrapper.classList.add('selected');
+                disableTextEditing(true);
             }
         });
     }
 
-    // Function to deselect the currently selected item
+    function addResizeHandles(wrapper, img) {
+        ['tl', 'tr', 'bl', 'br'].forEach(corner => {
+            const handle = document.createElement('div');
+            handle.classList.add('resize-handle', corner);
+            wrapper.appendChild(handle);
+
+            let startX, startY, startWidth, startHeight, startLeft, startTop, aspectRatio;
+
+            handle.addEventListener('mousedown', e => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                startX = e.clientX;
+                startY = e.clientY;
+                startWidth = img.offsetWidth;
+                startHeight = img.offsetHeight;
+                aspectRatio = startWidth / startHeight;
+                startLeft = parseInt(wrapper.style.left);
+                startTop = parseInt(wrapper.style.top);
+
+                const move = (ev) => {
+                    const dx = ev.clientX - startX;
+                    const dy = ev.clientY - startY;
+                    let newWidth = startWidth;
+                    let newHeight = startHeight;
+                    let newLeft = startLeft;
+                    let newTop = startTop;
+                    const shiftHeld = ev.shiftKey;
+
+                    if (corner === 'br') {
+                        if (shiftHeld) {
+                            newWidth = startWidth + dx;
+                            newHeight = newWidth / aspectRatio;
+                        } else {
+                            newWidth = startWidth + dx;
+                            newHeight = startHeight + dy;
+                        }
+                    } else if (corner === 'bl') {
+                        if (shiftHeld) {
+                            newWidth = startWidth - dx;
+                            newHeight = newWidth / aspectRatio;
+                            newLeft = startLeft + dx;
+                        } else {
+                            newWidth = startWidth - dx;
+                            newHeight = startHeight + dy;
+                            newLeft = startLeft + dx;
+                        }
+                    } else if (corner === 'tl') {
+                        if (shiftHeld) {
+                            newWidth = startWidth - dx;
+                            newHeight = newWidth / aspectRatio;
+                            newLeft = startLeft + dx;
+                            newTop = startTop + (startHeight - newHeight);
+                        } else {
+                            newWidth = startWidth - dx;
+                            newHeight = startHeight - dy;
+                            newLeft = startLeft + dx;
+                            newTop = startTop + dy;
+                        }
+                    } else if (corner === 'tr') {
+                        if (shiftHeld) {
+                            newWidth = startWidth + dx;
+                            newHeight = newWidth / aspectRatio;
+                            newTop = startTop + (startHeight - newHeight);
+                        } else {
+                            newWidth = startWidth + dx;
+                            newHeight = startHeight - dy;
+                            newTop = startTop + dy;
+                        }
+                    }
+
+                    if (newWidth > 20 && newHeight > 20) {
+                        img.style.width = `${newWidth}px`;
+                        img.style.height = `${newHeight}px`;
+                        wrapper.style.left = `${newLeft}px`;
+                        wrapper.style.top = `${newTop}px`;
+                    }
+                };
+
+                const stop = () => {
+                    document.removeEventListener('mousemove', move);
+                    document.removeEventListener('mouseup', stop);
+                };
+
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', stop);
+            });
+        });
+    }
+
     function deselectCurrentlySelected() {
         if (currentlySelected) {
             currentlySelected.classList.remove('selected');
             currentlySelected = null;
-            disableTextEditing(false); // Re-enable text editing
+            disableTextEditing(false);
         }
     }
 
-    // Function to enable or disable text editing
     function disableTextEditing(disable) {
-        const editableElements = document.querySelectorAll('[contenteditable]');
-        editableElements.forEach(el => {
-            el.contentEditable = !disable; // Enable or disable contentEditable
+        document.querySelectorAll('[contenteditable]').forEach(el => {
+            el.contentEditable = !disable;
         });
         document.querySelectorAll('.text-preview, .input-area').forEach(el => {
-            el.style.pointerEvents = disable ? 'none' : 'auto'; // Enable or disable pointer events
+            el.style.pointerEvents = disable ? 'none' : 'auto';
         });
     }
 
-    // Deselect image when clicking outside of it
-    document.addEventListener('click', (event) => {
-        if (currentlySelected && !currentlySelected.contains(event.target)) {
+    document.addEventListener('click', (e) => {
+        if (currentlySelected && !currentlySelected.contains(e.target)) {
             deselectCurrentlySelected();
         }
     });
 
-    // Deselect image when a new text area is created
-    document.addEventListener('input', (event) => {
-        const target = event.target;
-        if (target.isContentEditable) {
+    document.addEventListener('input', (e) => {
+        if (e.target.isContentEditable) {
             deselectCurrentlySelected();
         }
     });
 
-    // Event listener for delete button in the header
     document.getElementById('binButton').addEventListener('click', () => {
-        // Find the selected image
-        const selectedImage = document.querySelector('.selected');
-        if (selectedImage) {
-            selectedImage.remove(); // Remove the image from the DOM
+        if (currentlySelected) {
+            currentlySelected.remove();
+            currentlySelected = null;
         }
     });
 });

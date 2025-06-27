@@ -77,11 +77,14 @@ function createBlueIconButtons(x, y) {
             textarea.style.top = position.y + 'px';
             textarea.rows = 1;
             textarea.cols = 30;
+            document.body.appendChild(textarea);
+            textarea.focus();
 
             if (styleCallback) styleCallback(textarea);
 
             document.body.appendChild(textarea);
             textarea.focus();
+            attachGhostSuggestion(textarea);
 
             textarea.removeEventListener('keydown', handleEnterKey);
             textarea.addEventListener('keydown', handleEnterKey);
@@ -233,6 +236,7 @@ document.addEventListener('click', function(event) {
 
     document.body.appendChild(textarea);
     textarea.focus();
+    attachGhostSuggestion(textarea);
 
     textarea.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -370,7 +374,7 @@ function copyText(textElement) {
 
     tempTextarea.select(); // Select the text
     document.execCommand('copy'); // Copy the text to clipboard
-    document.body.removeChild(tempTextarea); // Remove the temporary textarea
+    document.body.removeChild(tempTextarea); // Remove the tempoary textarea
 }
 
 function startMovingText(textElement) {
@@ -407,3 +411,91 @@ document.addEventListener('mousemove', function(event) {
         }
     }
 });
+
+
+// word list for suggestions
+
+let wordList = [];
+
+// Load the word list from GitHub
+fetch('https://raw.githubusercontent.com/first20hours/google-10000-english/master/20k.txt')
+  .then(res => res.text())
+  .then(text => {
+    wordList = text.split('\n').map(w => w.trim().toLowerCase());
+  });
+
+function getCurrentWord(text, cursorPos) {
+  let left = text.slice(0, cursorPos);
+  let match = left.match(/[\w'-]+$/);
+  return match ? match[0] : '';
+}
+
+function findSuggestion(prefix) {
+  if (!prefix) return '';
+  prefix = prefix.toLowerCase();
+  return wordList.find(word => word.startsWith(prefix) && word.length > prefix.length) || '';
+}
+
+function attachGhostSuggestion(textarea) {
+  let wrapper = document.createElement('div');
+  wrapper.className = 'suggestion-wrapper';
+
+  let ghost = document.createElement('div');
+  ghost.className = 'ghost-text';
+
+  // Mirror all font-related styles
+  const styles = window.getComputedStyle(textarea);
+  ghost.style.fontFamily = styles.fontFamily;
+  ghost.style.fontSize = styles.fontSize;
+  ghost.style.fontWeight = styles.fontWeight;
+  ghost.style.lineHeight = styles.lineHeight;
+  ghost.style.padding = styles.padding;
+
+
+  wrapper.appendChild(ghost);
+  document.body.appendChild(wrapper);
+
+  function updateSuggestion() {
+    let cursorPos = textarea.selectionStart;
+    let currentText = textarea.value;
+    let currentWord = getCurrentWord(currentText, cursorPos);
+    let suggestion = findSuggestion(currentWord);
+
+    if (suggestion) {
+      let completed = suggestion.slice(currentWord.length);
+      ghost.textContent = currentText + completed;
+    } else {
+      ghost.textContent = '';
+    }
+
+    // Align perfectly with textarea
+    const rect = textarea.getBoundingClientRect();
+    wrapper.style.left = rect.left + window.scrollX + 'px';
+    wrapper.style.top = rect.top + window.scrollY + 'px';
+    wrapper.style.width = rect.width + 'px';
+    wrapper.style.height = rect.height + 'px';
+  }
+
+  textarea.addEventListener('input', updateSuggestion);
+  textarea.addEventListener('keydown', function(e) {
+    if ((e.key === 'Tab' || e.key === 'ArrowRight') && ghost.textContent) {
+      e.preventDefault();
+      let cursorPos = textarea.selectionStart;
+      let currentText = textarea.value;
+      let currentWord = getCurrentWord(currentText, cursorPos);
+      let suggestion = findSuggestion(currentWord);
+
+      if (suggestion) {
+        let before = currentText.slice(0, cursorPos - currentWord.length);
+        let after = currentText.slice(cursorPos);
+        textarea.value = before + suggestion + after;
+        textarea.selectionStart = textarea.selectionEnd = before.length + suggestion.length;
+        updateSuggestion();
+      }
+    }
+  });
+
+  textarea.addEventListener('blur', () => wrapper.remove());
+
+  updateSuggestion();
+}

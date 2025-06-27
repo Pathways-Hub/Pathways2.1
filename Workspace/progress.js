@@ -15,16 +15,30 @@ document.addEventListener('DOMContentLoaded', () => {
         progressNote.addEventListener('mousedown', e => e.stopPropagation());
         progressNote.addEventListener('click', e => e.stopPropagation());
 
+        // Title wrapper and delete button
+        const titleWrapper = document.createElement('div');
+        titleWrapper.classList.add('note-title-wrapper');
+
         const title = document.createElement('div');
         title.classList.add('note-title');
         title.contentEditable = true;
         title.innerText = 'Title';
 
+        const deleteBtn = document.createElement('div');
+        deleteBtn.classList.add('note-delete');
+        deleteBtn.textContent = '×';
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            progressNote.remove();
+        });
+
+        titleWrapper.appendChild(title);
+        titleWrapper.appendChild(deleteBtn);
+
         const tasksContainer = document.createElement('div');
         tasksContainer.classList.add('tasks-container');
         tasksContainer.setAttribute('id', `tasks-container-${progressNote.dataset.noteId}`);
 
-        // Handle dragover event for reordering tasks
         tasksContainer.addEventListener('dragover', e => {
             e.preventDefault();
             const afterElement = getDragAfterElement(tasksContainer, e.clientY);
@@ -36,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Handle task drop event
         tasksContainer.addEventListener('drop', e => {
             e.preventDefault();
             const draggingTask = document.querySelector('.dragging');
@@ -46,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
             adjustSpacing(tasksContainer, title);
         });
 
-        // Add buttons for Add Task and Customize
         const addTaskButton = document.createElement('div');
         addTaskButton.classList.add('add-task-btn');
 
@@ -57,11 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const customizeBtnRight = document.createElement('button');
         customizeBtnRight.classList.add('customize-right');
 
-        // Customize button with icon
         const customizeIcon = document.createElement('span');
         customizeIcon.classList.add('customize-icon');
-        customizeIcon.innerHTML = '&#9881;';  // Gear icon (Unicode character for settings)
-        
+        customizeIcon.innerHTML = '&#9881;';
         customizeBtnRight.appendChild(customizeIcon);
         customizeBtnRight.appendChild(document.createTextNode(' Customize'));
 
@@ -72,31 +82,27 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             const task = createTask();
             tasksContainer.appendChild(task);
-            adjustSpacing(tasksContainer, title);  // Adjust spacing when a task is added
+            adjustSpacing(tasksContainer, title);
         });
 
-        progressNote.appendChild(title);
+        progressNote.appendChild(titleWrapper);
         progressNote.appendChild(tasksContainer);
         progressNote.appendChild(addTaskButton);
         document.body.appendChild(progressNote);
 
-        // Handle Customize button click (show color boxes)
         customizeBtnRight.addEventListener('click', (e) => {
-            e.stopPropagation();  // Prevent event propagation to the progress note
+            e.stopPropagation();
             showColorOptions(progressNote);
         });
 
         makeDraggable(progressNote);
     }
 
-    // Show color options when Customize button is clicked
     function showColorOptions(progressNote) {
-        // Create the color palette container if it doesn't exist
         if (!document.querySelector('.color-options')) {
             const colorOptionsContainer = document.createElement('div');
             colorOptionsContainer.classList.add('color-options');
 
-            // Pastel colors to choose from
             const colors = [
                 '#FFB3BA', '#FFDFBA', '#FFECBA', '#BAFFC9',
                 '#BAE1FF', '#D9BAFF', '#FFBAF0', '#B3B3CC',
@@ -106,16 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 '#D0F0C0', '#FFC0CB', '#CDEFFD', '#E6CCFF'
             ];
 
-            // Create color boxes
             colors.forEach(color => {
                 const colorBox = document.createElement('div');
                 colorBox.classList.add('color-box');
                 colorBox.style.backgroundColor = color;
 
-                // Change progress note color when clicked
                 colorBox.addEventListener('click', () => {
                     progressNote.style.backgroundColor = color;
-                    colorOptionsContainer.remove();  // Remove color options after selecting
+                    colorOptionsContainer.remove();
                 });
 
                 colorOptionsContainer.appendChild(colorBox);
@@ -125,19 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Adjust spacing between title and button based on task count
     function adjustSpacing(tasksContainer, title) {
         const addButton = tasksContainer.nextElementSibling;
         if (tasksContainer.children.length === 0) {
-            title.style.marginBottom = '10px'; // Tight spacing when no tasks
-            addButton.style.marginTop = '15px'; // Keep a smaller gap when no tasks
+            title.style.marginBottom = '10px';
+            addButton.style.marginTop = '15px';
         } else {
-            title.style.marginBottom = '20px'; // Regular spacing when tasks are added
-            addButton.style.marginTop = '25px'; // Keep a larger gap when tasks are present
+            title.style.marginBottom = '20px';
+            addButton.style.marginTop = '25px';
         }
     }
 
-    // Create Task
     function createTask() {
         const task = document.createElement('div');
         task.classList.add('task');
@@ -175,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return task;
     }
 
-    // Reorder tasks when dropped
     function getDragAfterElement(container, clientY) {
         const draggableElements = [...container.querySelectorAll('.task:not(.dragging)')];
         return draggableElements.reduce((closest, child) => {
@@ -189,13 +190,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
-    // Make progress note draggable
     function makeDraggable(element) {
         let offsetX, offsetY, isDragging = false;
 
-        // Only allow dragging the progress note itself, not the tasks inside it
         element.addEventListener('mousedown', e => {
-            // If user clicks on a task or an editable content, stop propagation
             const isEditable = e.target.closest('[contenteditable]');
             if (isEditable || e.target.closest('.task')) return;
 
@@ -226,23 +224,45 @@ document.addEventListener('DOMContentLoaded', () => {
             width: 300px;
             background-color: #eee;
             border-radius: 20px;
-            padding: 20px;
+            padding: 12px;
             cursor: move;
             z-index: 9999;
             user-select: none;
         }
+        .note-title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 20px 16px 20px;
+            position: relative;
+        }
         .note-title {
+            flex: 1;
             font-weight: bold;
             font-size: 20px;
-            margin-bottom: 20px;
             cursor: text;
             user-select: text;
             text-transform: capitalize;
         }
+        .note-delete {
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+            color: #999;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .progress-note:hover .note-delete {
+            opacity: 1;
+        }
+        .note-delete:hover {
+            color: #c00;
+        }
         .tasks-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
             min-height: 20px;
         }
         .add-task-btn {
@@ -255,8 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .customize-right {
             width: 50%;
             padding: 10px;
-            background-color: rgba(0, 0, 0, 0.1); /* transparent and darker */
-            border: 0px solid rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 0;
             border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
@@ -277,9 +297,11 @@ document.addEventListener('DOMContentLoaded', () => {
             margin-right: 8px;
         }
         .task {
-            background-color: rgba(0, 0, 0, 0.1); /* transparent and darker */
+            background-color: #fff;
+            border: 2px solid rgba(0, 0, 0, 0.05);
             border-radius: 10px;
-            padding: 10px;
+            padding: 8px 10px;
+            margin: 0;
             position: relative;
             cursor: grab;
             user-select: none;
@@ -313,8 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .delete-task:hover {
             color: #c00;
         }
-
-        /* Color Options */
         .color-options {
             position: absolute;
             top: 0;
