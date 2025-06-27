@@ -73,13 +73,24 @@ function renderTasks() {
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = '';
 
+    // Set max height for 4 tasks (approximate height per task * 4)
+    taskList.style.maxHeight = '160px'; // adjust if needed based on your CSS
+    taskList.style.overflowY = 'auto';
+
     const tasks = getTasksFromLocalStorage();
     tasks.forEach(task => {
         const li = document.createElement('li');
+
+        // Set styles so container stretches with long text
+        li.style.display = 'flex';
+        li.style.alignItems = 'center';
+        li.style.marginBottom = '8px';
+        li.style.flexWrap = 'wrap'; // allow wrapping if too long
+
         li.innerHTML = `
-            <input type="checkbox" class="task-checkbox" onclick="toggleTaskCompletion(this)" ${task.completed ? 'checked' : ''}>
-            <span class="task-text">${task.text}</span>
-            <button onclick="deleteTask(this)">Delete</button>
+            <input type="checkbox" class="task-checkbox" onclick="toggleTaskCompletion(this)" ${task.completed ? 'checked' : ''} style="flex-shrink:0; margin-right: 8px;">
+            <span class="task-text" style="flex-grow:1; word-wrap: break-word; white-space: normal;">${task.text}</span>
+            <button onclick="deleteTask(this)" style="margin-left: 8px; flex-shrink:0;">Delete</button>
         `;
         taskList.appendChild(li);
     });
@@ -129,4 +140,3 @@ function toggleVideoPlay() {
 
 // Add event listener to the play button (middle button)
 document.querySelectorAll('.control-btn')[1].addEventListener('click', toggleVideoPlay);
-
