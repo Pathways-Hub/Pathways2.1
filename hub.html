@@ -81,7 +81,7 @@
     allowfullscreen>
   </iframe>
 
-  <h1 class="main-title">Home</h1>
+  <h1 class="main-title">Hi Toby, what will you create today?</h1>
 
   <a href="workspaces.html" class="big-create-btn">
     <span class="button-top-text">+</span>
@@ -144,6 +144,18 @@
   <script src="website/webelements.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script> 
   <script src="website/webel.js"></script>
+
+  <script>
+    function getGreeting() {
+      const hour = new Date().getHours();
+      if (hour < 12) return "Good morning";
+      if (hour < 18) return "Good afternoon";
+      return "Good evening";
+    }
+
+    const username = localStorage.getItem('username') || 'Alex';
+    document.querySelector('.welcome-message').innerHTML = `${getGreeting()} <span id="username">${username}</span>, what will you work on today?`;
+  </script>
 
 </body>
 </html>
