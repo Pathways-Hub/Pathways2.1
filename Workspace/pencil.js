@@ -1,9 +1,8 @@
-// pencil.js
-
 document.addEventListener('DOMContentLoaded', () => {
     let isDrawing = false;
     let isErasing = false;
     let isMouseDown = false;
+    let isDrawingRect = false; // rectangle mode flag (add toggle for this in your UI)
     const eraserSize = 10;
 
     const canvas = document.createElement('canvas');
@@ -21,12 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
 
-    // Store all lines drawn
-    const lines = [];
+    // Store shapes: lines and rectangles
+    // lines: { type: 'line', points: [...] }
+    // rectangles: { type: 'rect', start: {x,y}, end: {x,y} }
+    const shapes = [];
 
+    // Temporary variables for current drawing
     let currentLine = [];
+    let rectStart = null;
+    let rectEnd = null;
 
-    // Eraser outline element
+    // Eraser cursor circle
     const eraserOutline = document.createElement('div');
     eraserOutline.style.position = 'absolute';
     eraserOutline.style.border = '1px solid grey';
@@ -38,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     eraserOutline.style.zIndex = '1000';
     document.body.appendChild(eraserOutline);
 
-    // Crosshair element (size same as eraser circle)
     const crosshairSize = eraserSize * 2;
     const crosshair = document.createElement('div');
     crosshair.id = 'crosshairCursor';
@@ -69,75 +72,140 @@ document.addEventListener('DOMContentLoaded', () => {
     crosshair.appendChild(vLine);
     document.body.appendChild(crosshair);
 
+    // Resize canvas & redraw
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        redrawAllLines();
+        redrawAllShapes();
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    function startAction(event) {
-        if (isDrawing || isErasing) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
-            const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
+    // Save shapes array to localStorage
+    function saveShapes() {
+        localStorage.setItem('myDrawingShapes', JSON.stringify(shapes));
+    }
 
-            isMouseDown = true;
-
-            if (isDrawing) {
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                currentLine = [{ x, y }];
+    // Load shapes array from localStorage
+    function loadShapes() {
+        const data = localStorage.getItem('myDrawingShapes');
+        if (data) {
+            try {
+                const parsed = JSON.parse(data);
+                if (Array.isArray(parsed)) {
+                    shapes.length = 0;
+                    shapes.push(...parsed);
+                }
+            } catch (e) {
+                console.warn('Error parsing shapes from localStorage', e);
             }
         }
     }
 
-    function performAction(event) {
-        if ((isDrawing || isErasing) && isMouseDown) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
-            const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
+    // Start drawing (line or rect)
+    function startAction(event) {
+        if (!isDrawing && !isErasing && !isDrawingRect) return;
 
-            if (isDrawing) {
-                ctx.lineTo(x, y);
-                ctx.stroke();
-                currentLine.push({ x, y });
-            } else if (isErasing) {
-                // Find and remove any line containing a point near this location
-                for (let i = lines.length - 1; i >= 0; i--) {
-                    const line = lines[i];
-                    if (line.some(point => Math.hypot(point.x - x, point.y - y) <= eraserSize)) {
-                        lines.splice(i, 1);
+        const rect = canvas.getBoundingClientRect();
+        const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
+        const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
+
+        isMouseDown = true;
+
+        if (isDrawing) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            currentLine = [{ x, y }];
+        } else if (isDrawingRect) {
+            rectStart = { x, y };
+            rectEnd = null;
+        }
+    }
+
+    // Drawing or erasing
+    function performAction(event) {
+        if ((!isDrawing && !isErasing && !isDrawingRect) || !isMouseDown) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
+        const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
+
+        if (isDrawing) {
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            currentLine.push({ x, y });
+        } else if (isErasing) {
+            for (let i = shapes.length - 1; i >= 0; i--) {
+                const shape = shapes[i];
+                if (shape.type === 'line') {
+                    if (shape.points.some(point => Math.hypot(point.x - x, point.y - y) <= eraserSize)) {
+                        shapes.splice(i, 1);
+                    }
+                } else if (shape.type === 'rect') {
+                    // Simple rectangle hit test: check if eraser inside rectangle bbox (+eraserSize)
+                    const left = Math.min(shape.start.x, shape.end.x) - eraserSize;
+                    const right = Math.max(shape.start.x, shape.end.x) + eraserSize;
+                    const top = Math.min(shape.start.y, shape.end.y) - eraserSize;
+                    const bottom = Math.max(shape.start.y, shape.end.y) + eraserSize;
+                    if (x >= left && x <= right && y >= top && y <= bottom) {
+                        shapes.splice(i, 1);
                     }
                 }
-                redrawAllLines();
             }
+            redrawAllShapes();
+            saveShapes();
+        } else if (isDrawingRect && rectStart) {
+            rectEnd = { x, y };
+            redrawAllShapes();
+            // Draw current rect preview
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            const left = Math.min(rectStart.x, rectEnd.x);
+            const top = Math.min(rectStart.y, rectEnd.y);
+            const width = Math.abs(rectEnd.x - rectStart.x);
+            const height = Math.abs(rectEnd.y - rectStart.y);
+            ctx.strokeRect(left, top, width, height);
         }
     }
 
+    // Finish drawing/erasing
     function stopAction() {
         if (isDrawing && currentLine.length > 0) {
-            lines.push([...currentLine]);
+            shapes.push({ type: 'line', points: [...currentLine] });
             currentLine = [];
             ctx.closePath();
+            saveShapes();
+        } else if (isDrawingRect && rectStart && rectEnd) {
+            shapes.push({ type: 'rect', start: rectStart, end: rectEnd });
+            rectStart = null;
+            rectEnd = null;
+            saveShapes();
+            redrawAllShapes();
         }
         isMouseDown = false;
     }
 
-    function redrawAllLines() {
+    // Redraw all saved shapes
+    function redrawAllShapes() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 2;
-        for (const line of lines) {
-            if (line.length > 1) {
+
+        for (const shape of shapes) {
+            if (shape.type === 'line' && shape.points.length > 1) {
                 ctx.beginPath();
-                ctx.moveTo(line[0].x, line[0].y);
-                for (let i = 1; i < line.length; i++) {
-                    ctx.lineTo(line[i].x, line[i].y);
+                ctx.moveTo(shape.points[0].x, shape.points[0].y);
+                for (let i = 1; i < shape.points.length; i++) {
+                    ctx.lineTo(shape.points[i].x, shape.points[i].y);
                 }
                 ctx.stroke();
                 ctx.closePath();
+            } else if (shape.type === 'rect') {
+                const left = Math.min(shape.start.x, shape.end.x);
+                const top = Math.min(shape.start.y, shape.end.y);
+                const width = Math.abs(shape.end.x - shape.start.x);
+                const height = Math.abs(shape.end.y - shape.start.y);
+                ctx.strokeRect(left, top, width, height);
             }
         }
     }
@@ -157,12 +225,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Dummy disable text editing func, update as you want
+    function disableTextEditing(state) {}
+
+    // Toggle pencil drawing mode
     document.getElementById('pencilButton').addEventListener('click', () => {
         const pencilIcon = document.getElementById('pencilButton').querySelector('i');
         const eraserIcon = document.getElementById('eraserButton').querySelector('i');
 
         if (isDrawing) {
-            // Turn OFF drawing
             isDrawing = false;
             crosshair.style.display = 'none';
             document.removeEventListener('mousedown', startAction);
@@ -177,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
             disableTextEditing(false);
             console.log('Drawing mode deactivated');
         } else {
-            // Turn ON drawing
             isDrawing = true;
             isErasing = false;
+            isDrawingRect = false;
             canvas.style.display = 'block';
             crosshair.style.display = 'block';
             eraserOutline.style.display = 'none';
@@ -199,12 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Toggle eraser mode
     document.getElementById('eraserButton').addEventListener('click', () => {
         const pencilIcon = document.getElementById('pencilButton').querySelector('i');
         const eraserIcon = document.getElementById('eraserButton').querySelector('i');
 
         if (isErasing) {
-            // Turn OFF erasing
             isErasing = false;
             eraserOutline.style.display = 'none';
             document.removeEventListener('mousedown', startAction);
@@ -219,9 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
             disableTextEditing(false);
             console.log('Eraser mode deactivated');
         } else {
-            // Turn ON erasing
             isErasing = true;
             isDrawing = false;
+            isDrawingRect = false;
             canvas.style.display = 'block';
             eraserOutline.style.display = 'block';
             crosshair.style.display = 'none';
@@ -241,4 +312,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // You should add a similar button/toggle for rectangle mode:
+    // Example:
+    /*
+    document.getElementById('rectButton').addEventListener('click', () => {
+        // toggle isDrawingRect true/false; set isDrawing and isErasing false;
+        // show crosshair or other cursor for rect drawing
+        // bind/unbind events like above
+    });
+    */
+
+    // Load saved shapes and redraw at start
+    loadShapes();
+    redrawAllShapes();
 });

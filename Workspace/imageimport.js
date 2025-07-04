@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentlySelected = null;
+    const STORAGE_KEY = 'importedImages';
 
-    // Add global styles for selected state and resize handles with hover effect
     const style = document.createElement('style');
     style.textContent = `
         .selected {
@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
             border-radius: 20px;
             box-sizing: border-box;
         }
-
         .resize-handle {
             width: 10px;
             height: 10px;
@@ -21,13 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
             transition: opacity 0.3s ease;
             pointer-events: none;
         }
-
-        /* Show handles only on hover over the image wrapper */
         div.image-wrapper:hover .resize-handle {
             opacity: 1;
             pointer-events: auto;
         }
-
         .resize-handle.tl { top: -5px; left: -5px; cursor: nwse-resize; }
         .resize-handle.tr { top: -5px; right: -5px; cursor: nesw-resize; }
         .resize-handle.bl { bottom: -5px; left: -5px; cursor: nesw-resize; }
@@ -35,30 +31,32 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 
-    // On button click, ask for image URL and create image element
     document.getElementById('photoImportButton').addEventListener('click', () => {
         const url = prompt("Please enter the image URL:");
         if (url) {
-            createImageElement(url);
+            const id = 'img_' + Date.now(); // unique ID
+            createImageElement(url, 50, 100, 200, 'auto', id);
+            saveImageData();
         }
     });
 
-    function createImageElement(src) {
+    function createImageElement(src, left, top, width, height, id) {
         const wrapper = document.createElement('div');
-        wrapper.classList.add('image-wrapper'); // for hover effect
+        wrapper.classList.add('image-wrapper');
         wrapper.style.position = 'absolute';
-        wrapper.style.left = '50px';
-        wrapper.style.top = '100px';
+        wrapper.style.left = `${left}px`;
+        wrapper.style.top = `${top}px`;
         wrapper.style.zIndex = '1001';
         wrapper.style.display = 'inline-block';
+        wrapper.dataset.imageId = id;
 
         const img = new Image();
         img.src = src;
         img.style.borderRadius = '20px';
         img.style.cursor = 'move';
         img.style.display = 'block';
-        img.style.width = '200px';
-        img.style.height = 'auto';
+        img.style.width = typeof width === 'number' ? `${width}px` : width;
+        img.style.height = typeof height === 'number' ? `${height}px` : height;
 
         img.onload = () => {
             wrapper.appendChild(img);
@@ -102,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         document.addEventListener('mouseup', () => {
+            if (isDragging) saveImageData();
             isDragging = false;
         });
     }
@@ -201,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const stop = () => {
                     document.removeEventListener('mousemove', move);
                     document.removeEventListener('mouseup', stop);
+                    saveImageData(); // Save after resize
                 };
 
                 document.addEventListener('mousemove', move);
@@ -232,16 +232,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.addEventListener('input', (e) => {
-        if (e.target.isContentEditable) {
-            deselectCurrentlySelected();
-        }
-    });
-
     document.getElementById('binButton').addEventListener('click', () => {
         if (currentlySelected) {
+            const id = currentlySelected.dataset.imageId;
             currentlySelected.remove();
+            deleteImageData(id);
             currentlySelected = null;
         }
     });
+
+    function saveImageData() {
+        const images = Array.from(document.querySelectorAll('.image-wrapper')).map(wrapper => {
+            const img = wrapper.querySelector('img');
+            return {
+                id: wrapper.dataset.imageId,
+                src: img.src,
+                left: parseInt(wrapper.style.left),
+                top: parseInt(wrapper.style.top),
+                width: parseInt(img.style.width),
+                height: img.style.height
+            };
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+    }
+
+    function deleteImageData(id) {
+        const images = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        const updated = images.filter(img => img.id !== id);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    }
+
+    function restoreImages() {
+        const savedImages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        savedImages.forEach(data => {
+            createImageElement(data.src, data.left, data.top, data.width, data.height, data.id);
+        });
+    }
+
+    // Restore all images on load
+    restoreImages();
 });

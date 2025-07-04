@@ -1,138 +1,143 @@
-// Wait for the DOM to fully load before attaching the event listener
 document.addEventListener('DOMContentLoaded', function () {
     const squareToolButton = document.getElementById('squareToolButton');
     const deleteButton = document.getElementById('binButton');
-    let selectedSquare = null; // Track the selected square
+    let selectedSquare = null;
+    let gridSize = 20;
+    let isGridActive = false;
+    let squareIdCounter = 0;
+
+    // Load saved squares on page load
+    loadSquares();
 
     squareToolButton.addEventListener('click', function () {
         createRectangle();
     });
 
-    let gridSize = 20; // Grid size for snapping
-    let isGridActive = false; // Tracks if the grid is active
-
-    // Function to create a new rectangle
-    function createRectangle() {
+    function createRectangle(props = {}) {
         const square = document.createElement('div');
         square.classList.add('centeredSquare');
-        square.style.position = 'absolute';
-        square.style.width = '200px';
-        square.style.height = '200px';
-        square.style.backgroundColor = 'transparent';
-        square.style.border = '2px solid black';
+        square.dataset.id = props.id || `square-${Date.now()}-${squareIdCounter++}`;
 
-        const centerX = (window.innerWidth / 2) - 100;
-        const centerY = (window.innerHeight / 2) - 100;
+        const initial = {
+            width: props.width || 200,
+            height: props.height || 200,
+            left: props.left || window.innerWidth / 2 - 100,
+            top: props.top || window.innerHeight / 2 - 100,
+            borderRadius: props.borderRadius || 0,
+        };
 
-        square.style.left = `${centerX}px`;
-        square.style.top = `${centerY}px`;
+        Object.assign(square.style, {
+            position: 'absolute',
+            width: `${initial.width}px`,
+            height: `${initial.height}px`,
+            left: `${initial.left}px`,
+            top: `${initial.top}px`,
+            border: '2px solid black',
+            backgroundColor: 'transparent',
+            borderRadius: `${initial.borderRadius}px`,
+        });
 
         const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
         corners.forEach(corner => {
             const circle = document.createElement('div');
             circle.classList.add('resize-circle', corner);
-            circle.style.position = 'absolute';
-            circle.style.width = '10px';
-            circle.style.height = '10px';
-            circle.style.backgroundColor = 'blue';
-            circle.style.borderRadius = '50%';
-            circle.style.display = 'none';
+            Object.assign(circle.style, {
+                position: 'absolute',
+                width: '10px',
+                height: '10px',
+                backgroundColor: 'blue',
+                borderRadius: '50%',
+                display: 'none',
+                cursor: 'nwse-resize',
+            });
+
             switch (corner) {
-                case 'top-left':
-                    circle.style.left = '-5px';
-                    circle.style.top = '-5px';
-                    break;
-                case 'top-right':
-                    circle.style.right = '-5px';
-                    circle.style.top = '-5px';
-                    break;
-                case 'bottom-left':
-                    circle.style.left = '-5px';
-                    circle.style.bottom = '-5px';
-                    break;
-                case 'bottom-right':
-                    circle.style.right = '-5px';
-                    circle.style.bottom = '-5px';
-                    break;
+                case 'top-left': circle.style.left = '-5px'; circle.style.top = '-5px'; break;
+                case 'top-right': circle.style.right = '-5px'; circle.style.top = '-5px'; break;
+                case 'bottom-left': circle.style.left = '-5px'; circle.style.bottom = '-5px'; break;
+                case 'bottom-right': circle.style.right = '-5px'; circle.style.bottom = '-5px'; break;
             }
-            square.appendChild(circle);
-        }
-        );
 
-        circle.addEventListener('mousedown', function (e) {
-            e.preventDefault();
-            const startX = e.clientX;
-            const startY = e.clientY;
-            const startWidth = parseInt(window.getComputedStyle(square).width, 10);
-            const startHeight = parseInt(window.getComputedStyle(square).height, 10);
-            const startLeft = parseInt(window.getComputedStyle(square).left, 10);
-            const startTop = parseInt(window.getComputedStyle(square).top, 10);
+            circle.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const startWidth = parseInt(square.style.width);
+                const startHeight = parseInt(square.style.height);
+                const startLeft = parseInt(square.style.left);
+                const startTop = parseInt(square.style.top);
 
-            function resize(e) {
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
+                function resize(e) {
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
 
-                if (e.shiftKey) {
-                    const dragDistance = Math.max(Math.abs(dx), Math.abs(dy));
-                    const currentWidth = parseInt(window.getComputedStyle(square).width, 10);
-                    const currentHeight = parseInt(window.getComputedStyle(square).height, 10);
-                    const maxRadius = Math.min(currentWidth, currentHeight) / 2;
-                    const newRadius = Math.min(dragDistance, maxRadius);
-                    square.style.borderRadius = `${newRadius}px`;
-                } else {
-                    if (corner === 'top-left') {
-                        square.style.width = `${snapToGrid(startWidth - dx)}px`;
-                        square.style.height = `${snapToGrid(startHeight - dy)}px`;
-                        square.style.left = `${snapToGrid(startLeft + dx)}px`;
-                        square.style.top = `${snapToGrid(startTop + dy)}px`;
-                    } else if (corner === 'top-right') {
-                        square.style.width = `${snapToGrid(startWidth + dx)}px`;
-                        square.style.height = `${snapToGrid(startHeight - dy)}px`;
-                        square.style.top = `${snapToGrid(startTop + dy)}px`;
-                    } else if (corner === 'bottom-left') {
-                        square.style.width = `${snapToGrid(startWidth - dx)}px`;
-                        square.style.height = `${snapToGrid(startHeight + dy)}px`;
-                        square.style.left = `${snapToGrid(startLeft + dx)}px`;
-                    } else if (corner === 'bottom-right') {
-                        square.style.width = `${snapToGrid(startWidth + dx)}px`;
-                        square.style.height = `${snapToGrid(startHeight + dy)}px`;
+                    if (e.shiftKey) {
+                        const dragDistance = Math.max(Math.abs(dx), Math.abs(dy));
+                        const maxRadius = Math.min(startWidth, startHeight) / 2;
+                        square.style.borderRadius = `${Math.min(dragDistance, maxRadius)}px`;
+                    } else {
+                        if (corner === 'top-left') {
+                            square.style.width = `${snapToGrid(startWidth - dx)}px`;
+                            square.style.height = `${snapToGrid(startHeight - dy)}px`;
+                            square.style.left = `${snapToGrid(startLeft + dx)}px`;
+                            square.style.top = `${snapToGrid(startTop + dy)}px`;
+                        } else if (corner === 'top-right') {
+                            square.style.width = `${snapToGrid(startWidth + dx)}px`;
+                            square.style.height = `${snapToGrid(startHeight - dy)}px`;
+                            square.style.top = `${snapToGrid(startTop + dy)}px`;
+                        } else if (corner === 'bottom-left') {
+                            square.style.width = `${snapToGrid(startWidth - dx)}px`;
+                            square.style.height = `${snapToGrid(startHeight + dy)}px`;
+                            square.style.left = `${snapToGrid(startLeft + dx)}px`;
+                        } else if (corner === 'bottom-right') {
+                            square.style.width = `${snapToGrid(startWidth + dx)}px`;
+                            square.style.height = `${snapToGrid(startHeight + dy)}px`;
+                        }
                     }
+                    saveSquare(square);
                 }
-            }
 
-            function stopResize() {
-                document.removeEventListener('mousemove', resize);
-                document.removeEventListener('mouseup', stopResize);
-            }
+                function stopResize() {
+                    document.removeEventListener('mousemove', resize);
+                    document.removeEventListener('mouseup', stopResize);
+                }
 
-            document.addEventListener('mousemove', resize);
-            document.addEventListener('mouseup', stopResize);
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', stopResize);
+            });
+
+            square.appendChild(circle);
         });
 
         const dragHandle = document.createElement('div');
         dragHandle.classList.add('drag-handle');
-        dragHandle.style.position = 'absolute';
-        dragHandle.style.width = '10px';
-        dragHandle.style.height = '10px';
-        dragHandle.style.backgroundColor = 'blue';
-        dragHandle.style.left = 'calc(50% - 5px)';
-        dragHandle.style.top = 'calc(50% - 5px)';
-        dragHandle.style.cursor = 'move';
-        dragHandle.style.display = 'none';
+        Object.assign(dragHandle.style, {
+            position: 'absolute',
+            width: '10px',
+            height: '10px',
+            backgroundColor: 'blue',
+            left: 'calc(50% - 5px)',
+            top: 'calc(50% - 5px)',
+            cursor: 'move',
+            display: 'none',
+        });
         square.appendChild(dragHandle);
 
         dragHandle.addEventListener('mousedown', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             const startX = e.clientX;
             const startY = e.clientY;
-            const startLeft = parseInt(window.getComputedStyle(square).left, 10);
-            const startTop = parseInt(window.getComputedStyle(square).top, 10);
+            const startLeft = parseInt(square.style.left);
+            const startTop = parseInt(square.style.top);
 
             function drag(e) {
                 const dx = e.clientX - startX;
                 const dy = e.clientY - startY;
                 square.style.left = `${snapToGrid(startLeft + dx)}px`;
                 square.style.top = `${snapToGrid(startTop + dy)}px`;
+                saveSquare(square);
             }
 
             function stopDrag() {
@@ -144,50 +149,40 @@ document.addEventListener('DOMContentLoaded', function () {
             document.addEventListener('mouseup', stopDrag);
         });
 
-        // Select the square on drag handle click
         dragHandle.addEventListener('click', function (e) {
             e.stopPropagation();
-            if (selectedSquare) {
-                selectedSquare.style.border = '2px solid black';
-            }
+            if (selectedSquare) selectedSquare.style.border = '2px solid black';
             selectedSquare = square;
             selectedSquare.style.border = '2px solid red';
         });
 
-        square.addEventListener('mouseenter', function () {
-            square.querySelectorAll('.resize-circle').forEach(circle => {
-                circle.style.display = 'block';
-            });
+        square.addEventListener('mouseenter', () => {
+            square.querySelectorAll('.resize-circle').forEach(c => c.style.display = 'block');
             dragHandle.style.display = 'block';
         });
 
-        square.addEventListener('mouseleave', function () {
-            square.querySelectorAll('.resize-circle').forEach(circle => {
-                circle.style.display = 'none';
-            });
+        square.addEventListener('mouseleave', () => {
+            square.querySelectorAll('.resize-circle').forEach(c => c.style.display = 'none');
             dragHandle.style.display = 'none';
         });
 
         document.body.appendChild(square);
+        saveSquare(square);
     }
 
-    // Function to snap values to the grid if the grid is active
     function snapToGrid(value) {
-        if (isGridActive) {
-            return Math.round(value / gridSize) * gridSize;
-        }
-        return value;
+        return isGridActive ? Math.round(value / gridSize) * gridSize : value;
     }
 
-    // Delete the selected square
     deleteButton.addEventListener('click', function () {
         if (selectedSquare) {
+            const id = selectedSquare.dataset.id;
             selectedSquare.remove();
+            deleteSquare(id);
             selectedSquare = null;
         }
     });
 
-    // Deselect the square when clicking elsewhere
     document.addEventListener('click', function (e) {
         if (selectedSquare && !e.target.closest('.centeredSquare')) {
             selectedSquare.style.border = '2px solid black';
@@ -195,12 +190,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Toggle the grid state (this function can be triggered by a separate grid toggle button)
     function toggleGrid() {
         isGridActive = !isGridActive;
     }
 
-    // Example of how to toggle the grid from a button (uncomment if needed)
-    // document.getElementById('gridToggleButton').addEventListener('click', toggleGrid);
-    
+    function saveSquare(square) {
+        const id = square.dataset.id;
+        const squareData = {
+            id,
+            left: parseInt(square.style.left),
+            top: parseInt(square.style.top),
+            width: parseInt(square.style.width),
+            height: parseInt(square.style.height),
+            borderRadius: parseInt(square.style.borderRadius) || 0,
+        };
+
+        const allSquares = JSON.parse(localStorage.getItem('squares') || '[]');
+        const existingIndex = allSquares.findIndex(s => s.id === id);
+        if (existingIndex !== -1) {
+            allSquares[existingIndex] = squareData;
+        } else {
+            allSquares.push(squareData);
+        }
+        localStorage.setItem('squares', JSON.stringify(allSquares));
+    }
+
+    function deleteSquare(id) {
+        let allSquares = JSON.parse(localStorage.getItem('squares') || '[]');
+        allSquares = allSquares.filter(s => s.id !== id);
+        localStorage.setItem('squares', JSON.stringify(allSquares));
+    }
+
+    function loadSquares() {
+        const allSquares = JSON.parse(localStorage.getItem('squares') || '[]');
+        allSquares.forEach(s => createRectangle(s));
+    }
 });

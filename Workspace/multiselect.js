@@ -27,7 +27,7 @@ panel.id = 'emoji-panel';
 document.body.appendChild(panel);
 
 // === Create 4 colored emoji spans ===
-const coloredEmojis = ['😊', '😂', '😍', '😮'];
+const coloredEmojis = ['👍', '😂', '😍', '😮'];
 coloredEmojis.forEach(e => {
   const span = document.createElement('span');
   span.textContent = e;
