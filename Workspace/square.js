@@ -6,6 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
     let isGridActive = false;
     let squareIdCounter = 0;
 
+    // Workspace pan offset
+    let workspaceOffsetX = 0;
+    let workspaceOffsetY = 0;
+
+    // Load saved workspace offset
+    loadWorkspaceOffset();
+
+    // Squares data stored here to update positions relative to workspaceOffset
+    // We'll keep squares' logical positions relative to workspace coords (without offset)
+    let squaresData = [];
+
     // Load saved squares on page load
     loadSquares();
 
@@ -13,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         createRectangle();
     });
 
+    // --- Modify createRectangle to accept logical positions (relative to workspace) ---
     function createRectangle(props = {}) {
         const square = document.createElement('div');
         square.classList.add('centeredSquare');
@@ -21,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const initial = {
             width: props.width || 200,
             height: props.height || 200,
-            left: props.left || window.innerWidth / 2 - 100,
-            top: props.top || window.innerHeight / 2 - 100,
+            left: props.left !== undefined ? props.left : window.innerWidth / 2 - 100 - workspaceOffsetX,
+            top: props.top !== undefined ? props.top : window.innerHeight / 2 - 100 - workspaceOffsetY,
             borderRadius: props.borderRadius || 0,
         };
 
@@ -30,12 +42,16 @@ document.addEventListener('DOMContentLoaded', function () {
             position: 'absolute',
             width: `${initial.width}px`,
             height: `${initial.height}px`,
-            left: `${initial.left}px`,
-            top: `${initial.top}px`,
+            // Here we apply workspace offset to get screen position:
+            left: `${initial.left + workspaceOffsetX}px`,
+            top: `${initial.top + workspaceOffsetY}px`,
             border: '2px solid black',
             backgroundColor: 'transparent',
             borderRadius: `${initial.borderRadius}px`,
         });
+
+        // Add resize circles and drag handle like before
+        // Update their event handlers to work with workspace offset
 
         const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
         corners.forEach(corner => {
@@ -65,8 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const startY = e.clientY;
                 const startWidth = parseInt(square.style.width);
                 const startHeight = parseInt(square.style.height);
-                const startLeft = parseInt(square.style.left);
-                const startTop = parseInt(square.style.top);
+                const startLeft = parseInt(square.style.left) - workspaceOffsetX; // logical pos
+                const startTop = parseInt(square.style.top) - workspaceOffsetY;
 
                 function resize(e) {
                     const dx = e.clientX - startX;
@@ -80,16 +96,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (corner === 'top-left') {
                             square.style.width = `${snapToGrid(startWidth - dx)}px`;
                             square.style.height = `${snapToGrid(startHeight - dy)}px`;
-                            square.style.left = `${snapToGrid(startLeft + dx)}px`;
-                            square.style.top = `${snapToGrid(startTop + dy)}px`;
+                            // Update logical position (screen pos - workspace offset)
+                            square.style.left = `${snapToGrid(startLeft + dx) + workspaceOffsetX}px`;
+                            square.style.top = `${snapToGrid(startTop + dy) + workspaceOffsetY}px`;
                         } else if (corner === 'top-right') {
                             square.style.width = `${snapToGrid(startWidth + dx)}px`;
                             square.style.height = `${snapToGrid(startHeight - dy)}px`;
-                            square.style.top = `${snapToGrid(startTop + dy)}px`;
+                            square.style.top = `${snapToGrid(startTop + dy) + workspaceOffsetY}px`;
                         } else if (corner === 'bottom-left') {
                             square.style.width = `${snapToGrid(startWidth - dx)}px`;
                             square.style.height = `${snapToGrid(startHeight + dy)}px`;
-                            square.style.left = `${snapToGrid(startLeft + dx)}px`;
+                            square.style.left = `${snapToGrid(startLeft + dx) + workspaceOffsetX}px`;
                         } else if (corner === 'bottom-right') {
                             square.style.width = `${snapToGrid(startWidth + dx)}px`;
                             square.style.height = `${snapToGrid(startHeight + dy)}px`;
@@ -129,14 +146,16 @@ document.addEventListener('DOMContentLoaded', function () {
             e.stopPropagation();
             const startX = e.clientX;
             const startY = e.clientY;
-            const startLeft = parseInt(square.style.left);
-            const startTop = parseInt(square.style.top);
+            const startLeft = parseInt(square.style.left) - workspaceOffsetX; // logical pos
+            const startTop = parseInt(square.style.top) - workspaceOffsetY;
 
             function drag(e) {
                 const dx = e.clientX - startX;
                 const dy = e.clientY - startY;
-                square.style.left = `${snapToGrid(startLeft + dx)}px`;
-                square.style.top = `${snapToGrid(startTop + dy)}px`;
+                const newLeft = snapToGrid(startLeft + dx);
+                const newTop = snapToGrid(startTop + dy);
+                square.style.left = `${newLeft + workspaceOffsetX}px`;
+                square.style.top = `${newTop + workspaceOffsetY}px`;
                 saveSquare(square);
             }
 
@@ -167,9 +186,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.body.appendChild(square);
+
+        // Save the logical position (left - workspaceOffsetX) etc in squaresData and localStorage
         saveSquare(square);
     }
 
+    // Snap to grid function same as before
     function snapToGrid(value) {
         return isGridActive ? Math.round(value / gridSize) * gridSize : value;
     }
@@ -194,35 +216,102 @@ document.addEventListener('DOMContentLoaded', function () {
         isGridActive = !isGridActive;
     }
 
+    // Save a square's logical position (subtract workspace offset)
     function saveSquare(square) {
         const id = square.dataset.id;
+        const leftLogical = parseInt(square.style.left) - workspaceOffsetX;
+        const topLogical = parseInt(square.style.top) - workspaceOffsetY;
+
         const squareData = {
             id,
-            left: parseInt(square.style.left),
-            top: parseInt(square.style.top),
+            left: leftLogical,
+            top: topLogical,
             width: parseInt(square.style.width),
             height: parseInt(square.style.height),
             borderRadius: parseInt(square.style.borderRadius) || 0,
         };
 
-        const allSquares = JSON.parse(localStorage.getItem('squares') || '[]');
-        const existingIndex = allSquares.findIndex(s => s.id === id);
+        // Update squaresData array
+        const existingIndex = squaresData.findIndex(s => s.id === id);
         if (existingIndex !== -1) {
-            allSquares[existingIndex] = squareData;
+            squaresData[existingIndex] = squareData;
         } else {
-            allSquares.push(squareData);
+            squaresData.push(squareData);
         }
-        localStorage.setItem('squares', JSON.stringify(allSquares));
+
+        localStorage.setItem('squares', JSON.stringify(squaresData));
     }
 
     function deleteSquare(id) {
-        let allSquares = JSON.parse(localStorage.getItem('squares') || '[]');
-        allSquares = allSquares.filter(s => s.id !== id);
-        localStorage.setItem('squares', JSON.stringify(allSquares));
+        squaresData = squaresData.filter(s => s.id !== id);
+        localStorage.setItem('squares', JSON.stringify(squaresData));
     }
 
     function loadSquares() {
-        const allSquares = JSON.parse(localStorage.getItem('squares') || '[]');
-        allSquares.forEach(s => createRectangle(s));
+        squaresData = JSON.parse(localStorage.getItem('squares') || '[]');
+        squaresData.forEach(s => createRectangle(s));
+    }
+
+    // --- Workspace dragging implementation ---
+    let isWorkspaceDragging = false;
+    let workspaceDragStartX = 0;
+    let workspaceDragStartY = 0;
+
+    document.body.addEventListener('mousedown', function (e) {
+        if (e.target.closest('.centeredSquare') || e.target.closest('.resize-circle') || e.target.closest('.drag-handle')) {
+            // If clicking on square or controls, don't start dragging workspace
+            return;
+        }
+
+        // Only start dragging workspace on right mouse button (buttons=2)
+        if (e.buttons === 2) {
+            isWorkspaceDragging = true;
+            workspaceDragStartX = e.clientX;
+            workspaceDragStartY = e.clientY;
+            e.preventDefault();
+        }
+    });
+
+    document.body.addEventListener('mousemove', function (e) {
+        if (!isWorkspaceDragging) return;
+
+        const dx = e.clientX - workspaceDragStartX;
+        const dy = e.clientY - workspaceDragStartY;
+
+        workspaceOffsetX += dx;
+        workspaceOffsetY += dy;
+
+        workspaceDragStartX = e.clientX;
+        workspaceDragStartY = e.clientY;
+
+        document.querySelectorAll('.centeredSquare').forEach(square => {
+            const id = square.dataset.id;
+            const data = squaresData.find(s => s.id === id);
+            if (!data) return;
+
+            square.style.left = `${data.left + workspaceOffsetX}px`;
+            square.style.top = `${data.top + workspaceOffsetY}px`;
+        });
+    });
+
+    document.body.addEventListener('mouseup', function (e) {
+        if (isWorkspaceDragging) {
+            isWorkspaceDragging = false;
+            saveWorkspaceOffset();
+        }
+    });
+
+    // Save/load workspace offset in localStorage
+    function saveWorkspaceOffset() {
+        localStorage.setItem('workspaceOffset', JSON.stringify({ x: workspaceOffsetX, y: workspaceOffsetY }));
+    }
+
+    function loadWorkspaceOffset() {
+        const saved = localStorage.getItem('workspaceOffset');
+        if (saved) {
+            const pos = JSON.parse(saved);
+            workspaceOffsetX = pos.x || 0;
+            workspaceOffsetY = pos.y || 0;
+        }
     }
 });

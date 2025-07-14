@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tableButton = document.getElementById('tableButton');
     let currentlySelected = null;
+    let tableIdCounter = 0;
+
+    loadSavedTables(); // Load any existing tables
 
     tableButton.addEventListener('click', () => {
         let columns = prompt('Enter the number of columns (1-10):');
@@ -14,22 +17,42 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const tableData = {
+            id: `table-${Date.now()}`,
+            rows,
+            columns,
+            x: 0,
+            y: 0,
+            content: Array.from({ length: rows }, () => Array(columns).fill(''))
+        };
+
+        const table = createTableElement(tableData);
+        centerTable(table);
+        saveTablesToLocalStorage(); // Save immediately
+    });
+
+    function createTableElement(data) {
         const table = document.createElement('table');
+        table.dataset.tableId = data.id;
         table.style.borderCollapse = 'collapse';
         table.style.position = 'absolute';
         table.style.border = '1px solid black';
-        table.style.width = `${columns * 60}px`;
-        table.style.height = `${rows * 40}px`;
+        table.style.width = `${data.columns * 60}px`;
+        table.style.height = `${data.rows * 40}px`;
+        table.style.left = `${data.x}px`;
+        table.style.top = `${data.y}px`;
 
-        for (let i = 0; i < rows; i++) {
+        for (let i = 0; i < data.rows; i++) {
             const tr = document.createElement('tr');
-            for (let j = 0; j < columns; j++) {
+            for (let j = 0; j < data.columns; j++) {
                 const td = document.createElement('td');
                 td.contentEditable = 'true';
                 td.style.border = '1px solid black';
                 td.style.padding = '8px';
                 td.style.minWidth = '50px';
                 td.style.textAlign = 'center';
+                td.textContent = data.content?.[i]?.[j] || '';
+                td.addEventListener('input', saveTablesToLocalStorage);
                 tr.appendChild(td);
             }
             table.appendChild(tr);
@@ -37,28 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.body.appendChild(table);
 
-        function centerTable() {
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-            const tableWidth = table.offsetWidth;
-            const tableHeight = table.offsetHeight;
-
-            const left = (viewportWidth - tableWidth) / 2;
-            const top = (viewportHeight - tableHeight) / 2;
-
-            table.style.left = `${left}px`;
-            table.style.top = `${top}px`;
-        }
-
-        centerTable();
-
-        // Create the control button
         const controlButton = document.createElement('button');
         controlButton.innerHTML = '<i class="fa-solid fa-up-down-left-right"></i>';
         controlButton.style.position = 'absolute';
         controlButton.style.zIndex = '1002';
-        controlButton.style.display = 'none'; // Initially hidden
-        controlButton.classList.add('icon-button', 'table-control-button');
+        controlButton.style.display = 'none';
+        controlButton.classList.add('table-button', 'table-control-button');
         document.body.appendChild(controlButton);
 
         function updateControlButtonPosition() {
@@ -68,24 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         updateControlButtonPosition();
-
         makeDraggable(controlButton, table, updateControlButtonPosition);
         makeSelectable(table, controlButton);
-
         window.addEventListener('scroll', updateControlButtonPosition);
 
-        // Show/hide control button based on proximity
         document.addEventListener('mousemove', (e) => {
-            const tableRect = table.getBoundingClientRect();
-            const mouseX = e.clientX;
-            const mouseY = e.clientY;
-
-            const proximity = 50; // Extended proximity area
+            const rect = table.getBoundingClientRect();
+            const proximity = 50;
             if (
-                mouseX >= tableRect.left - proximity &&
-                mouseX <= tableRect.right + proximity &&
-                mouseY >= tableRect.top - proximity &&
-                mouseY <= tableRect.bottom + proximity
+                e.clientX >= rect.left - proximity && e.clientX <= rect.right + proximity &&
+                e.clientY >= rect.top - proximity && e.clientY <= rect.bottom + proximity
             ) {
                 controlButton.style.display = 'block';
             } else {
@@ -93,17 +92,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Handle removal of table and control button
-        function removeTableAndButton() {
-            if (currentlySelected) {
-                currentlySelected.remove();
-                controlButton.remove();
-                currentlySelected = null;
-            }
-        }
+        return table;
+    }
 
-        document.getElementById('binButton').addEventListener('click', removeTableAndButton);
-    });
+    function centerTable(table) {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const w = table.offsetWidth;
+        const h = table.offsetHeight;
+
+        const left = (vw - w) / 2;
+        const top = (vh - h) / 2;
+
+        table.style.left = `${left}px`;
+        table.style.top = `${top}px`;
+    }
 
     function makeDraggable(controlButton, table, updateControlButtonPosition) {
         let isDragging = false;
@@ -114,25 +117,23 @@ document.addEventListener('DOMContentLoaded', () => {
             startX = e.clientX;
             startY = e.clientY;
 
-            const buttonRect = controlButton.getBoundingClientRect();
             const tableRect = table.getBoundingClientRect();
+            initialX = tableRect.left;
+            initialY = tableRect.top;
 
-            initialX = tableRect.left + (e.clientX - buttonRect.left);
-            initialY = tableRect.top + (e.clientY - buttonRect.top);
-
-            table.style.zIndex = '1003';
-
-            // Select the table when dragging starts
             selectTable(table);
         });
 
         document.addEventListener('mousemove', (e) => {
             if (isDragging) {
-                const deltaX = e.clientX - startX;
-                const deltaY = e.clientY - startY;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
 
-                table.style.left = `${initialX + deltaX}px`;
-                table.style.top = `${initialY + deltaY}px`;
+                const newX = initialX + dx;
+                const newY = initialY + dy;
+
+                table.style.left = `${newX}px`;
+                table.style.top = `${newY}px`;
 
                 updateControlButtonPosition();
             }
@@ -141,20 +142,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mouseup', () => {
             if (isDragging) {
                 isDragging = false;
-                table.style.zIndex = '1002';
+                saveTablesToLocalStorage();
             }
         });
     }
 
     function makeSelectable(table, controlButton) {
-        function selectTable(table) {
+        function selectTable(t) {
             if (currentlySelected) {
-                currentlySelected.classList.remove('selected');
-                currentlySelected.classList.remove('table-selected');
+                currentlySelected.classList.remove('selected', 'table-selected');
             }
-            currentlySelected = table;
-            table.classList.add('selected');
-            table.classList.add('table-selected');
+            currentlySelected = t;
+            t.classList.add('selected', 'table-selected');
         }
 
         controlButton.addEventListener('click', (e) => {
@@ -162,30 +161,61 @@ document.addEventListener('DOMContentLoaded', () => {
             selectTable(table);
         });
 
-        document.addEventListener('click', (event) => {
-            if (currentlySelected && !currentlySelected.contains(event.target) && !controlButton.contains(event.target)) {
-                currentlySelected.classList.remove('selected');
-                currentlySelected.classList.remove('table-selected');
+        document.addEventListener('click', (e) => {
+            if (currentlySelected && !currentlySelected.contains(e.target) && !controlButton.contains(e.target)) {
+                currentlySelected.classList.remove('selected', 'table-selected');
                 currentlySelected = null;
             }
         });
 
-        table.addEventListener('click', (event) => {
-            event.stopPropagation();
+        table.addEventListener('click', (e) => e.stopPropagation());
+    }
+
+    function saveTablesToLocalStorage() {
+        const tables = document.querySelectorAll('table[data-table-id]');
+        const saved = [];
+
+        tables.forEach(table => {
+            const id = table.dataset.tableId;
+            const x = parseFloat(table.style.left);
+            const y = parseFloat(table.style.top);
+            const rows = table.rows.length;
+            const columns = table.rows[0]?.cells.length || 0;
+            const content = [];
+
+            for (let i = 0; i < rows; i++) {
+                const row = [];
+                for (let j = 0; j < columns; j++) {
+                    row.push(table.rows[i].cells[j].textContent || '');
+                }
+                content.push(row);
+            }
+
+            saved.push({ id, x, y, rows, columns, content });
+        });
+
+        localStorage.setItem('savedTables', JSON.stringify(saved));
+    }
+
+    function loadSavedTables() {
+        const data = JSON.parse(localStorage.getItem('savedTables') || '[]');
+        data.forEach(tableData => {
+            createTableElement(tableData);
         });
     }
 
-    // Remove table and control button when the bin button is clicked
-    function removeTableAndButton() {
+    document.getElementById('binButton').addEventListener('click', () => {
         if (currentlySelected) {
+            const id = currentlySelected.dataset.tableId;
             currentlySelected.remove();
             const controlButton = document.querySelector('.table-control-button');
-            if (controlButton) {
-                controlButton.remove();
-            }
-            currentlySelected = null;
-        }
-    }
+            if (controlButton) controlButton.remove();
 
-    document.getElementById('binButton').addEventListener('click', removeTableAndButton);
+            currentlySelected = null;
+
+            const all = JSON.parse(localStorage.getItem('savedTables') || '[]');
+            const filtered = all.filter(t => t.id !== id);
+            localStorage.setItem('savedTables', JSON.stringify(filtered));
+        }
+    });
 });

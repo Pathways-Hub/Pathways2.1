@@ -11,6 +11,30 @@ const emojiIcons = [
 let currentIndex = 0;
 let panelOpen = false;
 
+// === Inject animations into the page ===
+const rockingStyle = document.createElement('style');
+rockingStyle.textContent = `
+
+@keyframes riseAndRockLeft {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  20%  { transform: translateY(-40px) rotate(-20deg) scale(1.1); }
+  40%  { transform: translateY(-80px) rotate(20deg)  scale(1.2); }
+  60%  { transform: translateY(-120px) rotate(-20deg) scale(1.3); }
+  80%  { transform: translateY(-160px) rotate(20deg) scale(1.4); }
+  100% { transform: translateY(-200px) rotate(0deg)  scale(1.5); opacity: 0; }
+}
+
+@keyframes riseAndRockRight {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  20%  { transform: translateY(-40px) rotate(20deg) scale(1.1); }
+  40%  { transform: translateY(-80px) rotate(-20deg) scale(1.2); }
+  60%  { transform: translateY(-120px) rotate(20deg) scale(1.3); }
+  80%  { transform: translateY(-160px) rotate(-20deg) scale(1.4); }
+  100% { transform: translateY(-200px) rotate(0deg) scale(1.5); opacity: 0; }
+}
+`;
+document.head.appendChild(rockingStyle);
+
 // === Create emoji circle ===
 const emojiCircle = document.createElement('div');
 emojiCircle.id = 'emoji-circle';
@@ -47,7 +71,7 @@ coloredEmojis.forEach(e => {
     span.style.transform = 'scale(1)';
   });
 
-  // Click handler: spawn rising emojis animation
+  // Click handler: spawn rising + rocking emojis
   span.addEventListener('click', () => {
     spawnRisingEmojis(e, 20);
   });
@@ -137,39 +161,33 @@ panel.addEventListener('mouseleave', () => {
   }, 100);
 });
 
-// === Spawn rising emojis animation with delay and offscreen start ===
+// === Spawn rising emojis with alternating rocking direction ===
 function spawnRisingEmojis(emojiChar, count) {
   for (let i = 0; i < count; i++) {
     const e = document.createElement('div');
     e.textContent = emojiChar;
     const startX = Math.random() * window.innerWidth;
+    const delay = Math.random() * 600;
+
+    const alternate = Math.random() < 0.5 ? 'riseAndRockLeft' : 'riseAndRockRight';
 
     Object.assign(e.style, {
       position: 'fixed',
-      bottom: '-30px',          // start offscreen below viewport
+      bottom: '-30px',
       left: `${startX}px`,
       fontSize: '24px',
       pointerEvents: 'none',
       opacity: '1',
       userSelect: 'none',
-      transform: 'translateY(0) scale(1) translateX(0px)',
-      transition: 'transform 2s ease-out, opacity 2s ease-out',
-      zIndex: '2000'
+      zIndex: '2000',
+      animation: `${alternate} 2s linear forwards`,
+      animationDelay: `${delay}ms`
     });
+
     document.body.appendChild(e);
 
-    // Random delay (0 to 600ms) before animating
-    const delay = Math.random() * 600;
-
-    setTimeout(() => {
-      const driftX = (Math.random() * 60) - 30;
-      e.style.transform = `translateY(-200px) translateX(${driftX}px) scale(1.5)`;
-      e.style.opacity = '0';
-    }, delay);
-
-    // Remove from DOM after animation + delay
     setTimeout(() => {
       e.remove();
-    }, 2200 + delay);
+    }, 2600 + delay);
   }
 }

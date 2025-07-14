@@ -282,6 +282,8 @@ document.addEventListener('click', function(event) {
             removeButtonContainer(); // Hide the blue icon buttons container when Enter is pressed
 
             createBlueIconButtons(parseInt(div.style.left) - 40, parseInt(div.style.top));
+
+            saveTextsToLocalStorage(); // Save after creating new text
         }
     });
 
@@ -293,12 +295,150 @@ document.addEventListener('click', function(event) {
     document.addEventListener('mousedown', handleOutsideClick);
 });
 
+function handleEnterKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (textarea.value.trim() === '') {
+            textarea.remove();
+            textarea = null;
+            removeButtonContainer();
+            return;
+        }
+
+        let text = textarea.value;
+        let div = document.createElement('div');
+        div.className = 'text-preview';
+        div.contentEditable = true;
+        div.style.left = textarea.style.left;
+        div.style.top = textarea.style.top;
+
+        if (textarea.style.fontWeight === 'bold') {
+            div.innerHTML = `<span style="font-weight: bold;">${text.replace(/\n/g, '<br>')}</span>`;
+        } else if (textarea.style.fontStyle === 'italic') {
+            div.innerHTML = `<span style="font-style: italic;">${text.replace(/\n/g, '<br>')}</span>`;
+        } else if (textarea.style.textDecoration === 'underline') {
+            div.innerHTML = `<span style="text-decoration: underline;">${text.replace(/\n/g, '<br>')}</span>`;
+        } else if (textarea.getAttribute('data-is-bullet') === 'true') {
+            // Process text for bullet points
+            div.innerHTML = text.split('\n').map(line => `<div>• ${line}</div>`).join('');
+        } else {
+            div.innerHTML = text.replace(/\n/g, '<br>');
+        }
+
+        div.addEventListener('click', function(event) {
+            let position = { x: event.clientX, y: event.clientY };
+            if (isGridVisible) {
+                position = snapToGrid(event.clientX, event.clientY);
+            }
+            showButtons(div, position.x, position.y);
+        });
+
+        document.body.appendChild(div);
+
+        // Clear textarea
+        textarea.remove();
+        textarea = null;
+
+        removeButtonContainer(); // Hide the blue icon buttons container when Enter is pressed
+
+        createBlueIconButtons(parseInt(div.style.left) - 40, parseInt(div.style.top));
+
+        saveTextsToLocalStorage(); // Save after creating new text
+    } else if (e.key === 'Enter' && e.shiftKey) {
+        // Allow line breaks within the textarea
+        e.preventDefault();
+        const cursorPos = textarea.selectionStart;
+        const textBefore = textarea.value.substring(0, cursorPos);
+        const textAfter = textarea.value.substring(cursorPos);
+
+        textarea.value = textBefore + '\n' + textAfter;
+        textarea.selectionStart = textarea.selectionEnd = cursorPos + 1;
+    }
+}
+
+function handleBlur() {
+    // Remove textarea only if it does not have content
+    if (textarea && textarea.value.trim() === '') {
+        textarea.remove();
+        textarea = null;
+    }
+}
+
 function handleOutsideClick(event) {
     if (textarea && !textarea.contains(event.target) && !event.target.classList.contains('text-preview')) {
         textarea.remove();
         textarea = null;
     }
 }
+
+// --- New functions to save/load texts ---
+
+function saveTextsToLocalStorage() {
+    const texts = [];
+    document.querySelectorAll('.text-preview').forEach(div => {
+        texts.push({
+            html: div.innerHTML,
+            left: div.style.left,
+            top: div.style.top
+        });
+    });
+    localStorage.setItem('savedTexts', JSON.stringify(texts));
+}
+
+function loadSavedTexts() {
+    const saved = localStorage.getItem('savedTexts');
+    if (!saved) return;
+
+    const texts = JSON.parse(saved);
+    texts.forEach(item => {
+        let div = document.createElement('div');
+        div.className = 'text-preview';
+        div.contentEditable = true;
+        div.innerHTML = item.html;
+        div.style.left = item.left;
+        div.style.top = item.top;
+
+        div.addEventListener('click', function(event) {
+            let position = { x: event.clientX, y: event.clientY };
+            if (isGridVisible) {
+                position = snapToGrid(event.clientX, event.clientY);
+            }
+            showButtons(div, position.x, position.y);
+        });
+
+        document.body.appendChild(div);
+    });
+}
+
+// Load saved texts when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    loadSavedTexts();
+});
+
+
+// Create Save button element
+const saveButton = document.getElementById('save');
+
+if (saveButton) {
+    // Save on button click
+    saveButton.addEventListener('click', () => {
+        saveTextsToLocalStorage();
+
+        const originalIcon = saveButton.querySelector('i');
+        const originalClass = originalIcon.className;
+
+        // Swap icon to checkmark with smooth transition
+        originalIcon.className = 'fa-solid fa-check';
+        originalIcon.style.transition = 'transform 0.3s ease';
+        originalIcon.style.transform = 'scale(1.2)';
+
+        setTimeout(() => {
+            originalIcon.className = originalClass;
+            originalIcon.style.transform = 'scale(1)';
+        }, 1500);
+    });
+}
+
 
 function showButtons(textElement, x, y) {
     removeButtonContainer();

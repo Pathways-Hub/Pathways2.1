@@ -177,3 +177,25 @@ function scheduleHideTooltip() {
         }
     }, 100);
 }
+
+
+let userAttemptingToLeave = false;
+
+window.addEventListener('beforeunload', function (e) {
+    if (userAttemptingToLeave) return; // Avoid infinite loop
+
+    // Standard unload warning
+    e.preventDefault();
+    e.returnValue = '';
+
+    // Show custom modal
+    showExitModal();
+
+    return ''; // Required by some browsers
+});
+
+window.addEventListener('beforeunload', function (e) {
+    // This triggers the browser's native "Leave site?" dialog
+    e.preventDefault();
+    e.returnValue = ''; // Required for most browsers
+});

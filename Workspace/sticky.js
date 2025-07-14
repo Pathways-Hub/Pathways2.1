@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '#FFFF99', // Harsher Soft Yellow
     ];
 
-    // Function to create a sticky note
+    // Function to create a sticky note (returns the created note element)
     function createStickyNote() {
         const stickyNote = document.createElement('div');
         stickyNote.classList.add('sticky-note');
@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
         stickyTitle.addEventListener('focus', (e) => {
             e.target.style.outline = 'none'; // Remove any outline
         });
-
         stickyTitle.addEventListener('blur', (e) => {
             e.target.style.outline = 'none'; // Remove outline when focus is lost
+            saveStickyNotes();
         });
 
         // Create an editable text element for the smaller text
@@ -45,13 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
         stickyContent.classList.add('sticky-content');
         stickyContent.innerText = 'Example text'; // Default text
 
-        // Prevent text selection and highlight when editing
         stickyContent.addEventListener('focus', (e) => {
             e.target.style.outline = 'none'; // Remove any outline
         });
-
         stickyContent.addEventListener('blur', (e) => {
             e.target.style.outline = 'none'; // Remove outline when focus is lost
+            saveStickyNotes();
         });
 
         // Append the title and content to the sticky note
@@ -83,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
             stickyNote.style.height = 'auto'; // Reset height to auto
             stickyNote.style.height = `${stickyNote.scrollHeight}px`; // Set height based on content
         });
-
         const observerTitle = new MutationObserver(() => {
             stickyNote.style.height = 'auto'; // Reset height to auto
             stickyNote.style.height = `${stickyNote.scrollHeight}px`; // Set height based on content
@@ -94,15 +92,28 @@ document.addEventListener('DOMContentLoaded', () => {
             subtree: true,
             characterData: true
         });
-
         observerTitle.observe(stickyTitle, {
             childList: true,
             subtree: true,
             characterData: true
         });
+
+        saveStickyNotes(); // Save after creation
+        return stickyNote;
     }
 
-    // Function to make the sticky note draggable
+    // Create sticky note from saved data
+    function createStickyNoteFromData(data) {
+        const note = createStickyNote();
+        note.style.left = data.left;
+        note.style.top = data.top;
+        note.style.backgroundColor = data.color;
+        note.querySelector('.sticky-title').innerText = data.title;
+        note.querySelector('.sticky-content').innerText = data.content;
+        return note;
+    }
+
+    // Make sticky note draggable
     function makeDraggable(element) {
         let offsetX, offsetY, isDragging = false;
 
@@ -117,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isDragging) {
                 element.style.left = `${e.clientX - offsetX}px`;
                 element.style.top = `${e.clientY - offsetY}px`;
+                saveStickyNotes();
             }
         });
 
@@ -124,13 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isDragging) {
                 isDragging = false;
                 element.style.zIndex = ''; // Reset z-index
+                saveStickyNotes();
             }
         });
     }
 
-    // Function to select a sticky note
+    // Select sticky note
     function selectStickyNote(note) {
-        // Deselect the previously selected sticky note
         if (currentlySelectedStickyNote) {
             currentlySelectedStickyNote.classList.remove('sticky-note-selected');
         }
@@ -138,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentlySelectedStickyNote.classList.add('sticky-note-selected');
     }
 
-    // Function to unselect the currently selected sticky note
+    // Unselect sticky note
     function unselectStickyNote() {
         if (currentlySelectedStickyNote) {
             currentlySelectedStickyNote.classList.remove('sticky-note-selected');
@@ -146,55 +158,82 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Disable text box creation when clicking on sticky notes
+    // Disable text box creation when clicking outside sticky notes
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.sticky-note')) {
             isStickyNoteActive = false;
-            unselectStickyNote(); // Unselect sticky note when clicking outside
+            unselectStickyNote();
         }
     });
 
-    // Event listener for the sticky note button
-    stickyButton.addEventListener('click', createStickyNote);
+    // Sticky note button creates new note
+    stickyButton.addEventListener('click', () => {
+        createStickyNote();
+    });
 
-    // Event listener for the delete button
+    // Delete selected sticky note
     deleteButton.addEventListener('click', () => {
         if (currentlySelectedStickyNote) {
             currentlySelectedStickyNote.remove();
-            currentlySelectedStickyNote = null; // Clear the selected sticky note reference
+            currentlySelectedStickyNote = null;
+            saveStickyNotes();
         }
     });
 
-    // Event listener for the color button (paint bucket)
+    // Change color of selected sticky note
     paintBucketButton.addEventListener('click', () => {
         if (currentlySelectedStickyNote) {
-            // Cycle to the next color in the array
             currentColorIndex = (currentColorIndex + 1) % colors.length;
             currentlySelectedStickyNote.style.backgroundColor = colors[currentColorIndex];
+            saveStickyNotes();
         }
     });
 
-    // Override text creation behavior
+    // Prevent text creation if sticky note active
     document.addEventListener('dblclick', (e) => {
         if (isStickyNoteActive) {
-            e.stopPropagation(); // Prevents new text creation if sticky note is active
+            e.stopPropagation();
         }
     });
 
-    // CSS for sticky notes
+    // Save sticky notes to localStorage
+    function saveStickyNotes() {
+        const notes = Array.from(document.querySelectorAll('.sticky-note'));
+        const savedData = notes.map(note => ({
+            left: note.style.left,
+            top: note.style.top,
+            color: note.style.backgroundColor,
+            title: note.querySelector('.sticky-title')?.innerText || '',
+            content: note.querySelector('.sticky-content')?.innerText || ''
+        }));
+        localStorage.setItem('stickyNotes', JSON.stringify(savedData));
+    }
+
+    // Load sticky notes from localStorage
+    function loadStickyNotes() {
+        const savedNotes = JSON.parse(localStorage.getItem('stickyNotes') || '[]');
+        savedNotes.forEach(data => {
+            createStickyNoteFromData(data);
+        });
+    }
+
+    // CSS styles for sticky notes
     const style = document.createElement('style');
     style.innerHTML = `
         .sticky-note {
             position: absolute;
-            border-radius: 8px; /* Curved edges */
+            border-radius: 8px;
             padding: 10px;
-            box-shadow: none; /* Removed shadow */
-            z-index: 1000; /* Ensure it’s on top */
-            cursor: move; /* Indicate draggable */
-            overflow: hidden; /* Hide overflow */
+            box-shadow: none;
+            z-index: 1000;
+            cursor: move;
+            overflow: hidden;
+            min-width: 150px;
+            max-width: 300px;
+            user-select: text;
         }
         .sticky-note-selected {
-            border: 2px solid red; /* Red border for selected note */
+            border: 2px solid red;
         }
         .sticky-title {
             font-size: 14px;
@@ -205,7 +244,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .sticky-content {
             font-size: 12px;
             color: #333;
+            white-space: pre-wrap;
         }
     `;
     document.head.appendChild(style);
+
+    // Load sticky notes on startup
+    loadStickyNotes();
 });

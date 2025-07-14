@@ -157,16 +157,6 @@ const savedTheme = localStorage.getItem('theme') || 'light';
 document.body.classList.add(savedTheme + '-mode');
 updateHeaderBackground();
 
-// Function to update header background color based on theme
-function updateHeaderBackground() {
-  const header = document.querySelector('header');
-  if (document.body.classList.contains('dark-mode')) {
-    header.style.backgroundColor = '#121212';
-  } else {
-    header.style.backgroundColor = '#ffffff';
-  }
-}
-
 // Add a line divider above the subtitle
 const divider = document.createElement('div');
 divider.style.borderTop = '1px solid #ddd';

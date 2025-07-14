@@ -2,8 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDrawing = false;
     let isErasing = false;
     let isMouseDown = false;
-    let isDrawingRect = false; // rectangle mode flag (add toggle for this in your UI)
+    let isDrawingRect = false;
     const eraserSize = 10;
+
+    let offsetX = 0;
+    let offsetY = 0;
+    let dragStart = null;
 
     const canvas = document.createElement('canvas');
     canvas.id = 'drawingCanvas';
@@ -20,17 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
 
-    // Store shapes: lines and rectangles
-    // lines: { type: 'line', points: [...] }
-    // rectangles: { type: 'rect', start: {x,y}, end: {x,y} }
     const shapes = [];
-
-    // Temporary variables for current drawing
     let currentLine = [];
     let rectStart = null;
     let rectEnd = null;
 
-    // Eraser cursor circle
     const eraserOutline = document.createElement('div');
     eraserOutline.style.position = 'absolute';
     eraserOutline.style.border = '1px solid grey';
@@ -72,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
     crosshair.appendChild(vLine);
     document.body.appendChild(crosshair);
 
-    // Resize canvas & redraw
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -81,40 +78,58 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // Save shapes array to localStorage
-    function saveShapes() {
+    function saveShapesAndOffset() {
         localStorage.setItem('myDrawingShapes', JSON.stringify(shapes));
+        localStorage.setItem('myDrawingOffset', JSON.stringify({ offsetX, offsetY }));
     }
 
-    // Load shapes array from localStorage
-    function loadShapes() {
-        const data = localStorage.getItem('myDrawingShapes');
-        if (data) {
+    function loadShapesAndOffset() {
+        const shapesData = localStorage.getItem('myDrawingShapes');
+        if (shapesData) {
             try {
-                const parsed = JSON.parse(data);
-                if (Array.isArray(parsed)) {
+                const parsedShapes = JSON.parse(shapesData);
+                if (Array.isArray(parsedShapes)) {
                     shapes.length = 0;
-                    shapes.push(...parsed);
+                    shapes.push(...parsedShapes);
                 }
             } catch (e) {
                 console.warn('Error parsing shapes from localStorage', e);
             }
         }
+        const offsetData = localStorage.getItem('myDrawingOffset');
+        if (offsetData) {
+            try {
+                const parsedOffset = JSON.parse(offsetData);
+                if (
+                    typeof parsedOffset.offsetX === 'number' &&
+                    typeof parsedOffset.offsetY === 'number'
+                ) {
+                    offsetX = parsedOffset.offsetX;
+                    offsetY = parsedOffset.offsetY;
+                }
+            } catch (e) {
+                console.warn('Error parsing offset from localStorage', e);
+            }
+        }
     }
 
-    // Start drawing (line or rect)
+    function getMousePos(event) {
+        const rect = canvas.getBoundingClientRect();
+        const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left - offsetX;
+        const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top - offsetY;
+        return { x, y };
+    }
+
     function startAction(event) {
+        if (event.button === 2) return;
         if (!isDrawing && !isErasing && !isDrawingRect) return;
 
-        const rect = canvas.getBoundingClientRect();
-        const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
-        const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
-
         isMouseDown = true;
+        const { x, y } = getMousePos(event);
 
         if (isDrawing) {
             ctx.beginPath();
-            ctx.moveTo(x, y);
+            ctx.moveTo(x + offsetX, y + offsetY);
             currentLine = [{ x, y }];
         } else if (isDrawingRect) {
             rectStart = { x, y };
@@ -122,16 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Drawing or erasing
     function performAction(event) {
         if ((!isDrawing && !isErasing && !isDrawingRect) || !isMouseDown) return;
 
-        const rect = canvas.getBoundingClientRect();
-        const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
-        const y = (event.clientY || event.touches?.[0]?.clientY) - rect.top;
+        const { x, y } = getMousePos(event);
 
         if (isDrawing) {
-            ctx.lineTo(x, y);
+            ctx.lineTo(x + offsetX, y + offsetY);
             ctx.stroke();
             currentLine.push({ x, y });
         } else if (isErasing) {
@@ -142,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         shapes.splice(i, 1);
                     }
                 } else if (shape.type === 'rect') {
-                    // Simple rectangle hit test: check if eraser inside rectangle bbox (+eraserSize)
                     const left = Math.min(shape.start.x, shape.end.x) - eraserSize;
                     const right = Math.max(shape.start.x, shape.end.x) + eraserSize;
                     const top = Math.min(shape.start.y, shape.end.y) - eraserSize;
@@ -153,39 +164,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             redrawAllShapes();
-            saveShapes();
+            saveShapesAndOffset();
         } else if (isDrawingRect && rectStart) {
             rectEnd = { x, y };
             redrawAllShapes();
-            // Draw current rect preview
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 2;
             const left = Math.min(rectStart.x, rectEnd.x);
             const top = Math.min(rectStart.y, rectEnd.y);
             const width = Math.abs(rectEnd.x - rectStart.x);
             const height = Math.abs(rectEnd.y - rectStart.y);
-            ctx.strokeRect(left, top, width, height);
+            ctx.strokeRect(left + offsetX, top + offsetY, width, height);
         }
     }
 
-    // Finish drawing/erasing
     function stopAction() {
         if (isDrawing && currentLine.length > 0) {
-            shapes.push({ type: 'line', points: [...currentLine] });
+            const adjustedLine = currentLine.map(pt => ({ x: pt.x, y: pt.y }));
+            shapes.push({ type: 'line', points: adjustedLine });
             currentLine = [];
             ctx.closePath();
-            saveShapes();
+            saveShapesAndOffset();
         } else if (isDrawingRect && rectStart && rectEnd) {
             shapes.push({ type: 'rect', start: rectStart, end: rectEnd });
             rectStart = null;
             rectEnd = null;
-            saveShapes();
+            saveShapesAndOffset();
             redrawAllShapes();
         }
         isMouseDown = false;
     }
 
-    // Redraw all saved shapes
     function redrawAllShapes() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = 'black';
@@ -194,15 +203,15 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const shape of shapes) {
             if (shape.type === 'line' && shape.points.length > 1) {
                 ctx.beginPath();
-                ctx.moveTo(shape.points[0].x, shape.points[0].y);
+                ctx.moveTo(shape.points[0].x + offsetX, shape.points[0].y + offsetY);
                 for (let i = 1; i < shape.points.length; i++) {
-                    ctx.lineTo(shape.points[i].x, shape.points[i].y);
+                    ctx.lineTo(shape.points[i].x + offsetX, shape.points[i].y + offsetY);
                 }
                 ctx.stroke();
                 ctx.closePath();
             } else if (shape.type === 'rect') {
-                const left = Math.min(shape.start.x, shape.end.x);
-                const top = Math.min(shape.start.y, shape.end.y);
+                const left = Math.min(shape.start.x, shape.end.x) + offsetX;
+                const top = Math.min(shape.start.y, shape.end.y) + offsetY;
                 const width = Math.abs(shape.end.x - shape.start.x);
                 const height = Math.abs(shape.end.y - shape.start.y);
                 ctx.strokeRect(left, top, width, height);
@@ -225,10 +234,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Dummy disable text editing func, update as you want
     function disableTextEditing(state) {}
 
-    // Toggle pencil drawing mode
+    // PAN HANDLER - right click drag
+    document.addEventListener('mousedown', (e) => {
+        if (e.button === 2) {
+            dragStart = { x: e.clientX, y: e.clientY };
+        }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (dragStart && e.buttons === 2) {
+            const dx = e.clientX - dragStart.x;
+            const dy = e.clientY - dragStart.y;
+            offsetX += dx;
+            offsetY += dy;
+            dragStart = { x: e.clientX, y: e.clientY };
+            redrawAllShapes();
+            saveShapesAndOffset();  // Save offset on pan immediately
+        }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+        if (e.button === 2) dragStart = null;
+    });
+
+    // Tool toggles
+
     document.getElementById('pencilButton').addEventListener('click', () => {
         const pencilIcon = document.getElementById('pencilButton').querySelector('i');
         const eraserIcon = document.getElementById('eraserButton').querySelector('i');
@@ -240,13 +272,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.removeEventListener('mousemove', performAction);
             document.removeEventListener('mousemove', updateCursorVisuals);
             document.removeEventListener('mouseup', stopAction);
-            document.removeEventListener('touchstart', startAction);
-            document.removeEventListener('touchmove', performAction);
-            document.removeEventListener('touchmove', updateCursorVisuals);
-            document.removeEventListener('touchend', stopAction);
             pencilIcon.style.color = 'black';
             disableTextEditing(false);
-            console.log('Drawing mode deactivated');
         } else {
             isDrawing = true;
             isErasing = false;
@@ -261,16 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.addEventListener('mousemove', performAction);
             document.addEventListener('mousemove', updateCursorVisuals);
             document.addEventListener('mouseup', stopAction);
-            document.addEventListener('touchstart', startAction);
-            document.addEventListener('touchmove', performAction);
-            document.addEventListener('touchmove', updateCursorVisuals);
-            document.addEventListener('touchend', stopAction);
             disableTextEditing(true);
-            console.log('Drawing mode activated');
         }
     });
 
-    // Toggle eraser mode
     document.getElementById('eraserButton').addEventListener('click', () => {
         const pencilIcon = document.getElementById('pencilButton').querySelector('i');
         const eraserIcon = document.getElementById('eraserButton').querySelector('i');
@@ -282,13 +303,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.removeEventListener('mousemove', performAction);
             document.removeEventListener('mousemove', updateCursorVisuals);
             document.removeEventListener('mouseup', stopAction);
-            document.removeEventListener('touchstart', startAction);
-            document.removeEventListener('touchmove', performAction);
-            document.removeEventListener('touchmove', updateCursorVisuals);
-            document.removeEventListener('touchend', stopAction);
             eraserIcon.style.color = 'black';
             disableTextEditing(false);
-            console.log('Eraser mode deactivated');
         } else {
             isErasing = true;
             isDrawing = false;
@@ -303,26 +319,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.addEventListener('mousemove', performAction);
             document.addEventListener('mousemove', updateCursorVisuals);
             document.addEventListener('mouseup', stopAction);
-            document.addEventListener('touchstart', startAction);
-            document.addEventListener('touchmove', performAction);
-            document.addEventListener('touchmove', updateCursorVisuals);
-            document.addEventListener('touchend', stopAction);
             disableTextEditing(true);
-            console.log('Eraser mode activated');
         }
     });
 
-    // You should add a similar button/toggle for rectangle mode:
-    // Example:
-    /*
-    document.getElementById('rectButton').addEventListener('click', () => {
-        // toggle isDrawingRect true/false; set isDrawing and isErasing false;
-        // show crosshair or other cursor for rect drawing
-        // bind/unbind events like above
-    });
-    */
-
-    // Load saved shapes and redraw at start
-    loadShapes();
+    loadShapesAndOffset();
     redrawAllShapes();
 });
