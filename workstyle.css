@@ -4,57 +4,57 @@ body {
     padding: 0;
     height: 100vh;
     width: 100vw;
-    background-color: white;
+    background-color: #f8f8f8; /* Off-white background */
     font-family: Arial, sans-serif;
     position: relative;
-    background-image: none;
-    background-size: 10px 10px;
-    background-position: 0 0;
     overflow: hidden;
+    cursor: grab;
     transition: background-image 0.3s;
+
+    background-image:
+        linear-gradient(to right, #ddd 1px, transparent 1px),
+        linear-gradient(to bottom, #ddd 1px, transparent 1px),
+        linear-gradient(to right, #aaa 2px, transparent 2px),
+        linear-gradient(to bottom, #aaa 2px, transparent 2px);
+
+    background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+    background-position: 0 0;
 }
 
-/* Header styling */
 header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #ffffff;
-    padding: 5px 10px;
-    z-index: 1002;
-    box-sizing: border-box;
-    border-bottom: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: transform 0.3s ease-in-out;
+  position: fixed;
+  top: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: transparent; /* no background color */
+  pointer-events: none; /* disable pointer events on empty spaces */
+  z-index: 1000;
 }
 
-/* Primary sidebar - centered and styled */
-#sidebar {
-    position: fixed;
-    top: 50%;
-    left: 20px;
-    transform: translateY(-50%);
-    width: 90px;               /* Keep width same */
-    padding: 10px 4px;         /* Reduced horizontal padding to 4px */
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;                  /* Reduced gap between buttons */
-    z-index: 1001;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease-in-out;
+/* Boxes inside header that should be interactive */
+.header-left,
+.header-right {
+  background: white; /* keep white if you want visible boxes */
+  border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto; /* enable clicks inside these boxes */
+  min-width: 300px;
+  max-width: 45%;
 }
 
-#sidebar {
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    position: fixed !important;
+.header-right {
+  justify-content: flex-end;
+}
+
+.header-right {
+  justify-content: flex-end;
 }
 
 /* Styling for icon button */
@@ -83,10 +83,16 @@ header {
     color: rgb(136, 136, 136); /* Black icon color */
 }
 
-.icon-button {
-    width: 76px;
-    height: 76px;
-    font-size: 28px;
+/* Hover-triggered button container */
+.more-icons-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.table-button {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,69 +101,6 @@ header {
     border-radius: 10px;
     cursor: pointer;
     transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-}
-
-.icon-button:hover {
-    border-color: black; /* Only changing the color, not the whole border */
-    background-color: white;
-}
-
-/* Hover-triggered button container */
-.more-icons-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-/* Dropdown/tool group shown on hover */
-.sidebar-icons {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 16px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    z-index: 100;
-    gap: 10px;
-}
-
-.more-icons-wrapper:hover .sidebar-icons {
-    display: flex;
-}
-
-/* Each category (Drawing, Media, etc.) */
-.category-wrapper {
-    position: relative;
-}
-
-/* Sub-sidebar flyouts per category */
-.sub-sidebar {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    z-index: 200;
-    gap: 10px;
-}
-
-.category-wrapper:hover .sub-sidebar {
-    display: flex;
-}
-
-/* Optional: add transition or animation for sub-sidebar */
-.sub-sidebar,
-.sidebar-icons {
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    opacity: 0;
-    transform: translateX(-10px);
 }
 
 .more-icons-wrapper:hover .sidebar-icons,
@@ -190,11 +133,6 @@ header h1 {
     outline: none; /* Remove focus outline */
     padding: 0; /* No padding */
 }
-/* Change text color to off-white in dark mode */
-body.dark-mode .editable-title {
-    color: #f0f0f0; /* Off-white color */
-}
-
 
 /* Grid and hide header button styling */
 .grid-toggle-button, .hide-header-button {
@@ -534,39 +472,9 @@ body.dark-mode .editable-title {
     background-color: #e6e6e6;
 }
 
-/* General body styling */
-body.light-mode {
-    background-color: white; /* Light background for light mode */
-    color: black; /* Text color in light mode */
-}
-
-body.dark-mode {
-    background-color: #121212; /* Dark background for dark mode */
-    color: white; /* Text color in dark mode */
-}
-
-
-/* Icon button styles for light and dark mode */
-body.light-mode .icon-button {
-    color: rgb(0, 0, 0); /* Dark icon color in light mode */
-}
-
-body.dark-mode .icon-button {
-    color: rgb(255, 255, 255); /* Light icon color in dark mode */
-}
-
 /* Menu Text Styling to ensure it does not change in dark mode */
 #curved-menu {
     color: black; /* Make sure menu text stays black regardless of mode */
-}
-
-body.dark-mode #curved-menu {
-    color: black; /* Prevent menu text from turning white in dark mode */
-}
-
-/* Change logo when dark mode is enabled */
-body.dark-mode #headerImage {
-    content: url('images/pathways light.png');
 }
 
 /* Account Dropdown Styles */

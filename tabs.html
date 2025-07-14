@@ -1,111 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
-    <link rel="icon" href="images/favicon.png" type="image/png">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: white;
-            color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
-
-        header {
-            width: 100%;
-            height: 30px; /* Reduced height for thinner header */
-            background-color: #f8f8f8; /* Off-white header */
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-        }
-
-        .content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 80%;
-            max-width: 1200px;
-            margin-top: 30px; /* Adjusted offset for thinner header */
-        }
-
-        .text {
-            text-align: left;
-        }
-
-        .text h1 {
-            margin: 0;
-            font-size: 3.5rem; /* Increased font size for two lines */
-            line-height: 1.2; /* Adjust line height */
-        }
-
-        .text p {
-            margin: 10px 0 0; /* Added spacing between large and small text */
-            font-size: 1.2rem;
-        }
-
-        .image {
-            margin-left: 20px; /* Move image closer to text */
-        }
-
-        .image img {
-            max-width: 100%;
-            height: auto;
-            max-height: 400px; /* Increased max height */
-        }
-
-        .logo {
-            height: 20px; /* Reduced logo height for thinner header */
-        }
-
-        @media (max-width: 768px) {
-            .content {
-                flex-direction: column; /* Stack content vertically */
-                align-items: center;
-                text-align: center; /* Center align text for mobile */
-            }
-
-            .text {
-                text-align: center; /* Center text for mobile */
-            }
-
-            .text h1 {
-                font-size: 2rem; /* Smaller text size for mobile */
-            }
-
-            .image {
-                margin-left: 0; /* Remove margin for mobile */
-                margin-bottom: 20px; /* Add space below image */
-            }
-
-            .image img {
-                max-height: 250px; /* Smaller image for mobile */
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slack-Style Chat</title>
+  <link rel="stylesheet" href="evo/chat.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-    <header>
-        <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo"/></a>
-    </header>
-    <div class="content">
-        <div class="image">
-            <img src="https://assets.streamlinehq.com/image/private/w_800,h_800,ar_1/f_auto/v1/icons/london/product/product/page-under-construction-wmtenb7keckg4up70p7kc7.png?_a=DAJFJtWIZAAC" alt="Under Construction">
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="hub.html">
+          <img src="images/Pathwaystl.png" alt="Logo" class="logo" />
+        </a>
+      </div>
+      <div class="sidebar-content">
+        <p>No chats yet</p>
+      </div>
+    </aside>
+
+    <!-- Chat Area -->
+    <main class="chat-area">
+      <div class="chat-header">
+        <h3>General</h3>
+      </div>
+
+      <div class="messages" id="messages">
+        <!-- Sent messages will appear here -->
+      </div>
+
+      <!-- Toolbar for content types -->
+      <div class="toolbar">
+        <div class="tool"><i class="fa-solid fa-code"></i> Code</div>
+        <div class="tool"><i class="fa-solid fa-file-lines"></i> Document</div>
+        <div class="tool"><i class="fa-solid fa-image"></i> Image</div>
+        <div class="tool"><i class="fa-solid fa-link"></i> Link</div>
+        <div class="tool"><i class="fa-solid fa-microphone"></i> Audio</div>
+        <div class="tool"><i class="fa-solid fa-video"></i> Video</div>
+      </div>
+
+      <!-- Input box -->
+      <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button id="sendButton"><i class="fa fa-paper-plane"></i></button>
+      </div>
+    </main>
+  </div>
+
+  <script src="evo/msg_lnks.js"></script>
+  <script>
+    const sendButton = document.getElementById('sendButton');
+    const messageInput = document.getElementById('messageInput');
+    const messages = document.getElementById('messages');
+
+    function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      const message = document.createElement('div');
+      message.className = 'message outgoing';
+      message.innerHTML = `
+        <div class="content">
+          <div class="sender">You</div>
+          <div class="bubble">${text}</div>
         </div>
-        <div class="text">
-            <h1>This page is in<br>development</h1>
-            <p>Please wait for further updates</p>
-        </div>
-    </div>
+        <img src="images/favicon.png" alt="You" class="avatar" />
+      `;
+      messages.appendChild(message);
+
+      messageInput.value = '';
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
 </body>
 </html>

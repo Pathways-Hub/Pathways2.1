@@ -6,101 +6,112 @@
     <title>Pathways</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="workstyle.css">
+    <link rel="stylesheet" href="Workspace/other.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-<header id="header">
-    <div class="toggle-button-container">
-        <a href="hub.html"><img src="images/Pathwaystl.png" alt="Logo" id="headerImage" style="width: 100px; height: auto;" /></a>
+  <div id="infinite-grid"></div>
+
+    <header id="header">
+    <div class="header-left">
+        <a href="hub.html">
+        <img src="images/Pathwaystl.png" alt="Logo" id="headerImage" style="width: 120px; height: auto;" />
+        </a>
         <button id="icon" class="h-button">
-            <i class="fa-regular fa-square-plus"></i>
+        <i class="fa-regular fa-square-plus"></i>
         </button>
         <input type="text" class="editable-title" value="Untitled Workspace" />
         <button id="information" class="h-button" title="Information" onclick="window.location.href='infom.html';">
-            <i class="fa-solid fa-info"></i>
+        <i class="fa-solid fa-info"></i>
         </button>
-        <!-- Star Toggle Icon -->
         <button id="starButton" class="h-button" title="Star">
-            <i class="fa-regular fa-star"></i>
+        <i class="fa-regular fa-star"></i>
         </button>
         <button id="comment" class="h-button" title="Invite">
-            <i class="fa-solid fa-people-arrows"></i>
+        <i class="fa-solid fa-people-arrows"></i>
         </button>
-        </div>
+    </div>
 
-        <!-- Brush button on the far right -->
-        <div class="brush-button-container">
-            <!-- Last Edited Timestamp -->
-            <div id="lastEdited" style="margin-right: 10px; font-size: 14px; color: #333;">
-                Last edited: never
-            </div>
+    <div class="header-right">
+        <div id="lastEdited" style="margin-right: 10px; font-size: 14px; color: #333;">
+        Last edited: never
         </div>
-            <!-- Account Dropdown -->
-        <div class="account-dropdown-container">
-            <button id="accountButton" class="h-button" title="Account">
-                <i class="fa-regular fa-user-circle"></i>
+        <div class="more-icons-wrapper">
+            <button class="chat-button" onclick="openChat()">
+                <div class="chat-img-container">
+                    <img src="workspace/images/chat_btn.jpg" alt="Chat" />
+                </div>
             </button>
-            <div id="accountDropdown" class="account-dropdown">
-                <a href="#">Profile</a>
-                <a href="#">Settings</a>
-                <a href="#">Log Out</a>
-                <a id="downloadButton" href="#"><i class="fa-solid fa-circle-down"></i> Download</a>
-            </div>
         </div>
-    </header>  
-    
-    <!-- Sidebar -->
-        <div id="sidebar">
-            <div class="more-icons-wrapper">
-                <button class="icon-button">
-                <i class="fas fa-paint-brush"></i>
-                </button>
-                <div class="sidebar-icons">
-                <button id="pencilButton" class="icon-button"><i class="fas fa-pencil-alt"></i></button>
-                <button id="eraserButton" class="icon-button"><i class="fas fa-eraser"></i></button>
-                <button id="lineToolButton" class="icon-button"><i class="fas fa-slash"></i></button>
-                <button id="squareToolButton" class="icon-button"><i class="fa-regular fa-square"></i></button>
-                <button id="paintBucketButton" class="icon-button"><i class="fas fa-fill-drip"></i></button>
+        <button id="image_s" class="h-button" title="Image">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <div class="account-dropdown-container">
+        <button id="accountButton" class="h-button" title="Account">
+            <i class="fa-regular fa-user-circle"></i>
+        </button>
+        <div id="accountDropdown" class="account-dropdown">
+            <a href="#">Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Log Out</a>
+            <a id="downloadButton" href="#"><i class="fa-solid fa-circle-down"></i> Download</a>
+        </div>
+        </div>
+    </div>
+    </header>
+        
+        <!-- Sidebar -->
+            <div id="sidebar">
+                <div class="more-icons-wrapper">
+                    <button class="paint-button">
+                    <i class="fas fa-paint-brush"></i>
+                    </button>
+                    <div class="sidebar-icons">
+                    <button id="pencilButton" class="icon-button"><i class="fas fa-pencil-alt"></i></button>
+                    <button id="eraserButton" class="icon-button"><i class="fas fa-eraser"></i></button>
+                    <button id="lineToolButton" class="icon-button"><i class="fas fa-slash"></i></button>
+                    <button id="squareToolButton" class="icon-button"><i class="fa-regular fa-square"></i></button>
+                    <button id="paintBucketButton" class="icon-button"><i class="fas fa-fill-drip"></i></button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="more-icons-wrapper">
-                <button class="icon-button">
-                <i class="fas fa-photo-film"></i>
-                </button>
-                <div class="sidebar-icons">
-                <button id="photoButton" class="icon-button"><i class="fas fa-image"></i></button>
-                <button id="photoImportButton" class="icon-button"><i class="fas fa-globe"></i></button>
-                <button id="cameraButton" class="icon-button"><i class="fa fa-video"></i></button>
-                <button id="musicButton" class="icon-button"><i class="fas fa-music"></i></button>
+                <div class="more-icons-wrapper">
+                    <button class="media-button">
+                    <i class="fas fa-photo-film"></i>
+                    </button>
+                    <div class="sidebar-icons">
+                    <button id="photoButton" class="icon-button"><i class="fas fa-image"></i></button>
+                    <button id="photoImportButton" class="icon-button"><i class="fas fa-globe"></i></button>
+                    <button id="cameraButton" class="icon-button"><i class="fa fa-video"></i></button>
+                    <button id="musicButton" class="icon-button"><i class="fas fa-music"></i></button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="more-icons-wrapper">
-                <button class="icon-button">
-                <i class="fas fa-table-cells-large"></i>
-                </button>
-                <div class="sidebar-icons">
-                <button id="tableButton" class="icon-button"><i class="fas fa-table"></i></button>
-                <button id="stickynote" class="icon-button"><i class="fas fa-sticky-note"></i></button>
-                <button id="progress" class="icon-button"><i class="fa-solid fa-circle-half-stroke"></i></button>
-                <button id="pallets" class="icon-button"><i class="fa-solid fa-swatchbook"></i></button>
+                <div class="more-icons-wrapper">
+                    <button class="element-button">
+                    <i class="fas fa-table-cells-large"></i>
+                    </button>
+                    <div class="sidebar-icons">
+                    <button id="tableButton" class="icon-button"><i class="fas fa-table"></i></button>
+                    <button id="stickynote" class="icon-button"><i class="fas fa-sticky-note"></i></button>
+                    <button id="progress" class="icon-button"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                    <button id="pallets" class="icon-button"><i class="fa-solid fa-swatchbook"></i></button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="more-icons-wrapper">
-                <button class="icon-button">
-                <i class="fas fa-gear"></i>
-                </button>
-                <div class="sidebar-icons">
-                <button id="binButton" class="icon-button"><i class="fas fa-trash"></i></button>
-                <button id="save" class="icon-button"><i class="fas fa-save"></i></button>
-                <button id="load" class="icon-button"><i class="fa-solid fa-upload"></i></button>
-                <button id="export" class="icon-button"><i class="fas fa-share"></i></button>
+                <div class="more-icons-wrapper">
+                    <button class="set-button">
+                    <i class="fas fa-gear"></i>
+                    </button>
+                    <div class="sidebar-icons">
+                    <button id="binButton" class="icon-button"><i class="fas fa-trash"></i></button>
+                    <button id="save" class="icon-button"><i class="fas fa-save"></i></button>
+                    <button id="load" class="icon-button"><i class="fa-solid fa-upload"></i></button>
+                    <button id="export" class="icon-button"><i class="fas fa-share"></i></button>
+                    </div>
                 </div>
-            </div>
-        </div>    
+            </div>    
 
 
     <!-- Tool Function Scripts -->
@@ -117,7 +128,6 @@
     <script src="Workspace/progress.js"></script>
     <script src="Workspace/saveload.js"></script>
     <script src="Workspace/export.js"></script>
-    <script src="Workspace/open.js"></script>
     <script src="Workspace/square.js"></script>
     <script src="Workspace/themes.js"></script>
     <script src="Workspace/pallets.js"></script>
@@ -135,6 +145,8 @@
     <!-- Pop-up Scripts -->
     <script src="website/downpop.js"></script>
     <script src="website/inbox.js"></script>
+
+    <script src="Workspace/im_s.js"></script>
 
     <!-- Script to handle extra icon visibility -->
     <script>
@@ -194,6 +206,96 @@
             titleInput.addEventListener('input', updateTitle);
         });
     </script>
+
+<script>
+let isDraggingWorkspace = false;
+let dragStartX = 0, dragStartY = 0;
+let bgPosX = 0, bgPosY = 0;
+
+// Load saved workspace offset from localStorage, or default to 0
+let savedOffset = JSON.parse(localStorage.getItem('workspaceOffset') || '{"x":0,"y":0}');
+window.workspaceOffsetX = savedOffset.x;
+window.workspaceOffsetY = savedOffset.y;
+
+// Apply the saved background position visually
+bgPosX = workspaceOffsetX;
+bgPosY = workspaceOffsetY;
+document.body.style.backgroundPosition = `${bgPosX}px ${bgPosY}px`;
+
+// Optional: Move any positioned elements (like shapes) on page load
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.centeredSquare').forEach(square => {
+        const id = square.dataset.id;
+        const data = squaresData.find(s => s.id === id);
+        if (!data) return;
+        square.style.left = `${data.left + workspaceOffsetX}px`;
+        square.style.top = `${data.top + workspaceOffsetY}px`;
+    });
+
+    // Also update image positions based on initial offset
+    if (typeof window.updateImagesPositionWithWorkspace === 'function') {
+        window.updateImagesPositionWithWorkspace(workspaceOffsetX, workspaceOffsetY);
+    }
+});
+
+document.body.addEventListener('contextmenu', e => {
+    e.preventDefault(); // Disable right-click menu
+});
+
+document.body.addEventListener('mousedown', e => {
+    if (e.button !== 2) return; // Only right-click
+
+    if (window.isInteractingWithLine || e.target.closest('.centeredSquare')) return;
+
+    isDraggingWorkspace = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    document.body.style.cursor = 'grabbing';
+});
+
+document.body.addEventListener('mousemove', e => {
+    if (!isDraggingWorkspace) return;
+
+    const dx = e.clientX - dragStartX;
+    const dy = e.clientY - dragStartY;
+
+    workspaceOffsetX += dx;
+    workspaceOffsetY += dy;
+
+    bgPosX += dx;
+    bgPosY += dy;
+    document.body.style.backgroundPosition = `${bgPosX}px ${bgPosY}px`;
+
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+
+    // Move squares
+    document.querySelectorAll('.centeredSquare').forEach(square => {
+        const id = square.dataset.id;
+        const data = squaresData.find(s => s.id === id);
+        if (!data) return;
+        square.style.left = `${data.left + workspaceOffsetX}px`;
+        square.style.top = `${data.top + workspaceOffsetY}px`;
+    });
+
+    // Move images
+    if (typeof window.updateImagesPositionWithWorkspace === 'function') {
+        window.updateImagesPositionWithWorkspace(workspaceOffsetX, workspaceOffsetY);
+    }
+});
+
+document.body.addEventListener('mouseup', e => {
+    if (e.button !== 2) return;
+    isDraggingWorkspace = false;
+    document.body.style.cursor = 'default';
+
+    // Save updated offset to localStorage
+    localStorage.setItem('workspaceOffset', JSON.stringify({
+        x: workspaceOffsetX,
+        y: workspaceOffsetY
+    }));
+});
+</script>
 
 </body>
 </html>
