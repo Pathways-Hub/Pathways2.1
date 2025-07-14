@@ -15,7 +15,7 @@ saveButton.addEventListener('click', () => {
 
     // Simulate a click to download
     document.body.appendChild(a);
-    a.click();
+    a.click()
     document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
 
