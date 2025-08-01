@@ -4,101 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="wallpapers.css">
-    <link rel="stylesheet" href="helements.css">
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Pathways | Hub</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo-container">
-            <a href="index.html"><img src="images/Pathwaystl.png" alt="Pathways Logo" class="logo" /></a>
-            <div class="icon-buttons">
-                <a href="workspaces.html" class="icon-btn">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </div>
-        </div>
-        <nav class="nav-links">
-            <div class="section-title">General</div>
-            <a href="hub.html" class="nav-link">Home</a>
-            <a href="infom.html" class="nav-link">Information</a>
-            <hr class="separator"> <!-- Line separator -->
-
-            <a href="projects.html" class="nav-link">Projects</a>
-            <a href="#" class="nav-link">Templates</a>
-            <hr class="separator"> <!-- Line separator -->
-
-            <a href="#" class="nav-link">Account</a>
-            <a href="finance.html" class="nav-link">Finance</a>
-            <a href="#" class="nav-link">Settings</a>
-            <hr class="separator"> <!-- Line separator -->
-
-            <a href="wallpapers.html" class="nav-link">Launchpad <i class="fa-solid fa-rocket"></i></a>
-        </nav>
-
-            <!-- Extra Box Above Task Window -->
-            <div class="extra-container">
-                <div class="lofi-label">Lofi Radio</div>
-                <div class="control-buttons">
-                <a href="https://www.youtube.com/watch?v=iWjQKl4VEio" target="_blank">
-                    <button class="control-btn"><i class="fa-solid fa-link"></i></button>
-                </a>
-                <button class="control-btn"><i class="fas fa-play"></i></button>
-                <button class="control-btn"><i class="fas fa-bars"></i></button>
-                </div>
-            </div>
-
-            <iframe
-                id="youtubeVideo"
-                width="0"
-                height="0"
-                src="https://www.youtube.com/embed/iWjQKl4VEio?enablejsapi=1&autoplay=0&mute=0"
-                frameborder="0"
-                allow="autoplay"
-                allowfullscreen>
-            </iframe>
-        
-        <div class="progress-container">
-            <div class="progress-header">
-                <span class="progress-text">0%</span>
-                <span class="edit-text" onclick="toggleTaskWindow()">click to edit tasks</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" style="width: 0%;"></div>
-            </div>
-        </div>
-        
-        <div class="task-window" id="taskWindow">
-            <button class="close-btn">&times;</button>
-            <h3>Manage Tasks</h3>
-            <ul id="taskList"></ul>
-            <input type="text" id="taskInput" placeholder="New Task">
-            <taskbutton onclick="addTask()"><i class="fa-solid fa-plus"></i> Add Task</taskbutton>
-        </div>
-    </div>
-
-    <!-- Banner Section -->
     <div class="banner-container">
-        <h1 class="banner-title">Launchpad</h1>
+        <h1 class="banner-title">JavaScript Plugin Builder</h1>
         <img src="website/launchpad.png" alt="Banner Image" class="banner">
 
-        <!-- Pathways Import Instruction -->
         <p class="import-description">
-            Pathways is a powerful tool that helps developers streamline workflows. 
-            To integrate Pathways into your project, use the following import statement:
+            This documentation shows how to build custom JavaScript tools that plug into this app. All elements use your existing style classes like <code>control-btn</code>, <code>extra-container</code>, and <code>import-description</code>.
         </p>
 
+        <hr class="separator">
+
+        <p class="section-title">START HERE: Plugin Function</p>
+        <p class="import-description">
+            Begin by writing a function to define your plugin. Replace <code>MyPlugin</code> with your actual tool name.
+        </p>
         <div class="code-snippet">
-            <code>import Pathways from 'pathways';</code>
+            <code>
+function MyPlugin() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log("Plugin started");<br>
+}
+            </code>
         </div>
+
+        <hr class="separator">
+
+        <p class="section-title">ADD A BUTTON</p>
+        <p class="import-description">
+            Create a button to launch your plugin. It will use the class <code>control-btn</code> to match your existing UI.
+        </p>
+        <div class="code-snippet">
+            <code>
+const btn = document.createElement("button");<br>
+btn.className = "control-btn";<br>
+btn.textContent = "Launch MyPlugin";<br>
+btn.onclick = MyPlugin;<br>
+document.body.appendChild(btn);
+            </code>
+        </div>
+
+        <hr class="separator">
+
+        <p class="section-title">CREATE A CONTAINER</p>
+        <p class="import-description">
+            Use this to spawn a styled box for your tool. Containers can hold text, inputs, and buttons.
+        </p>
+        <div class="code-snippet">
+            <code>
+const container = document.createElement("div");<br>
+container.className = "extra-container";<br>
+document.body.appendChild(container);
+            </code>
+        </div>
+
+        <hr class="separator">
+
+        <p class="section-title">INSERT TEXT</p>
+        <p class="import-description">
+            Add paragraph-style text with the <code>import-description</code> class for visual consistency.
+        </p>
+        <div class="code-snippet">
+            <code>
+const text = document.createElement("p");<br>
+text.className = "import-description";<br>
+text.textContent = "Hello from MyPlugin";<br>
+container.appendChild(text);
+            </code>
+        </div>
+
+        <hr class="separator">
+
+        <p class="section-title">INPUT FIELD</p>
+        <p class="import-description">
+            You can add an input box to collect user data.
+        </p>
+        <div class="code-snippet">
+            <code>
+const input = document.createElement("input");<br>
+input.placeholder = "Type here...";<br>
+container.appendChild(input);<br><br>
+
+const value = input.value; // use this to get input
+            </code>
+        </div>
+
+        <hr class="separator">
+
+        <p class="section-title">ADD A BUTTON TO THE TOOL</p>
+        <p class="import-description">
+            Add an internal plugin button to perform actions, like saving or submitting.
+        </p>
+        <div class="code-snippet">
+            <code>
+const innerBtn = document.createElement("button");<br>
+innerBtn.className = "control-btn";<br>
+innerBtn.textContent = "Submit";<br>
+innerBtn.onclick = () => alert(input.value);<br>
+container.appendChild(innerBtn);
+            </code>
+        </div>
+
+        <hr class="separator">
+
+        <p class="section-title">MAKE IT DRAGGABLE</p>
+        <p class="import-description">
+            Add drag support to your plugin container so users can move it around.
+        </p>
+        <div class="code-snippet">
+            <code>
+function makeDraggable(element) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;let offsetX, offsetY, isDragging = false;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;element.addEventListener("mousedown", (e) => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (e.target.tagName === "INPUT" || e.target.isContentEditable) return;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isDragging = true;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;offsetX = e.clientX - element.offsetLeft;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;offsetY = e.clientY - element.offsetTop;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.style.zIndex = 9999;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;document.addEventListener("mousemove", (e) => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!isDragging) return;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.style.left = `${e.clientX - offsetX}px`;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.style.top = `${e.clientY - offsetY}px`;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;document.addEventListener("mouseup", () => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isDragging = false;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+}
+            </code>
+        </div>
+
+        <hr class="separator">
+
+        <p class="section-title">FULL PLUGIN EXAMPLE</p>
+        <p class="import-description">
+            Here's the complete pattern to spawn a draggable plugin with input, button, and text.
+        </p>
+        <div class="code-snippet">
+            <code>
+function MyPlugin() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;const container = document.createElement("div");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;container.className = "extra-container";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;container.style.position = "absolute";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;container.style.top = "300px";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;container.style.left = "300px";<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;const text = document.createElement("p");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;text.className = "import-description";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;text.textContent = "This is MyPlugin tool";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;container.appendChild(text);<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;const input = document.createElement("input");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input.placeholder = "Your input...";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;container.appendChild(input);<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;const btn = document.createElement("button");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;btn.className = "control-btn";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;btn.textContent = "Submit";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;btn.onclick = () => alert(input.value);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;container.appendChild(btn);<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;document.body.appendChild(container);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;makeDraggable(container);<br>
+}
+            </code>
+        </div>
+        <hr class="separator">
+
+        <p class="section-title">IMPORTANT PLUGIN CONSTRAINTS</p>
+        <p class="import-description">
+            To ensure performance and compatibility, all plugins must follow these rules:
+        </p>
+
+        <ul class="import-description">
+            <li><strong>Max file size:</strong> Your entire plugin must be under <code>500KB</code>.</li>
+            <li><strong>Single file only:</strong> Plugins must be contained in a single JavaScript file.</li>
+            <li><strong>No local assets:</strong> Any images or media must use hosted URLs (e.g., <code>https://example.com/image.png</code>). Local file paths like <code>./img/pic.png</code> will not work.</li>
+        </ul>
+
+        <p class="import-description">
+            Stick to the structure provided in this guide to ensure your plugin is accepted and functions correctly inside the workspace.
+        </p>
     </div>
-
-    <script src="website/tasks.js"></script>
-    <script src="website/webelements.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script> 
-
 </body>
 </html>

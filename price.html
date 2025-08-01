@@ -1,131 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pathways</title>
-    <link rel="stylesheet" href="price.css" />
-    <link rel="icon" href="images/favicon.png" type="image/png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pathways │ Pave Your Way</title>
+  <link rel="stylesheet" href="evo/chat.css">
+  <link rel="stylesheet" href="price.css">
+  <link rel="stylesheet" href="website/footer.css">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <a href="index.html"><img src="images/Pathwaystl.png" alt="Pathways Logo" class="logo" /></a>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="price.html">Pricing</a></li>
-                <li><a href="hub.html">Hub</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-        <!-- Sign In Button -->
-        <a href="login.html" class="btn sign-in"><i class="fa-solid fa-user"></i> Sign In</a>
-    </header> 
 
-    <!-- New Plan Options Section -->
-    <section class="plans-intro">
-        <div class="plans-text">
-            <h1>Plan options</h1>
-            <p>
-                Choose a plan that fits your needs, whether you're just getting started or scaling your business.
-                Our flexible pricing options are designed to provide value and scalability.
-            </p>
-        </div>
-        <div class="plans-image">
-            <img src="website/images/path_plus_guy.png" alt="Plan Illustration" />
-            <div class="fine-print">*average pathways+ user (a very cool person)*</div>
-        </div>
-    </section>
-
-    <div class="pricing-container">
-        <div class="pricing-plan">
-            <h2>Hobbiest</h2>
-            <p class="price">£0</p>
-            <p class="month">a month</p>
-            <ul class="features">
-                <li>Limited Features</li>
-                <li>2 device limit</li>
-                <li></li>
+<header class="site-header">
+  <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo"/></a>
+  <nav>
+    <div class="nav-container">
+      <ul class="nav-links">
+        <li class="dropdown">
+          <a href="#">Pathways <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-content wide-dropdown">
+            <ul>
+              <li><a href="#">Career Roadmaps</a></li>
+              <li><a href="#">Skill Development</a></li>
+              <li><a href="#">Certifications</a></li>
             </ul>
-            <button class="buy-button">Get started</button>
-            <div class="yearly-container">
-                <h3>Yearly Plan</h3>
-                <p class="yearly-price">£0</p>
-                <p class="yearly-month">a year</p>
-            </div>
-        </div>
-
-        <div class="pricing-plan popular">
-            <div class="popular-badge">Most Popular</div>
-            <h2>Freelancer</h2>
-            <p class="price">£5.60</p>
-            <p class="month">a month</p>
-            <ul class="features">
-                <li>All <b>basic</b> features</li>
-                <li>10 device limit</li>
-                <li></li>
+          </div>
+        </li>
+        <li><a href="price.html">Pricing</a></li>
+        <li><a href="hub.html">Hub</a></li>
+        <li class="dropdown">
+          <a href="about.html">About <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-content wide-dropdown">
+            <ul>
+              <li><a href="#">Our Story</a></li>
+              <li><a href="#">Mission</a></li>
+              <li><a href="#">Team</a></li>
             </ul>
-            <button class="buy-button">Get monthly</button>
-            <div class="yearly-container">
-                <h3>Yearly Plan</h3>
-                <p class="yearly-price">£50</p>
-                <p class="yearly-month">a year</p>
-                <button class="buy-button-yearly">Get yearly</button>
-            </div>
-        </div>
-
-        <div class="pricing-plan">
-            <h2>Business</h2>
-            <p class="price">£11.60</p>
-            <p class="month">a month</p>
-            <ul class="features">
-                <li>All Features Unlocked</li>
-                <li>No device limit</li>
-                <li></li>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Business <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-content wide-dropdown">
+            <ul>
+              <li><a href="#">Partnerships</a></li>
+              <li><a href="#">Enterprise Tools</a></li>
+              <li><a href="#">Use Cases</a></li>
             </ul>
-            <button class="buy-button">Get monthly</button>
-            <div class="yearly-container most-popular-yearly">
-                <div class="most-popular-badge-yearly">Most Popular</div>
-                <h3>Yearly Plan</h3>
-                <p class="yearly-price">£100</p>
-                <p class="yearly-month">a year</p>
-                <button class="buy-button-yearly">Get yearly</button>
-            </div>
-        </div>
+          </div>
+        </li>
+      </ul>
     </div>
+  </nav>
+  <a href="login.html" class="btn sign-in">Sign In</a>
+</header> 
 
-    <div class="finance-content">
-        <div class="card-holder">
-            <img src="website/card_fx.png" alt="Card Image" class="finance-image" />
-            <div class="card-text-top">
-                <h2 class="card-title">Payment Method</h2>
-                <p class="change-text">Change payment method <a href="tabs.html" class="change-link">here</a></p>
-            </div>
-        </div>
+<section class="t-text">
+  <div class="pill-label">Avalable on all collaborating acounts</div>
+  <h2>Pathways pricing plans</h2>
+  <p class="subtitle-text">Choose the perfect plan that fits your needs and start paving your way today.</p>
+</section>
+
+<section class="three-containers" aria-label="Feature or pricing containers">
+
+  <div class="container-box">
+    <div class="container-header-wrapper">
+      <div class="container-header-text">
+        <h2 class="container-header">Pathways <span>hobbyist</span></h2>
+        <p class="container-subheader">One request at a time</p>
+      </div>
+      <div class="container-header-actions">
+        <a href="#" class="btn-primary">View</a>
+        <p class="container-price" style="margin-top:0.5rem; font-weight:700;">$10 <small>/mo</small></p>
+      </div>
     </div>
+    <div class="container-content">
+      <ul>
+        <li>Access to all design services</li>
+        <li>Bi-weekly calls and daily slack communication</li>
+        <li>Available for 3 days each week</li>
+        <li>Easy-to-manage ticketing system</li>
+        <li>Immediate start</li>
+      </ul>
+    </div>
+  </div>
 
-    <script>
-        const image = document.querySelector('.finance-image');
-        const container = document.querySelector('.finance-content');
+  <div class="container-box middle-box">
+    <div class="container-header-wrapper">
+      <div class="container-header-text">
+        <h2 class="container-header">Pathways <span>studio</span></h2>
+        <p class="container-subheader">Double your delivery 2x</p>
+      </div>
+      <div class="container-header-actions">
+        <a href="#" class="btn-primary" style="background: #8b5cf6;">View</a>
+        <p class="container-price">$20 <small>/mo</small></p>
+      </div>
+    </div>
+    <div class="container-content">
+      <ul>
+        <li>All from Nanodose membership</li>
+        <li>Direct comms in Slack + weekly sync</li>
+        <li>No-code development for free</li>
+        <li>Available for 5 days each week</li>
+        <li>Delivery in avg. 48 hours</li>
+        <li>Easy-to-manage ticketing system in Notion</li>
+        <li>Immediate start</li>
+      </ul>
+    </div>
+  </div>
 
-        container.addEventListener('mousemove', (e) => {
-            const { width, height, left, top } = container.getBoundingClientRect();
-            const x = e.clientX - left;
-            const y = e.clientY - top;
+  <div class="container-box">
+    <div class="container-header-wrapper">
+      <div class="container-header-text">
+        <h2 class="container-header">Pathways <span>business</span></h2>
+        <p class="container-subheader">Fitting your individual project needs</p>
+      </div>
+      <div class="container-header-actions">
+        <a href="#" class="btn-primary" style="background: transparent; color: #6366f1;">View</a>
+        <p class="container-price" style="margin-top:0.5rem; font-weight:700;">$50 <small>/mo</small></p>
+      </div>
+    </div>
+    <div class="container-content">
+      <ul>
+        <li>Custom scope</li>
+        <li>Dedicated team</li>
+        <li>Fixed deadlines</li>
+        <li>Strategic and consulting sessions bi-weekly</li>
+        <li>Payment plan based on milestones</li>
+      </ul>
+    </div>
+  </div>
 
-            const rotateX = ((y / height) - 0.5) * 50; // Increased from 20 to 50
-            const rotateY = ((x / width) - 0.5) * -50; // Increased from 20 to 50
+</section>
 
-            image.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-        });
+<div class="free-account-wrapper">
+  <a href="#" class="btn-free-account">Continue with free account</a>
+</div>
 
-        container.addEventListener('mouseleave', () => {
-            image.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-        });
-    </script>
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <img src="images/favicon.png" alt="Favicon" class="footer-logo">
+      <div class="social-links">
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="far fa-envelope"></i></a>
+        <a href="#" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
+      </div>
+      <p class="disclaimer">Pathways will never sell your information <a href="about.html">terms and conditions</a>.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-section">
+        <strong>Company</strong>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <strong>Download</strong>
+        <ul>
+          <li><a href="#">iOS</a></li>
+          <li><a href="#">Android</a></li>
+          <li><a href="#">Desktop</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <strong>Pricing</strong>
+        <ul>
+          <li><a href="#">Plans</a></li>
+          <li><a href="#">Enterprise</a></li>
+          <li><a href="#">Education</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <strong>Help</strong>
+        <ul>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Status</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>

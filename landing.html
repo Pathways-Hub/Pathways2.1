@@ -1,110 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathways │ Pave Your Way </title>
-    <link rel="stylesheet" href="landing.css"> <!-- Ensure this path is correct -->
-    <link rel="stylesheet" href="website/footer.css"> <!-- Ensure this path is correct -->
-    <link rel="icon" href="images/favicon.png" type="image/png">
-    <!-- Add Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pathways │ Pave Your Way</title>
+  <link rel="stylesheet" href="evo/chat.css">
+  <link rel="stylesheet" href="landing.css">
+  <link rel="stylesheet" href="website/footer.css">
+  <link rel="stylesheet" href="banner.css">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<header>
-    <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo" /></a>
-    <nav>
-        <ul class="nav-links">
-            <li><a href="#">Pathways <i class="fa-solid fa-angle-down"></i></a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="hub.html">Hub</a></li>
-            <li><a href="about.html">About <i class="fa-solid fa-angle-down"></i></a></li>
-            <li><a href="#">Business <i class="fa-solid fa-angle-down"></i></a></li>
-        </ul>
-    </nav>
-    <!-- Sign In Button -->
-    <a href="login.html" class="btn sign-in">Sign In</a>
-</header>
-
-<section class="hero">
-  <div class="hero-content">
-    <h1>Pave your way</h1>
-    <p>With Pathways</p>
-    <div class="hero-buttons">
-      <a href="#" class="btn primary">Get Started</a>
-      <a href="#" class="btn secondary">Learn More</a>
+<div class="banner">
+  <div class="banner-content">
+    <div class="banner-left">
+      <img src="https://i.pinimg.com/1200x/46/f4/3b/46f43b2da6e4adde424e0c19fbd4301c.jpg" alt="Banner Image" class="banner-image" />
+      <div class="banner-text">
+        <h1>Cloud 9</h1>
+        <p>by diplodocus</p>
+      </div>
     </div>
+    <a class="banner-button" href="#" download>Download</a>
+  </div>
+</div>
+
+<div class="banner-spacer"></div>
+
+<section class="description">
+  <div class="description-container">
+    <p>
+      Cloud 9 is a lightweight lofi audio plugin for Pathways Workspaces
+    </p>
+    <p>
+      Built to integrate seamlessly into your workflow, Cloud 9 launches quickly, stays out of your way, and provides a consistent, low-effort environment for concentration. The clean design and effortless functionality make it ideal for anyone looking to bring more rhythm and calm into their workspace without breaking momentum.
+    </p>
+    <p>
+      From soft textures and mellow beats to warm audio layers that fade into the background, Cloud 9 acts as an ambient companion — not just a music player, but a mindset enhancer. Created by <strong>diplodocus</strong>, it’s more than sound — it’s part of your creative process.
+    </p>
   </div>
 </section>
 
-<body>
-  <div class="main-wrapper">
+<header class="site-header">
+  <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo"/></a>
+  <nav>
+    <div class="nav-container">
+      <ul class="nav-links">
+        <li class="dropdown">
+          <a href="#">Pathways <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-content wide-dropdown">
+            <ul>
+              <li><a href="#">Career Roadmaps</a></li>
+              <li><a href="#">Skill Development</a></li>
+              <li><a href="#">Certifications</a></li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="hub.html">Hub</a></li>
+        <li class="dropdown">
+          <a href="about.html">About <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-content wide-dropdown">
+            <ul>
+              <li><a href="#">Our Story</a></li>
+              <li><a href="#">Mission</a></li>
+              <li><a href="#">Team</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Business <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-content wide-dropdown">
+            <ul>
+              <li><a href="#">Partnerships</a></li>
+              <li><a href="#">Enterprise Tools</a></li>
+              <li><a href="#">Use Cases</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <a href="login.html" class="btn sign-in">Sign In</a>
+</header> 
 
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <img src="images/favicon.png" alt="Favicon" class="footer-logo">
+      <div class="social-links">
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="far fa-envelope"></i></a>
+        <a href="#" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
+      </div>
+      <p class="disclaimer">Pathways will never sell your information <a href="about.html">terms and conditions</a>.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-section">
+        <strong>Company</strong>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <strong>Download</strong>
+        <ul>
+          <li><a href="#">iOS</a></li>
+          <li><a href="#">Android</a></li>
+          <li><a href="#">Desktop</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <strong>Pricing</strong>
+        <ul>
+          <li><a href="#">Plans</a></li>
+          <li><a href="#">Enterprise</a></li>
+          <li><a href="#">Education</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <strong>Help</strong>
+        <ul>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Status</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
-</body>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-left">
-                <img src="images/favicon.png" alt="Favicon" class="footer-logo">
-                <div class="social-links">
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-icon"><i class="far fa-envelope"></i></a>
-                    <a href="#" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
-                </div>
-                <p class="disclaimer">Pathways will never sell your information <a href="about.html">terms and conditions</a>.</p>
-            </div>
-
-            <div class="footer-right">
-                <div class="footer-section">
-                    <strong>Company</strong>
-                    <ul>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Press</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <strong>Download</strong>
-                    <ul>
-                        <li><a href="#">iOS</a></li>
-                        <li><a href="#">Android</a></li>
-                        <li><a href="#">Desktop</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <strong>Pricing</strong>
-                    <ul>
-                        <li><a href="#">Plans</a></li>
-                        <li><a href="#">Enterprise</a></li>
-                        <li><a href="#">Education</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <strong>Help</strong>
-                    <ul>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Status</a></li>
-                        <li><a href="#">Privacy</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Include the popup.js script -->
-    <script src="website/popup.js"></script>
+</footer>
 
 </body>
 </html>

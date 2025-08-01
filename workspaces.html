@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pathways</title>
-    <script src="loading.js"></script>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="workstyle.css">
     <link rel="stylesheet" href="Workspace/other.css">
@@ -112,8 +111,7 @@
                     <button id="export" class="icon-button"><i class="fas fa-share"></i></button>
                     </div>
                 </div>
-            </div>    
-
+            </div>  
 
     <!-- Tool Function Scripts -->
     <script src="Workspace/script.js"></script>
@@ -142,6 +140,7 @@
     <script src="website/save.js"></script>
     <script src="Workspace/simple_elements.js"></script>
     <script src="Workspace/invite/iv.js"></script>
+    <script src="Workspace/pluggedin.js"></script>
 
     <!-- Pop-up Scripts -->
     <script src="website/downpop.js"></script>
@@ -236,6 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.updateImagesPositionWithWorkspace === 'function') {
         window.updateImagesPositionWithWorkspace(workspaceOffsetX, workspaceOffsetY);
     }
+
+    // ✅ Update tables as well
+    if (typeof window.updateTablesPositionWithWorkspace === 'function') {
+        window.updateTablesPositionWithWorkspace(workspaceOffsetX, workspaceOffsetY);
+    }
 });
 
 document.body.addEventListener('contextmenu', e => {
@@ -281,6 +285,11 @@ document.body.addEventListener('mousemove', e => {
     // Move images
     if (typeof window.updateImagesPositionWithWorkspace === 'function') {
         window.updateImagesPositionWithWorkspace(workspaceOffsetX, workspaceOffsetY);
+    }
+
+    // ✅ Move tables
+    if (typeof window.updateTablesPositionWithWorkspace === 'function') {
+        window.updateTablesPositionWithWorkspace(workspaceOffsetX, workspaceOffsetY);
     }
 });
 

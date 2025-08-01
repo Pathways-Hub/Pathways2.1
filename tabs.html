@@ -1,83 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Slack-Style Chat</title>
-  <link rel="stylesheet" href="evo/chat.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathways │ Pave Your Way </title>
+    <link rel="stylesheet" href="website.css"> <!-- Ensure this path is correct -->
+    <link rel="stylesheet" href="website/footer.css"> <!-- Ensure this path is correct -->
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <!-- Add Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <div class="app">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <a href="hub.html">
-          <img src="images/Pathwaystl.png" alt="Logo" class="logo" />
-        </a>
-      </div>
-      <div class="sidebar-content">
-        <p>No chats yet</p>
-      </div>
-    </aside>
 
-    <!-- Chat Area -->
-    <main class="chat-area">
-      <div class="chat-header">
-        <h3>General</h3>
-      </div>
+<header class="site-header">
+    <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo" /></a>
 
-      <div class="messages" id="messages">
-        <!-- Sent messages will appear here -->
-      </div>
-
-      <!-- Toolbar for content types -->
-      <div class="toolbar">
-        <div class="tool"><i class="fa-solid fa-code"></i> Code</div>
-        <div class="tool"><i class="fa-solid fa-file-lines"></i> Document</div>
-        <div class="tool"><i class="fa-solid fa-image"></i> Image</div>
-        <div class="tool"><i class="fa-solid fa-link"></i> Link</div>
-        <div class="tool"><i class="fa-solid fa-microphone"></i> Audio</div>
-        <div class="tool"><i class="fa-solid fa-video"></i> Video</div>
-      </div>
-
-      <!-- Input box -->
-      <div class="message-input">
-        <input type="text" id="messageInput" placeholder="Type a message..." />
-        <button id="sendButton"><i class="fa fa-paper-plane"></i></button>
-      </div>
-    </main>
-  </div>
-
-  <script src="evo/msg_lnks.js"></script>
-  <script>
-    const sendButton = document.getElementById('sendButton');
-    const messageInput = document.getElementById('messageInput');
-    const messages = document.getElementById('messages');
-
-    function sendMessage() {
-      const text = messageInput.value.trim();
-      if (!text) return;
-
-      const message = document.createElement('div');
-      message.className = 'message outgoing';
-      message.innerHTML = `
-        <div class="content">
-          <div class="sender">You</div>
-          <div class="bubble">${text}</div>
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#">Pathways <i class="fa-solid fa-angle-down"></i></a>
+                    <div class="dropdown-content wide-dropdown">
+                        <ul>
+                            <li><a href="#">Career Roadmaps</a></li>
+                            <li><a href="#">Skill Development</a></li>
+                            <li><a href="#">Certifications</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="hub.html">Hub</a></li>
+                <li class="dropdown">
+                    <a href="about.html">About <i class="fa-solid fa-angle-down"></i></a>
+                    <div class="dropdown-content wide-dropdown">
+                        <ul>
+                            <li><a href="#">Our Story</a></li>
+                            <li><a href="#">Mission</a></li>
+                            <li><a href="#">Team</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Business <i class="fa-solid fa-angle-down"></i></a>
+                    <div class="dropdown-content wide-dropdown">
+                        <ul>
+                            <li><a href="#">Partnerships</a></li>
+                            <li><a href="#">Enterprise Tools</a></li>
+                            <li><a href="#">Use Cases</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <img src="images/favicon.png" alt="You" class="avatar" />
-      `;
-      messages.appendChild(message);
+    </nav>
 
-      messageInput.value = '';
-      messages.scrollTop = messages.scrollHeight;
-    }
+    <!-- Sign In Button -->
+    <a href="login.html" class="btn sign-in">Sign In</a>
+</header> 
 
-    sendButton.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
-  </script>
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <span class="pill"><i class="fa-solid fa-circle"></i> Beta Version</span>
+        <h1>Pave Your Way</h1>
+        <p>with Pathways</p>
+        <div class="button-container">
+            <button class="black-button" id="newWorkspace" onclick="window.location.href='login.html';">
+                Get Started <i class="fa-solid fa-rocket"></i>
+            </button>
+            <i class="fa-solid fa-angles-down"></i>
+            <button class="white-button">
+                Learn More <i class="fa-solid fa-book"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<body>
+  <div class="main-wrapper">
+
+    <div class="image-section">
+    <img
+        id="promo-image"
+        class="promo-image"
+        src="website/images/pthws_example.png"
+        alt="Promo"
+    />
+    </div>
+
+    <div class="trio-button-section">
+      <div class="trio-button-container">
+
+        <!-- Travel Planning -->
+        <button class="trio-button selected">
+          <div class="icon-box">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Travel Planning</span>
+          </div>
+          <div class="button-description">
+            Keep destinations, bookings, and itineraries together. Pathways makes trip planning seamless and visual.
+          </div>
+        </button>
+
+        <!-- Track Progress -->
+        <button class="trio-button">
+          <div class="icon-box">
+            <i class="fas fa-chart-line"></i>
+            <span>Track Progress</span>
+          </div>
+          <div class="button-description">
+            See your goals come to life. Pathways tracks progress in real-time so you always know where you stand.
+          </div>
+        </button>
+
+        <!-- Schedule Tasks -->
+        <button class="trio-button">
+          <div class="icon-box">
+            <i class="fas fa-calendar-check"></i>
+            <span>Schedule Tasks</span>
+          </div>
+          <div class="button-description">
+            Plan out everything from big milestones to daily tasks. Stay organized without the overwhelm.
+          </div>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="video-section">
+        <div class="video-wrapper">
+            <video class="promo-video" autoplay loop muted playsinline id="pathwaysVideo">
+                <source src="website/website_animation2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <button class="video-control" id="videoToggle">
+                <i class="fas fa-pause"></i>
+            </button>
+        </div>
+    </div>
+
+  </div>
+</body>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <img src="images/favicon.png" alt="Favicon" class="footer-logo">
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="far fa-envelope"></i></a>
+                    <a href="#" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
+                </div>
+                <p class="disclaimer">Pathways will never sell your information <a href="about.html">terms and conditions</a>.</p>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-section">
+                    <strong>Company</strong>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <strong>Download</strong>
+                    <ul>
+                        <li><a href="#">iOS</a></li>
+                        <li><a href="#">Android</a></li>
+                        <li><a href="#">Desktop</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <strong>Pricing</strong>
+                    <ul>
+                        <li><a href="#">Plans</a></li>
+                        <li><a href="#">Enterprise</a></li>
+                        <li><a href="#">Education</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <strong>Help</strong>
+                    <ul>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include the popup.js script -->
+    <script src="website/popup.js"></script>
+
+    <script>
+        const video = document.getElementById('pathwaysVideo');
+        const toggleBtn = document.getElementById('videoToggle');
+        const icon = toggleBtn.querySelector('i');
+
+        toggleBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+            } else {
+                video.pause();
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        });
+    </script>
+    <script>
+    // Select buttons and promo image
+        const buttons = document.querySelectorAll('.trio-button');
+        const promoImage = document.getElementById('promo-image');
+
+        const images = [
+        'website/images/pthws_example.png',
+        'website/images/pthws_example2.png',
+        'website/images/pthws_example3.png'
+        ];
+
+        buttons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            // Smooth fade out/in transition for the image source
+            promoImage.style.opacity = 0;
+
+            setTimeout(() => {
+            promoImage.src = images[index];
+
+            // Get the icon box text color
+            const iconBox = button.querySelector('.icon-box');
+            const color = window.getComputedStyle(iconBox).color;
+            promoImage.style.borderColor = color;
+
+            promoImage.style.opacity = 1;
+            }, 300); // Match this with your CSS transition duration
+        });
+        });
+    </script>
+
 </body>
 </html>

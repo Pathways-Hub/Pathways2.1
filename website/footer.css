@@ -1,27 +1,20 @@
-/* Global Styles */
-html, body {
-    margin: 0; /* Remove default margins */
-    font-family: Arial, sans-serif;
-    color: #000000;
-    min-height: 100%; /* Ensure the body fills the full height of the viewport */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Main content area */
-body > *:not(footer) {
-    flex: 1; /* Allow content above the footer to grow and ensure the footer is pushed down if needed */
-}
-
-/* Footer */
 footer {
     background-color: #ffffff;
-    border-top: 1px solid #000000;
-    height: 300px;
+    border: 1px solid #cacaca; /* border on all sides */
+    border-radius: 15px;
+    height: auto;
     display: flex;
-    justify-content: center; /* Centers .footer-container horizontally */
-    padding: 40px 20px;       /* Reduced side padding for tighter spacing */
+    justify-content: center;
+    padding: 40px 20px;
     box-sizing: border-box;
+    margin: 40px auto 20px auto;  /* Bottom margin is now 20px */
+    width: calc(100% - 40px);     /* Matches header */
+    max-width: 1200px;            /* Matches header */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    /* 👇 Ensures it's not pinned to the bottom */
+    margin-top: auto;
 }
 
 /* Footer Container with max-width and centered content */

@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+
+.motivational-container {
+  background-color: #ffffff;
+  border: 1px solid #cacaca;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 60px 50px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.motivational-columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.motivational-text h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3vw;
+  color: #333333;
+  margin: 1.5vw 0;
+  text-align: left;
+  line-height: 1.2;
+  font-weight: normal;
+}
+
+.pathways-message {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+  flex: 1;
+  min-width: 250px;
+  align-self: center;
+}
+
+.create-workspace-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.create-workspace-btn:hover {
+  background-color: #333;
+}
+
+.button-wrapper {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.collaborate-section {
+  text-align: center;
+  margin: 100px auto;
+  max-width: 800px;
+  position: relative;
+}
+
+.collaborate-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.5rem;
+  color: #333333;
+  font-weight: normal;
+}
+
+.collab-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.collab-wrapper h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.8rem;
+  color: #333;
+  font-weight: normal;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+}
+
+.collab-badges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.badge {
+  position: absolute;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+/* Cursor arrows */
+.badge::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 12px 12px 0 0;
+  pointer-events: none;
+}
+
+/* Lucas */
+.badge.lucas {
+  background-color: #007bff;
+  top: -30px;
+  left: 20%;
+  animation: float1 4s ease-in-out infinite;
+}
+
+.badge.lucas::after {
+  border-color: transparent #007bff transparent transparent;
+  bottom: -12px;  /* moved further down */
+  right: -12px;   /* moved further right */
+  top: auto;
+  transform: rotate(0deg); /* points right */
+  transform-origin: bottom right;
+}
+
+/* Olivia */
+.badge.olivia {
+  background-color: #e83e8c;
+  top: -30px;              /* moved badge up */
+  right: -30px;
+  animation: float2 5.5s ease-in-out infinite;
+}
+
+.badge.olivia::after {
+  border-color: transparent #e83e8c transparent transparent;
+  bottom: -12px;           /* moved pointer down to stay aligned */
+  left: -6px;
+  top: auto;
+  transform: rotate(90deg); /* clockwise */
+  transform-origin: bottom left;
+}
+
+/* Tamar */
+.badge.tamar {
+  background-color: #28a745;
+  bottom: -70px;
+  left: 10%;
+  animation: float3 6s ease-in-out infinite;
+}
+
+.badge.tamar::after {
+  border-color: transparent #28a745 transparent transparent;
+  top: -6px;
+  right: -6px;
+  transform: rotate(-90deg);
+  transform-origin: top right;
+}
+
+/* 李新 */
+.badge.lixīn {
+  background-color: #fd7e14;
+  bottom: -95px;
+  right: 10%;
+  animation: float4 5s ease-in-out infinite;
+}
+
+.badge.lixīn::after {
+  border-color: transparent #fd7e14 transparent transparent;
+  top: -2px;       /* moved closer to name */
+  left: -2px;      /* moved closer to name */
+  right: auto;
+  transform: rotate(180deg); /* stays flipped */
+  transform-origin: top left;
+}
+
+/* Floating animations */
+@keyframes float1 {
+  0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+  50%  { transform: translate(-50%, -50%) translate(4px, -6px); }
+  100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+}
+
+@keyframes float2 {
+  0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+  50%  { transform: translate(-50%, -50%) translate(-5px, 5px); }
+  100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+}
+
+@keyframes float3 {
+  0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+  50%  { transform: translate(-50%, -50%) translate(6px, 3px); }
+  100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+}
+
+@keyframes float4 {
+  0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+  50%  { transform: translate(-50%, -50%) translate(-3px, -5px); }
+  100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+}
+
+.invite-text {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 1.2rem;
+  color: #555;
+  max-width: 800px;
+  margin: 0px auto 0;
+  margin-bottom: 6rem;
+  text-align: center;
+  line-height: 1.5;
+}

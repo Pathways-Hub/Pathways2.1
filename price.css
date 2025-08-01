@@ -1,412 +1,268 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px; /* Adds padding for body content */
-    background-color: white;
-    height: auto; /* Set to auto for dynamic height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding-top: 60px; /* To account for the fixed header */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+
+/* Container for the 3 large boxes */
+.three-containers {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1rem;
+  background: transparent;
+  flex-wrap: wrap;
 }
 
-header {
-    width: 100%;
-    padding: 5px 20px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #cacaca;
-    display: flex;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    box-sizing: border-box;
-    height: 60px;
-    z-index: 1000;
+/* Each container box */
+.container-box {
+  position: relative; /* needed for the pseudo */
+  border-radius: 20px;
+  overflow: visible; /* show pseudo outside */
+  background: white;
+  min-height: 420px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.btn.sign-in {
-    background-color: #000000; /* Black button */
-    color: #ffffff; /* White text */
-    padding: 5px 15px; /* Padding for a smaller button */
-    font-size: 0.9rem; /* Slightly smaller text */
-    font-weight: bold;
-    text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Rounded edges */
-    margin-left: auto; /* Push button to the far right */
+/* Hover effect */
+.container-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.15);
 }
 
-.btn.sign-in:hover {
-    background-color: #333333; /* Darker black on hover */
+/* Header wrapper - white background, flex horizontal */
+.container-header-wrapper {
+  background: white !important;
+  padding: 1.5rem 2rem 1rem 2rem;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: nowrap; /* prevents wrapping */
 }
 
-.logo {
-    height: 25px;
-    margin-right: 20px;
+/* Left side - title and subtitle stacked */
+.container-header-text {
+  display: flex;
+  flex-direction: column;
 }
 
-nav {
-    flex-grow: 1;
+
+/* Right side - button and price side-by-side */
+.container-header-actions {
+  display: flex;
+  flex-direction: row; /* horizontal layout */
+  align-items: center;
+  gap: 1rem;
 }
 
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
+/* Header text */
+.container-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: #111;
 }
 
-.nav-links li {
-    display: inline;
+/* Italic span */
+.container-header span {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-weight: normal;
 }
 
-.nav-links a {
-    text-decoration: none;
-    color: black;
-    font-size: 0.9rem;
-    font-weight: bold;
+/* Subtitle */
+.container-subheader {
+  font-style: italic;
+  color: #666;
+  margin: 0;
 }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    min-width: 150px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    border: 1px solid #ddd;
+/* Right side - button, price, and note stacked */
+.container-header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  min-width: 140px;
 }
 
-.dropdown-content li {
-    display: block;
+/* Buttons */
+.btn-primary {
+  background: transparent !important;
+  border: 3px solid #8984ea !important;
+  color: #8984ea !important;
+  padding: 0.65rem 2rem !important;
+  border-radius: 10px !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  transition: background 0.3s ease !important;
 }
 
-.dropdown-content a {
-    color: #333;
-    padding: 10px;
-    text-decoration: none;
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
+.btn-primary:hover {
+  background: #8984ea !important;
+  color: white !important;
 }
 
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
+/* Price styling */
+.container-price {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #111;
+  margin: 0;
 }
 
-.nav-links li:hover .dropdown-content {
-    display: block;
+.container-price small {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #666;
 }
 
-/* Pricing container */
-.pricing-container {
-    display: flex; /* Flexbox for pricing plans */
-    justify-content: center; /* Center pricing plans */
-    align-items: center; /* Align items vertically */
-    margin-top: 20px; /* Space above pricing plans */
-    gap: 20px; /* Space between pricing plans */
-    padding: 50px 20px; /* Padding for pricing container */
+/* Price note / small fine print */
+.price-note {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0;
 }
 
-.pricing-plan {
-    background-color: white; /* White background for pricing plans */
-    border-radius: 20px; /* Rounded corners */
-    padding: 30px; /* Padding inside pricing plans */
-    text-align: center; /* Center text */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow for pricing plans */
-    width: 250px; /* Fixed width for pricing plans */
+/* Bottom content area - off-white background */
+.container-content {
+  background: #f9f9f9 !important;
+  padding: 1.5rem 2rem 2rem 2rem;
+  border-radius: 0 0 20px 20px;
+  flex-grow: 1;
+  color: #444 !important;
 }
 
-.pricing-plan h2 {
-    font-size: 1.8rem; /* Font size for plan title */
-    color: #333; /* Color for plan title */
-}
-
-.price {
-    font-size: 3rem; /* Font size for price */
-    color: #0583fe; /* Color for price */
-    margin: 10px 0; /* Margin above and below price */
-}
-
-.month {
-    font-size: 0.9rem; /* Font size for month text */
-    color: #777; /* Color for month text */
-    margin-bottom: 20px; /* Margin below month text */
-}
-
-.features {
-    list-style-type: none; /* Remove bullet points */
-    padding: 0; /* Reset padding */
-    margin: 0 0 20px 0; /* Reset margin */
-    font-size: 0.9rem; /* Font size for features */
-    color: #555; /* Color for features */
-}
-
-.features li {
-    margin-bottom: 10px; /* Margin below each feature */
-}
-
-/* Button styles */
-.buy-button {
-    background-color: #000000; /* Black background for button */
-    color: white; /* White text for button */
-    padding: 10px 25px; /* Padding for button */
-    border: none; /* No border */
-    border-radius: 20px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 1rem; /* Font size for button */
-    transition: background-color 0.3s; /* Transition for background color */
-}
-
-.buy-button:hover {
-    background-color: #ffbbbb; /* Darker background on hover */
-    color: black
-}
-
-/* Media queries */
+/* Responsive */
 @media (max-width: 768px) {
-    .pricing-container {
-        flex-direction: column; /* Stack items on smaller screens */
-        align-items: center; /* Center items */
-        gap: 40px; /* Space between items */
+  .container-header-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .container-box {
+    width: 90%;
+    max-width: 400px;
+  }
+    .container-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
     }
+
+  .container-header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
-/* Styling for the image container at the bottom */
-.image-container {
-    text-align: center; /* Center image */
-    margin-top: 50px; /* Space between pricing plans and image */
+/* Title section spacing */
+.t-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8rem;
+  margin-bottom: 0.3rem;
+  gap: 0.25rem; /* smaller vertical gap between children */
 }
 
-.bottom-image {
-    max-width: 100%; /* Responsive image */
-    height: auto; /* Auto height for image */
-    margin: 0 auto; /* Center image */
-    display: block; /* Block display for image */
-    padding: 20px; /* Optional padding for image */
+.t-text h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.5vw;
+  color: #333333;
+  margin: 1.5vw 0;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: normal;
 }
 
-/* Popular badge */
-.popular-badge {
-    background-color: #087fe7; /* Background color for popular badge */
-    color: white; /* Text color for badge */
-    padding: 5px 10px; /* Padding for badge */
-    font-size: 0.9rem; /* Font size for badge */
-    position: absolute; /* Positioning for badge */
-    top: -10px; /* Position at the top */
-    left: 50%; /* Center badge horizontally */
-    transform: translateX(-50%); /* Center badge */
-    border-radius: 10px; /* Rounded corners for badge */
+.middle-box {
+  border: none; /* remove native border */
+  position: relative;
+  z-index: 1;
 }
 
-.popular {
-    border: 2px solid #087fe7; /* Border for popular plans */
-    position: relative; /* Positioning context for badge */
+/* Fixed middle-box border with a colorful decorative border-image */
+.middle-box::before {
+  content: "";
+  position: absolute;
+  top: -48px; /* extend top further */
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  z-index: -1;
+  border-radius: 32px;
+  padding: 12px;
+  background: url('https://imgs.search.brave.com/iTpSPbmYvTj8ag3J-QiBLHRaKpTlBScUmzWJMn2_fS0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE2/MTgzOTc3NDY2NjYt/NjM0MDVjZTVkMDE1/P2ZtPWpwZyZxPTYw/Jnc9MzAwMCZpeGxp/Yj1yYi00LjEuMCZp/eGlkPU0zd3hNakEz/ZkRCOE1IeHpaV0Z5/WTJoOE1UWjhmR2R5/WVdScFpXNTBmR1Z1/ZkRCOGZEQjhmSHd3') border-box;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(1.1);
+  border-radius: 32px;
 }
 
-/* Popular badge for yearly plan */
-.most-popular-badge-yearly {
-    background-color: #087fe7; /* Background color for yearly popular badge */
-    color: white; /* Text color for yearly badge */
-    padding: 5px 10px; /* Padding for yearly badge */
-    font-size: 0.9rem; /* Font size for yearly badge */
-    position: absolute; /* Positioning for yearly badge */
-    top: -15px; /* Position at the top */
-    left: 50%; /* Center badge horizontally */
-    transform: translateX(-50%); /* Center badge */
-    border-radius: 10px; /* Rounded corners for yearly badge */
+/* Embed text inside the top of the border */
+.middle-box::after {
+  content: "Most Popular";
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-family: sans-serif;
+  z-index: 1;
 }
 
-/* Most popular yearly plan styling */
-.most-popular-yearly {
-    border: 2px solid #087fe7; /* Border for most popular yearly plan */
-    background-color: #ebf5fe; /* Background color for most popular yearly plan */
-    color: #087fe7; /* Text color for yearly plan */
-    position: relative; /* Positioning context for badge */
+.pill-label {
+  display: inline-block;
+  background-color: #d1fae5; /* light green */
+  color: #065f46; /* dark green */
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px; /* pill shape */
+  user-select: none;
+  letter-spacing: 0.03em;
+  text-align: center; /* center text inside */
+  margin-bottom: 0;
 }
 
-/* Yearly pricing container */
-.yearly-container {
-    background-color: #f8f8f8; /* Background color for yearly plans */
-    border-radius: 10px; /* Rounded corners for yearly plans */
-    padding: 15px; /* Padding for yearly plans */
-    margin-top: 20px; /* Space above yearly plans */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Shadow for yearly plans */
+.subtitle-text {
+  margin-top: 0;    /* remove space above subtitle */
+  margin-bottom: 3rem; /* add space below subtitle */
 }
 
-/* Styling for the yearly plan text */
-.yearly-container h3 {
-    font-size: 1.2rem; /* Font size for yearly plan title */
-    color: #333; /* Color for yearly plan title */
-    margin: 0 0 10px 0; /* Margin below yearly plan title */
+.free-account-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
-/* Yearly price */
-.yearly-price {
-    font-size: 2.5rem; /* Font size for yearly price */
-    color: #0583fe; /* Color for yearly price */
-    margin: 10px 0; /* Margin above and below yearly price */
+.btn-free-account {
+  background-color: transparent;
+  border: 2px solid #9ca3af; /* gray-400 */
+  color: #374151; /* gray-700 */
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-bottom: 5rem;
 }
 
-.yearly-month {
-    font-size: 0.9rem; /* Font size for month text in yearly plan */
-    color: #777; /* Color for month text in yearly plan */
-    margin-bottom: 10px; /* Margin below month text in yearly plan */
-}
-
-/* Yearly buy button */
-.buy-button-yearly {
-    background-color: #000; /* Black background for yearly button */
-    color: white; /* White text for yearly button */
-    padding: 8px 20px; /* Padding for yearly button */
-    border: none; /* No border */
-    border-radius: 20px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 1rem; /* Font size for yearly button */
-    transition: background-color 0.3s; /* Transition for background color */
-    margin-top: 10px; /* Space above yearly button */
-}
-
-.buy-button-yearly:hover {
-    background-color: #ffbbbb; /* Darker background on hover */
-        color: black; /* White text for yearly button */
-}
-
-/* Icon styles for buttons */
-.black-button i,
-.white-button i {
-    margin-left: 10px; /* Space between text and icon */
-}
-
-/* Ensure the buttons can handle icons */
-.black-button {
-    display: flex; /* Flex display for button */
-    align-items: center; /* Center icon vertically */
-    justify-content: center; /* Center button content */
-}
-
-.white-button {
-    display: flex; /* Flex display for button */
-    align-items: center; /* Center icon vertically */
-    justify-content: center; /* Center button content */
-}
-
-
-.plans-intro {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    max-width: 1100px;
-    margin: 40px auto 20px auto;
-    padding: 0 20px;
-    flex-wrap: wrap; /* keeps it responsive */
-    font-family: Arial, sans-serif;
-    color: black;
-}
-
-.plans-text {
-    flex: 1 1 400px;
-}
-
-.plans-text h1 {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    color: black;
-}
-
-.plans-text p {
-    font-size: 1.1rem;
-    color: black;
-    line-height: 1.5;
-}
-
-.plans-image {
-    flex: 1 1 400px;
-    text-align: right;
-}
-
-.plans-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.fine-print {
-    font-size: 0.7rem;
-    color: #555;
-    margin-top: 5px;
-    font-style: italic;
-    text-align: center;
-    font-family: Arial, sans-serif;
-}
-
-
-/* Updated CSS */
-.finance-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #ffffff;
-    padding: 5vw; /* Adjust padding to be responsive */
-    perspective: 1000px;
-    box-sizing: border-box;
-}
-
-.card-holder {
-    position: relative;
-    display: flex;
-    align-items: flex-start; /* Align items at the top */
-    justify-content: flex-start;
-    border: 2px solid #ccc; /* Increased border width */
-    border-radius: 20px;
-    padding: 3vw 3vw 4vw 3vw; /* Adjust padding with relative units */
-    background-color: #fff;
-    box-sizing: border-box;
-    gap: 3vw; /* Adjust gap for responsiveness */
-    width: fit-content; /* Shrink wrap */
-    max-width: 90%;
-    flex-direction: row;
-}
-
-/* Card image slightly larger */
-.finance-image {
-    width: 20vw; /* Image width in relative units (responsive) */
-    height: auto;
-    transform-style: preserve-3d;
-    transition: transform 0.3s ease;
-    border-radius: 16px;
-}
-
-/* Title styling */
-.card-title {
-    font-size: 30px; /* Slightly smaller than original (20px) */
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    color: #333;
-    margin: 0;
-}
-
-/* Change text styling */
-.change-text {
-    font-size: 20px; /* Slightly smaller than before (was 14-16px range) */
-    font-weight: 400; /* Normal/light */
-    color: #333;
-    margin-top: 14px;
-    text-align: left;
-}
-
-.change-link {
-    text-decoration: underline;
-    color: #007bff;
-}
-
-.change-link:hover {
-    color: #0056b3;
+.btn-free-account:hover {
+  background-color: #f3f4f6; /* gray-100 */
+  border-color: #6b7280; /* gray-500 */
+  color: #111827; /* gray-900 */
 }

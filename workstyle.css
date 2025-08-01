@@ -646,3 +646,8 @@ header h1 {
     z-index: 2;
   }
   
+  .image-wrapper {
+    position: absolute;
+    z-index: 1001 !important; /* keep images on top */
+    display: inline-block;
+}

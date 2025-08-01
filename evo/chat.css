@@ -1,214 +1,267 @@
+/* General body settings */
 body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background-color: #f5f5f5;
-  height: 100vh;
-  display: flex;
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
-.app {
-  display: flex;
+/* Styling for the header */
+header {
+    width: calc(100% - 40px); /* reduce width so it has some horizontal space */
+    max-width: 1200px;         /* optional max width for nicer layout */
+    margin: 10px auto;         /* top margin for separation, auto to center horizontally */
+    padding: 5px 20px;
+    background-color: #ffffff;
+    border: 1px solid #cacaca; /* border on all sides */
+    border-radius: 15px;       /* curved corners */
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 10px;                 /* move it down to create space */
+    left: 50%;
+    transform: translateX(-50%); /* center horizontally */
+    box-sizing: border-box;
+    height: 60px;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* subtle shadow */
+}
+
+.main-wrapper-with-image {
+  position: relative;
   width: 100%;
-  height: 100vh;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 260px;
-  background: white;
-  color: black;
+  min-height: 70vh;
   display: flex;
-  flex-direction: column;
-  border-right: 1px solid #ddd;
-}
-
-.sidebar-header {
-  display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 20px 16px;
-  border-bottom: 1px solid #eee;
+  padding-top: 100px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.behind-image {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  transform: translate(-50%, -50%);
+  filter: brightness(1.1) contrast(1.05) saturate(1.2);
+  opacity: 0.25;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0; /* MUST BE LOWER THAN EVERYTHING ELSE */
+  border-radius: 30px;
 }
 
 .logo {
-  width: 120px;
-  height: auto;
-  margin-bottom: 10px;
+    height: 25px;
+    z-index: 2;
 }
 
-.sidebar-content {
-  padding: 20px;
-  color: #777;
-  font-size: 14px;
+.nav-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-/* Chat Area */
-.chat-area {
-  flex: 1;
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #f0f0f0;
+}
+
+.sign-in {
+    z-index: 2;
+}
+
+.nav-container {
   display: flex;
-  flex-direction: column;
-  background: #fff;
+  justify-content: center;
+  width: 100%;
 }
 
-/* Chat header */
-.chat-header {
-  background: white;
-  padding: 16px 20px;
-  border-bottom: 1px solid #ddd;
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border: 1px solid #ddd;
 }
 
-.chat-header h3 {
-  margin: 0;
-  font-size: 18px;
+.dropdown-content li {
+    display: block;
 }
 
-/* Messages display */
-.messages {
-  flex-grow: 1;
-  padding: 20px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background: #fff;
+.dropdown-content a {
+    color: #333;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-.message {
-  display: flex;
-  justify-content: flex-end; /* messages on right */
-  gap: 12px;
-  align-items: flex-start;
-  max-width: 70%;
-  margin-left: auto; /* push to right */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
 }
 
-.message .content {
-  max-width: 80%;
-  background: transparent;
-  color: #222;
-  font-size: 15px;
-  line-height: 1.4;
-  white-space: pre-wrap;
+.nav-links li:hover .dropdown-content {
+    display: block;
 }
 
-.message .sender {
-  font-weight: 600;
-  font-size: 13px;
-  color: #666;
-  text-align: right;
-  margin-bottom: 4px;
+.btn.sign-in {
+    background-color: #000000; /* Black button */
+    color: #ffffff; /* White text */
+    padding: 5px 15px; /* Padding for a smaller button */
+    font-size: 0.9rem; /* Slightly smaller text */
+    font-weight: bold;
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded edges */
+    margin-left: auto; /* Push button to the far right */
 }
 
-.message .avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 0 1px #ccc;
-  flex-shrink: 0;
+.btn.sign-in:hover {
+    background-color: #333333; /* Darker black on hover */
 }
 
-/* Code message style inside .content */
-.code-message {
-  background: #f9f9f9;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 13px;
+.center-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0;
+    text-align: center;
+    min-height: 70vh;
+    gap: 10px;
+    max-width: 700px;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+.main-title {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 0;
+    letter-spacing: 0.5px;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0 0 1rem 0;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    padding: 8px 14px 45px 14px;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease;
+}
+
+.input-wrapper:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.idea-input {
+    width: 100%;
+    padding: 16px 40px 16px 0;
+    font-size: 1.1rem;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    color: #222;
+    box-sizing: border-box;
+}
+
+.send-icon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.send-icon:hover {
+    color: #333;
+}
+
+.input-actions {
+    position: absolute;
+    bottom: 8px;
+    left: 14px;
+    display: flex;
+    gap: 10px;
+}
+
+.icon-only {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #000;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.icon-only:hover {
+    color: #333;
+}
+
+.sign-in-prompt {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+  width: 100%;
+}
+
+.sign-in-prompt a {
+  text-decoration: underline;
   color: #000;
-  line-height: 1.4;
-  border: 1px solid #ddd;
-  white-space: pre-wrap;
-  overflow: hidden;
-  max-height: 8.5em;
-  position: relative;
-}
-
-.code-message.expanded {
-  max-height: none;
-}
-
-/* Buttons container */
-.code-buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  gap: 6px;
-}
-
-.code-buttons button {
-  background: #e4e6eb;
-  border: none;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
   cursor: pointer;
 }
 
-.code-buttons button:hover {
-  background: #d2d4d8;
-}
-
-/* Code meta text */
-.code-meta {
-  font-size: 12px;
-  color: #444;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-/* Toolbar */
-.toolbar {
-  display: flex;
-  gap: 10px;
-  padding: 10px 20px;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  background: #fafafa;
-  flex-wrap: wrap;
-}
-
-.tool {
-  background: #e4e6eb;
-  border-radius: 20px;
-  padding: 6px 12px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.tool:hover {
-  background: #d0d2d6;
-}
-
-/* Input */
-.message-input {
-  display: flex;
-  padding: 12px 20px;
-  background: #f9f9f9;
-  border-top: 1px solid #ddd;
-}
-
-.message-input input {
-  flex-grow: 1;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  padding: 10px 14px;
-  font-size: 14px;
-  outline: none;
-}
-
-.message-input button {
-  margin-left: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  font-size: 16px;
-  cursor: pointer;
+.sign-in-prompt a:hover {
+  color: #333;
 }

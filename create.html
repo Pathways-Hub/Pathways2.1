@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pathways │ Create</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" href="images/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="create.css" />
+  <style>
+    .step-counter {
+      position: absolute;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #333;
+      z-index: 10;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="step-counter" id="step-counter">Step 1 of 3</div>
+
+    <!-- Close (X) Button -->
+    <a href="tabs.html" class="close-button" title="Close">×</a>
+
+    <!-- Page Title -->
+    <p class="intro-text" id="page-title">
+      Start your <i>workspace</i> here
+    </p>
+
+    <!-- Step 1: Input Field -->
+    <div class="input-wrapper" id="input-section">
+      <input type="text" id="workspaceName" placeholder="Name your workspace" class="workspace-input" />
+    </div>
+
+    <!-- Step 2: Dropdown -->
+    <div class="dropdown-section" id="dropdown-section" style="display: none;">
+      <label for="workspace-type" class="dropdown-label">Select a workspace type:</label>
+      <select id="workspace-type" class="workspace-dropdown">
+        <option disabled selected>Choose one...</option>
+        <option>Project Management</option>
+        <option>Personal Journal</option>
+        <option>Team Dashboard</option>
+        <option>Task Tracker</option>
+        <option>Brainstorming Space</option>
+        <option>Meeting Notes</option>
+        <option>Study Hub</option>
+        <option>Event Planning</option>
+        <option>Design Board</option>
+        <option>Documentation</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <!-- Step 3: Templates -->
+    <div class="template-section" id="template-section" style="display: none;">
+      <div class="template-grid">
+        <div class="template-card">
+          <i class="fa-regular fa-file icon"></i>
+          <span class="tooltip">Blank</span>
+        </div>
+        <div class="template-card">
+          <i class="fa-solid fa-diagram-project icon"></i>
+          <span class="tooltip">Project Plan</span>
+        </div>
+        <div class="template-card">
+          <i class="fa-solid fa-pen icon"></i>
+          <span class="tooltip">Journal</span>
+        </div>
+        <div class="template-card">
+          <i class="fa-solid fa-chart-line icon"></i>
+          <span class="tooltip">Dashboard</span>
+        </div>
+        <div class="template-card">
+          <i class="fa-solid fa-list-check icon"></i>
+          <span class="tooltip">Task List</span>
+        </div>
+        <div class="template-card">
+          <i class="fa-solid fa-lightbulb icon"></i>
+          <span class="tooltip">Ideas</span>
+        </div>
+        <div class="template-card">
+          <i class="fa-solid fa-book-open icon"></i>
+          <span class="tooltip">Study Space</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="button-wrapper">
+      <button class="back-button" id="back-btn" disabled>Back</button>
+      <button class="continue-button" id="continue-btn">Continue</button>
+    </div>
+
+    <!-- Bottom Left Icon -->
+    <div class="icon-wrapper">
+      <img src="images/favicon.png" alt="Favicon" class="corner-icon" />
+    </div>
+
+  </div>
+
+<script>
+  const continueBtn = document.getElementById('continue-btn');
+  const backBtn = document.getElementById('back-btn');
+  const title = document.getElementById('page-title');
+  const inputSection = document.getElementById('input-section');
+  const dropdownSection = document.getElementById('dropdown-section');
+  const templateSection = document.getElementById('template-section');
+  const nameInput = document.getElementById('workspaceName');
+  const stepCounter = document.getElementById('step-counter');
+  const container = document.querySelector('.container');
+
+  let step = 1;
+
+  function updateStepCounter(current) {
+    stepCounter.textContent = `Step ${current} of 3`;
+  }
+
+  continueBtn.addEventListener('click', () => {
+    if (step === 1) {
+      inputSection.style.display = 'none';
+      dropdownSection.style.display = 'block';
+      title.innerHTML = 'What type of project is this?';
+      backBtn.disabled = false;
+      backBtn.classList.add('enabled');
+      backBtn.style.cursor = 'pointer';
+      step = 2;
+      updateStepCounter(step);
+    } else if (step === 2) {
+      dropdownSection.style.display = 'none';
+      templateSection.style.display = 'block';
+      title.innerHTML = 'Choose a project template';
+      step = 3;
+      updateStepCounter(step);
+      continueBtn.disabled = true;
+      continueBtn.style.opacity = '0.6';
+      continueBtn.style.cursor = 'not-allowed';
+    } else if (step === 3 && selectedCard) {
+      showLoadingScreen();
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    if (step === 2) {
+      inputSection.style.display = 'block';
+      dropdownSection.style.display = 'none';
+      title.innerHTML = 'Start your <i>workspace</i> here';
+      backBtn.disabled = true;
+      backBtn.classList.remove('enabled');
+      backBtn.style.cursor = 'not-allowed';
+      step = 1;
+      updateStepCounter(step);
+    } else if (step === 3) {
+      dropdownSection.style.display = 'block';
+      templateSection.style.display = 'none';
+      title.innerHTML = 'What type of project is this?';
+      step = 2;
+      updateStepCounter(step);
+      continueBtn.disabled = false;
+      continueBtn.style.opacity = '1';
+      continueBtn.style.cursor = 'pointer';
+    }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("name");
+  if (name) {
+    nameInput.value = decodeURIComponent(name);
+    inputSection.style.display = 'none';
+    dropdownSection.style.display = 'block';
+    title.innerHTML = 'What type of <i>workspace</i> is this?';
+    backBtn.disabled = false;
+    backBtn.classList.add('enabled');
+    backBtn.style.cursor = 'pointer';
+    step = 2;
+    updateStepCounter(step);
+  }
+
+  let selectedCard = null;
+  const templateCards = document.querySelectorAll('.template-card');
+
+  templateCards.forEach(card => {
+    card.addEventListener('click', () => {
+      if (selectedCard) {
+        selectedCard.classList.remove('selected');
+      }
+      card.classList.add('selected');
+      selectedCard = card;
+
+      if (step === 3) {
+        continueBtn.disabled = false;
+        continueBtn.style.opacity = '1';
+        continueBtn.style.cursor = 'pointer';
+      }
+
+      const templateType = card.querySelector('.tooltip')?.innerText;
+      console.log("Selected template:", templateType);
+    });
+  });
+
+  function showLoadingScreen() {
+    document.body.style.overflow = 'hidden';
+    container.innerHTML = `
+      <div class="loading-screen">
+        <p class="loading-message">Please stand by as we prepare your <i>workspace</i></p>
+        <div class="loading-spinner"></div>
+        <p class="loading-status" id="status-text">Setting things up...</p>
+      </div>
+    `;
+
+    const messages = [
+      "Gathering your tools...",
+      "Placing sticky notes...",
+      "Warming up ideas...",
+      "Connecting the dots...",
+      "Sharpening pencils...",
+      "Loading productivity..."
+    ];
+
+    let index = 0;
+    const statusText = document.getElementById("status-text");
+    const interval = setInterval(() => {
+      statusText.textContent = messages[index % messages.length];
+      index++;
+    }, 2000);
+
+    const delay = 5000 + Math.random() * 5000;
+
+    setTimeout(() => {
+      clearInterval(interval);
+      container.innerHTML = `
+        <div class="loading-screen">
+          <p class="loading-message">All set! Launching your <i>workspace</i>...</p>
+          <div class="loading-spinner"></div>
+        </div>
+      `;
+      setTimeout(() => {
+        window.location.href = "workspaces.html";
+      }, 2000);
+    }, delay);
+  }
+</script>
+
+</body>
+</html>

@@ -1,216 +1,37 @@
-/* Main Title */
-.main-title {
+.center-square {
   position: absolute;
-  top: calc(20vh - 3vw); /* Closer to the buttons */
-  left: 400px;
-  font-family: 'Arial', sans-serif;
-  font-size: 1vw;
-  font-weight: normal;  /* No bold */
-  color: #000000;
-  margin: 0;
-  z-index: 10;
-}
-
-@media (max-width: 768px) {
-  .main-title {
-    left: 600px;
-    font-size: 2vw;
-    top: calc(25vh - 4vw); /* Match new spacing on smaller screens */
-  }
-}
-
-/* Create Buttons */
-.open-create-btn, .t1-create-btn, .t2-create-btn, .t3-create-btn, .t4-create-btn, .big-create-btn {
-  position: absolute;
-  top: 20vh;
-  width: 10vw;
-  height: 10vw;
-  border-radius: 30px;
-  cursor: pointer;
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;  /* Align items to top left */
-  font-family: Arial, sans-serif;
-  transition: filter 0.2s ease, background-color 0.2s ease;
-  text-decoration: none;
-  margin-right: 20px;
-}
-
-/* Hover Effect */
-.open-create-btn:hover,
-.t1-create-btn:hover,
-.t2-create-btn:hover,
-.t3-create-btn:hover,
-.t4-create-btn:hover,
-.big-create-btn:hover {
-  filter: brightness(0.9); /* Slight dimming effect */
-}
-
-/* Button positions using 400px offset from left */
-.big-create-btn {
-  left: 400px;
-  border: 2px solid #B6E2DD;
-  background: linear-gradient(to bottom, #B6E2DD 20%, #ffffff 20%);
-}
-
-.open-create-btn {
-  left: calc(400px + 12vw);
-  border: 2px solid #C8DDBB;
-  background: linear-gradient(to bottom, #C8DDBB 20%, #ffffff 20%);
-}
-
-.t1-create-btn {
-  left: calc(400px + 24vw);
-  border: 2px solid #E9E5AF;
-  background: linear-gradient(to bottom, #E9E5AF 20%, #ffffff 20%);
-}
-
-.t2-create-btn {
-  left: calc(400px + 36vw);
-  border: 2px solid #FBDF9D;
-  background: linear-gradient(to bottom, #FBDF9D 20%, #ffffff 20%);
-}
-
-.t3-create-btn {
-  left: calc(400px + 48vw);
-  border: 2px solid #FBC99D;
-  background: linear-gradient(to bottom, #FBC99D 20%, #ffffff 20%);
-}
-
-.t4-create-btn {
-  left: calc(400px + 60vw);
-  border: 2px solid #FBB39D;
-  background: linear-gradient(to bottom, #FBB39D 20%, #ffffff 20%);
-}
-
-/* Mobile styles */
-@media (max-width: 768px) {
-  .open-create-btn,
-  .t1-create-btn,
-  .t2-create-btn,
-  .t3-create-btn,
-  .t4-create-btn,
-  .big-create-btn {
-    width: 18vw;
-    height: 18vw;
-    top: 25vh;
-    left: calc(600px + 10vw);
-    transform: translateX(0);
-  }
-}
-
-/* Remove button text if any */
-.open-create-btn::before,
-.t1-create-btn::before,
-.t2-create-btn::before,
-.t3-create-btn::before,
-.t4-create-btn::before,
-.big-create-btn::before {
-  content: "";
-  width: 100%;
-}
-
-/* "+" text in the top-left of each button */
-.button-top-text {
-  position: absolute;
-  top: 2%;   /* Move it further up */
-  left: 8%;  /* Keep it snug in the top-left */
-  font-size: 1.5vw; /* Slightly larger now */
-  font-weight: normal;
-  font-family: Arial, sans-serif; /* Set to Arial */
-  color: #000;
-  pointer-events: none;
-}
-
-.h-button-top-text {
-  position: absolute;
-  top: 5%;   /* Move it further up */
-  left: 8%;  /* Keep it snug in the top-left */
-  font-size: 1vw; /* Slightly larger now */
-  font-weight: normal;
-  font-family: Arial, sans-serif; /* Set to Arial */
-  color: #000;
-  pointer-events: none;
-}
-
-.t-button-top-text {
-  position: absolute;
-  top: 5%;   /* Move it further up */
-  left: 8%;  /* Keep it snug in the top-left */
-  font-size: 0.8vw; /* Slightly larger now */
-  font-weight: normal;
-  font-family: Arial, sans-serif; /* Set to Arial */
-  color: #000;
-  pointer-events: none;
-}
-
-/* Responsive for mobile */
-@media (max-width: 768px) {
-  .button-top-text {
-    font-size: 2.5vw;
-    font-family: Arial, sans-serif;
-  }
-}
-
-.grey-rectangle {
-  width: 34vw;
-  height: 14vw;
-  border-radius: 20px;          /* Rounded corners */
-  border: 1px solid #e6e6e6;    /* 1px black border */
-  background-color: #f0f0f0;    /* Default background for second one */
-}
-
-.date-box {
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.date-deco {
-  width: 8vw;
-  height: 8vw;
-  background-color: #CFE8FF; /* Pastel blue */
+  top: 50%;
+  left: 50%;
+  width: 160px;
+  height: 160px;
+  background-color: #ccc;
   border-radius: 20px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.center-square:hover {
+  background-color: #bbb;
+}
+
+.center-square .circle {
+  width: 60px;
+  height: 60px;
+  background-color: #777;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#currentDate {
-  font-size: 4vw;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  color: #000;
-}
-
-#currentDay {
-  margin-top: 1vw;
-  font-size: 1vw; /* Smaller day text */
-  color: #333;
-  text-align: center;
-}
-
-/* Wrap both grey rectangles and text lines inside a parent container */
-.bottom-section {
-  position: absolute;
-  top: calc(20vh + 12vw); /* aligns with button row spacing */
-  left: 400px;
-  width: 72vw; /* enough for 2 grey boxes + spacing */
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5vw; /* reduced space between grey boxes and Updates section */
-}
-
-/* Grey rectangles layout */
-.grey-rectangles-container {
-  position: relative;
-  display: flex;
-  gap: 2vw;
-  width: 100%;
+.center-square .circle i {
+  color: white;
+  font-size: 24px;
 }
