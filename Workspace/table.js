@@ -1,221 +1,263 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const tableButton = document.getElementById('tableButton');
-    let currentlySelected = null;
-    let tableIdCounter = 0;
+let selectedTable = null;
+const STORAGE_KEY = 'workspaceTablesData';
+let tablesData = [];
+let tableIdCounter = 0;
 
-    loadSavedTables(); // Load any existing tables
+// Load saved tables from localStorage on load
+function loadTables() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    try {
+        tablesData = JSON.parse(saved);
+    } catch {
+        tablesData = [];
+    }
 
-    tableButton.addEventListener('click', () => {
-        let columns = prompt('Enter the number of columns (1-10):');
-        let rows = prompt('Enter the number of rows (1-10):');
+    tablesData.forEach(data => {
+        createTableFromData(data);
+        // Keep track of tableIdCounter to avoid duplicates
+        const idNum = parseInt(data.id.split('-')[1]);
+        if (idNum >= tableIdCounter) tableIdCounter = idNum + 1;
+    });
+}
 
-        columns = parseInt(columns, 10);
-        rows = parseInt(rows, 10);
+// Create table from saved data
+function createTableFromData(data) {
+    const container = document.createElement("div");
+    container.classList.add("workspaceTable");
+    container.dataset.id = data.id;
+    container.style.position = "absolute";
+    container.style.left = `${data.left + workspaceOffsetX}px`;
+    container.style.top = `${data.top + workspaceOffsetY}px`;
+    container.style.zIndex = 1000;
+    container.style.border = "2px solid transparent";
+    container.style.background = "#fff";
+    container.style.cursor = "move";
+    container.style.padding = "10px";
+    container.style.userSelect = "none";
 
-        if (isNaN(columns) || isNaN(rows) || columns < 1 || columns > 10 || rows < 1 || rows > 10) {
-            alert('Please enter valid numbers between 1 and 10 for both columns and rows.');
-            return;
-        }
+    container.innerHTML = data.html; // restored table with all inner HTML (formatting preserved)
 
-        const tableData = {
-            id: `table-${Date.now()}`,
-            rows,
-            columns,
-            x: 0,
-            y: 0,
-            content: Array.from({ length: rows }, () => Array(columns).fill(''))
-        };
+    // Add event listeners for selection & drag
 
-        const table = createTableElement(tableData);
-        centerTable(table);
-        saveTablesToLocalStorage(); // Save immediately
+    container.addEventListener("click", e => {
+        e.stopPropagation();
+        selectTable(container);
     });
 
-    function createTableElement(data) {
-        const table = document.createElement('table');
-        table.dataset.tableId = data.id;
-        table.style.borderCollapse = 'collapse';
-        table.style.position = 'absolute';
-        table.style.border = '1px solid black';
-        table.style.width = `${data.columns * 60}px`;
-        table.style.height = `${data.rows * 40}px`;
-        table.style.left = `${data.x}px`;
-        table.style.top = `${data.y}px`;
+    // Make the container draggable
+    let isDragging = false, offsetX = 0, offsetY = 0;
 
-        for (let i = 0; i < data.rows; i++) {
-            const tr = document.createElement('tr');
-            for (let j = 0; j < data.columns; j++) {
-                const td = document.createElement('td');
-                td.contentEditable = 'true';
-                td.style.border = '1px solid black';
-                td.style.padding = '8px';
-                td.style.minWidth = '50px';
-                td.style.textAlign = 'center';
-                td.textContent = data.content?.[i]?.[j] || '';
-                td.addEventListener('input', saveTablesToLocalStorage);
-                tr.appendChild(td);
+    container.addEventListener("mousedown", (e) => {
+        if (e.target.tagName === "TD" || e.target.tagName === "TR") return;
+        isDragging = true;
+        offsetX = e.clientX - container.offsetLeft;
+        offsetY = e.clientY - container.offsetTop;
+        e.preventDefault();
+        selectTable(container);
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+            const newX = e.clientX - offsetX;
+            const newY = e.clientY - offsetY;
+            container.style.left = `${newX}px`;
+            container.style.top = `${newY}px`;
+
+            const tableData = tablesData.find(t => t.id === container.dataset.id);
+            if (tableData) {
+                tableData.left = newX - workspaceOffsetX;
+                tableData.top = newY - workspaceOffsetY;
             }
-            table.appendChild(tr);
         }
+    });
 
-        document.body.appendChild(table);
-
-        const controlButton = document.createElement('button');
-        controlButton.innerHTML = '<i class="fa-solid fa-up-down-left-right"></i>';
-        controlButton.style.position = 'absolute';
-        controlButton.style.zIndex = '1002';
-        controlButton.style.display = 'none';
-        controlButton.classList.add('table-button', 'table-control-button');
-        document.body.appendChild(controlButton);
-
-        function updateControlButtonPosition() {
-            const tableRect = table.getBoundingClientRect();
-            controlButton.style.left = `${tableRect.left + window.scrollX}px`;
-            controlButton.style.top = `${tableRect.top + window.scrollY - 35}px`;
+    document.addEventListener("mouseup", () => {
+        if (isDragging) {
+            isDragging = false;
+            saveTablesData();
         }
+    });
 
-        updateControlButtonPosition();
-        makeDraggable(controlButton, table, updateControlButtonPosition);
-        makeSelectable(table, controlButton);
-        window.addEventListener('scroll', updateControlButtonPosition);
-
-        document.addEventListener('mousemove', (e) => {
-            const rect = table.getBoundingClientRect();
-            const proximity = 50;
-            if (
-                e.clientX >= rect.left - proximity && e.clientX <= rect.right + proximity &&
-                e.clientY >= rect.top - proximity && e.clientY <= rect.bottom + proximity
-            ) {
-                controlButton.style.display = 'block';
-            } else {
-                controlButton.style.display = 'none';
-            }
+    // Add input listener to save content on any edit inside table cells
+    container.querySelectorAll('td[contenteditable]').forEach(td => {
+        td.addEventListener('input', () => {
+            const tableData = tablesData.find(t => t.id === container.dataset.id);
+            if (!tableData) return;
+            tableData.html = container.innerHTML;
+            saveTablesData();
         });
+    });
 
-        return table;
+    document.body.appendChild(container);
+}
+
+// Save all tables to localStorage
+function saveTablesData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tablesData));
+}
+
+document.getElementById("tableButton").addEventListener("click", () => {
+    const cols = parseInt(prompt("Enter number of columns (X):"));
+    const rows = parseInt(prompt("Enter number of rows (Y):"));
+
+    if (isNaN(cols) || isNaN(rows) || cols <= 0 || rows <= 0) {
+        alert("Please enter valid positive numbers.");
+        return;
     }
 
-    function centerTable(table) {
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const w = table.offsetWidth;
-        const h = table.offsetHeight;
+    const container = document.createElement("div");
+    container.classList.add("workspaceTable");
+    container.dataset.id = `table-${tableIdCounter++}`;
+    container.style.position = "absolute";
+    container.style.left = `${window.innerWidth / 2}px`;
+    container.style.top = `${window.innerHeight / 2}px`;
+    container.style.zIndex = 1000;
+    container.style.border = "2px solid transparent";
+    container.style.background = "#fff";
+    container.style.cursor = "move";
+    container.style.padding = "10px";
+    container.style.userSelect = "none";
 
-        const left = (vw - w) / 2;
-        const top = (vh - h) / 2;
+    const logicalX = window.innerWidth / 2 - workspaceOffsetX;
+    const logicalY = window.innerHeight / 2 - workspaceOffsetY;
 
-        table.style.left = `${left}px`;
-        table.style.top = `${top}px`;
-    }
+    // Create table element
+    const table = document.createElement("table");
+    table.style.borderCollapse = "collapse";
+    table.style.width = "100%";
+    table.style.userSelect = "text";
 
-    function makeDraggable(controlButton, table, updateControlButtonPosition) {
-        let isDragging = false;
-        let startX, startY, initialX, initialY;
+    for (let y = 0; y < rows; y++) {
+        const tr = document.createElement("tr");
+        for (let x = 0; x < cols; x++) {
+            const td = document.createElement("td");
+            td.contentEditable = true;
+            td.style.border = "1px solid #000";
+            td.style.padding = "8px";
+            td.style.minWidth = "50px";
+            td.style.textAlign = "center";
 
-        controlButton.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
+            td.addEventListener("click", (e) => {
+                e.stopPropagation();
+                selectTable(container);
+            });
 
-            const tableRect = table.getBoundingClientRect();
-            initialX = tableRect.left;
-            initialY = tableRect.top;
+            td.addEventListener('input', () => {
+                const tableData = tablesData.find(t => t.id === container.dataset.id);
+                if (!tableData) return;
+                tableData.html = container.innerHTML;
+                saveTablesData();
+            });
 
-            selectTable(table);
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-
-                const newX = initialX + dx;
-                const newY = initialY + dy;
-
-                table.style.left = `${newX}px`;
-                table.style.top = `${newY}px`;
-
-                updateControlButtonPosition();
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false;
-                saveTablesToLocalStorage();
-            }
-        });
-    }
-
-    function makeSelectable(table, controlButton) {
-        function selectTable(t) {
-            if (currentlySelected) {
-                currentlySelected.classList.remove('selected', 'table-selected');
-            }
-            currentlySelected = t;
-            t.classList.add('selected', 'table-selected');
+            tr.appendChild(td);
         }
-
-        controlButton.addEventListener('click', (e) => {
+        tr.addEventListener("click", (e) => {
             e.stopPropagation();
-            selectTable(table);
+            selectTable(container);
         });
+        table.appendChild(tr);
+    }
 
-        document.addEventListener('click', (e) => {
-            if (currentlySelected && !currentlySelected.contains(e.target) && !controlButton.contains(e.target)) {
-                currentlySelected.classList.remove('selected', 'table-selected');
-                currentlySelected = null;
+    table.addEventListener("click", (e) => {
+        e.stopPropagation();
+        selectTable(container);
+    });
+
+    container.appendChild(table);
+    document.body.appendChild(container);
+
+    // Add table data to tablesData array
+    tablesData.push({
+        id: container.dataset.id,
+        left: logicalX,
+        top: logicalY,
+        html: container.innerHTML
+    });
+    saveTablesData();
+
+    // Make draggable
+    let isDragging = false, offsetX = 0, offsetY = 0;
+
+    container.addEventListener("mousedown", (e) => {
+        if (e.target.tagName === "TD" || e.target.tagName === "TR") return;
+        isDragging = true;
+        offsetX = e.clientX - container.offsetLeft;
+        offsetY = e.clientY - container.offsetTop;
+        e.preventDefault();
+        selectTable(container);
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+            const newX = e.clientX - offsetX;
+            const newY = e.clientY - offsetY;
+            container.style.left = `${newX}px`;
+            container.style.top = `${newY}px`;
+
+            const tableData = tablesData.find(t => t.id === container.dataset.id);
+            if (tableData) {
+                tableData.left = newX - workspaceOffsetX;
+                tableData.top = newY - workspaceOffsetY;
+                tableData.html = container.innerHTML;
             }
-        });
-
-        table.addEventListener('click', (e) => e.stopPropagation());
-    }
-
-    function saveTablesToLocalStorage() {
-        const tables = document.querySelectorAll('table[data-table-id]');
-        const saved = [];
-
-        tables.forEach(table => {
-            const id = table.dataset.tableId;
-            const x = parseFloat(table.style.left);
-            const y = parseFloat(table.style.top);
-            const rows = table.rows.length;
-            const columns = table.rows[0]?.cells.length || 0;
-            const content = [];
-
-            for (let i = 0; i < rows; i++) {
-                const row = [];
-                for (let j = 0; j < columns; j++) {
-                    row.push(table.rows[i].cells[j].textContent || '');
-                }
-                content.push(row);
-            }
-
-            saved.push({ id, x, y, rows, columns, content });
-        });
-
-        localStorage.setItem('savedTables', JSON.stringify(saved));
-    }
-
-    function loadSavedTables() {
-        const data = JSON.parse(localStorage.getItem('savedTables') || '[]');
-        data.forEach(tableData => {
-            createTableElement(tableData);
-        });
-    }
-
-    document.getElementById('binButton').addEventListener('click', () => {
-        if (currentlySelected) {
-            const id = currentlySelected.dataset.tableId;
-            currentlySelected.remove();
-            const controlButton = document.querySelector('.table-control-button');
-            if (controlButton) controlButton.remove();
-
-            currentlySelected = null;
-
-            const all = JSON.parse(localStorage.getItem('savedTables') || '[]');
-            const filtered = all.filter(t => t.id !== id);
-            localStorage.setItem('savedTables', JSON.stringify(filtered));
         }
     });
+
+    document.addEventListener("mouseup", () => {
+        if (isDragging) {
+            isDragging = false;
+            saveTablesData();
+        }
+    });
+});
+
+// Deselect table if clicking anywhere else
+document.addEventListener("click", () => {
+    if (selectedTable) {
+        selectedTable.style.border = "2px solid transparent";
+        selectedTable = null;
+    }
+});
+
+// Select helper
+function selectTable(container) {
+    if (selectedTable && selectedTable !== container) {
+        selectedTable.style.border = "2px solid transparent";
+    }
+    selectedTable = container;
+    container.style.border = "2px solid red";
+}
+
+// Delete selected table when binButton clicked
+document.getElementById("binButton").addEventListener("click", () => {
+    if (selectedTable) {
+        const id = selectedTable.dataset.id;
+        selectedTable.remove();
+        const index = tablesData.findIndex(t => t.id === id);
+        if (index !== -1) tablesData.splice(index, 1);
+        saveTablesData();
+        selectedTable = null;
+    }
+});
+
+// Update tables position on workspace drag
+window.updateTablesPositionWithWorkspace = function(offsetX, offsetY) {
+    document.querySelectorAll(".workspaceTable").forEach(table => {
+        const id = table.dataset.id;
+        const data = tablesData.find(t => t.id === id);
+        if (!data) return;
+        table.style.left = `${data.left + offsetX}px`;
+        table.style.top = `${data.top + offsetY}px`;
+    });
+};
+
+// Load tables on DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+    loadTables();
+    if (typeof window.workspaceOffsetX === "number" &&
+        typeof window.workspaceOffsetY === "number" &&
+        typeof window.updateTablesPositionWithWorkspace === "function") {
+        window.updateTablesPositionWithWorkspace(window.workspaceOffsetX, window.workspaceOffsetY);
+    }
 });
