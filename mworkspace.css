@@ -1,110 +1,99 @@
-/* General body styling */
-body {
+/* Make the page fill the viewport */
+html, body {
+  height: 100%;
   margin: 0;
-  padding: 0;
-  background-color: white;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  color: black;
-  overflow-x: hidden;
 }
 
-/* Top bar styling */
-#top-bar {
-  width: 100%;
-  height: 5px;
-  background-color: #34eb9e;
+:root {
+  /* Adjust the spacing and dot size here */
+  --grid-gap: 28px;   /* distance between dots */
+  --dot-size: 2px;    /* dot radius-ish */
+  --dot-color: #cfcfcf;
+
+  /* These are updated by JS to pan the background */
+  --bg-x: 0px;
+  --bg-y: 0px;
 }
 
-/* Taskbar styling (moved above title) */
-#taskbar {
+#workspace {
+  position: fixed;
+  inset: 0;
+  background-color: #fff;
+
+  /* Dotted grid using a radial-gradient repeated */
+  background-image:
+    radial-gradient(circle, var(--dot-color) var(--dot-size), transparent calc(var(--dot-size) + 0.01px));
+  background-size: var(--grid-gap) var(--grid-gap);
+
+  /* These positions get changed by JS to give the "infinite" drag feel */
+  background-position: var(--bg-x) var(--bg-y);
+
+  /* Nice panning cursor UX */
+  cursor: grab;
+  touch-action: none; /* allows us to handle touch-drag without scrolling */
+  user-select: none;
+}
+
+/* While dragging */
+#workspace.dragging {
+  cursor: grabbing;
+}
+
+#floating-header {
   position: absolute;
-  top: 5px; /* Adjusting to position it below the top bar */
-  width: 100%;
-  height: 50px;
-  background-color: white; /* White background */
+  top: 12px;
+  left: 12px;
+  right: 12px; /* Equal spacing on sides as top */
+  
   display: flex;
-  justify-content: start;
   align-items: center;
-  padding: 0 10px;
-  box-sizing: border-box;
+  justify-content: flex-start; /* logo stays left */
+
+  background: white;
+  padding: 14px 18px;
+
+  /* Rounded corners but more square-like */
+  border-radius: 20px;
+
+  /* Slightly exaggerated top curve */
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+
   z-index: 10;
-  border: none; /* No border */
-  box-shadow: none; /* Removed shadow */
 }
 
-/* Buttons in the taskbar */
-.taskbar-button {
-  width: 30px; /* Smaller size for buttons */
-  height: 30px;
-  margin-right: 10px;
-  border: none;
-  background-color: transparent;
-  font-size: 18px; /* Smaller font size */
-  color: #333;
-  cursor: pointer;
+#floating-header img {
+  width: 40px;
+  height: 40px;
 }
 
-/* Ensure the favicon image fits with the button size */
-.taskbar-button img {
-  width: 30px; /* Same size as the buttons */
-  height: 30px;
-  object-fit: cover; /* Maintain aspect ratio and fill the area */
+/* --- Scale up for tablets/desktops --- */
+@media (min-width: 600px) {
+  #floating-header {
+    padding: 18px 22px;
+    border-radius: 24px;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+  }
+  #floating-header img {
+    width: 48px;
+    height: 48px;
+  }
 }
 
-.taskbar-button:focus {
+.text-box {
+  position: absolute;
+  min-width: 50px;
+  min-height: 20px;
+  font-size: 14px;
   outline: none;
-}
-
-/* Vertical line styling */
-.vertical-line {
-  width: 1px; /* Thin line */
-  height: 30px; /* Same height as buttons */
-  background-color: #ccc; /* Light gray color */
-  margin-right: 10px; /* Space between the line and the next button */
-}
-
-/* Style for the editable title */
-#title {
-  font-size: 16px; /* Slightly smaller than the default font size */
-  font-weight: normal;
-  padding: 10px 15px;
+  padding: 0;
   margin: 0;
-  text-align: left;
-  color: grey;
-  background-color: white;
-  box-sizing: border-box;
-  outline: none; /* Remove focus outline */
-  white-space: nowrap; /* Prevent text wrapping to the next line */
-  overflow-x: auto; /* Allow scrolling if the text overflows */
-  border: none; /* No border */
-  width: 100%;
-  position: absolute;
-  top: 60px; /* Position it below the taskbar */
-}
-
-/* Placeholder styling for the title when empty */
-#title:empty::before {
-  content: "Untitled"; /* Placeholder text */
-  color: #aaa; /* Light grey color */
-}
-
-/* Style for the editable note area */
-#note {
-  padding: 15px;
-  width: 100%;
-  min-height: calc(100vh - 120px); /* Adjust for the top bar, title, and taskbar */
-  box-sizing: border-box;
-  outline: none; /* Remove focus outline */
-  white-space: pre-wrap; /* Preserve spaces and line breaks */
-  word-wrap: break-word; /* Prevent long words from overflowing */
-  background-color: white;
-  position: absolute;
-  top: 110px; /* Ensure note starts below the title and taskbar */
-}
-
-/* Placeholder styling for the note area */
-#note:empty::before {
-  content: "Start typing your notes here..."; /* Placeholder text */
-  color: #aaa; /* Light grey color */
+  background: none;
+  border: none;
+  box-shadow: none;
+  cursor: text;
+  white-space: pre-wrap; /* preserve line breaks if any */
 }
