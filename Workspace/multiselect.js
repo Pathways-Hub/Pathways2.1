@@ -14,23 +14,10 @@ let panelOpen = false;
 // === Inject animations into the page ===
 const rockingStyle = document.createElement('style');
 rockingStyle.textContent = `
-
-@keyframes riseAndRockLeft {
-  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-  20%  { transform: translateY(-40px) rotate(-20deg) scale(1.1); }
-  40%  { transform: translateY(-80px) rotate(20deg)  scale(1.2); }
-  60%  { transform: translateY(-120px) rotate(-20deg) scale(1.3); }
-  80%  { transform: translateY(-160px) rotate(20deg) scale(1.4); }
-  100% { transform: translateY(-200px) rotate(0deg)  scale(1.5); opacity: 0; }
-}
-
-@keyframes riseAndRockRight {
-  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-  20%  { transform: translateY(-40px) rotate(20deg) scale(1.1); }
-  40%  { transform: translateY(-80px) rotate(-20deg) scale(1.2); }
-  60%  { transform: translateY(-120px) rotate(20deg) scale(1.3); }
-  80%  { transform: translateY(-160px) rotate(-20deg) scale(1.4); }
-  100% { transform: translateY(-200px) rotate(0deg) scale(1.5); opacity: 0; }
+@keyframes riseStraight {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  70%  { transform: translateY(-140px) scale(1.4); opacity: 1; }
+  100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
 }
 `;
 document.head.appendChild(rockingStyle);
@@ -50,30 +37,37 @@ const panel = document.createElement('div');
 panel.id = 'emoji-panel';
 document.body.appendChild(panel);
 
-// === Create 4 colored emoji spans ===
-const coloredEmojis = ['👍', '😂', '😍', '😮'];
-coloredEmojis.forEach(e => {
-  const span = document.createElement('span');
-  span.textContent = e;
-  Object.assign(span.style, {
-    fontSize: '24px',
+// === Image-based "emojis" ===
+const emojiImages = [
+  { src: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Thumbs%20Up.png", alt: "Thumbs Up" },
+  { src: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Face%20with%20Tears%20of%20Joy.png", alt: "Face with Tears of Joy" },
+  { src: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png", alt: "Red Heart" },
+  { src: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Hushed%20Face.png", alt: "Hushed Face" }
+];
+
+emojiImages.forEach(({ src, alt }) => {
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  img.width = 30;
+  img.height = 30;
+  Object.assign(img.style, {
     margin: '0 10px',
     userSelect: 'none',
     cursor: 'pointer',
     transition: 'transform 0.3s ease'
   });
-  panel.appendChild(span);
+  panel.appendChild(img);
 
-  span.addEventListener('mouseenter', () => {
-    span.style.transform = 'scale(1.3)';
+  img.addEventListener('mouseenter', () => {
+    img.style.transform = 'scale(1.3)';
   });
-  span.addEventListener('mouseleave', () => {
-    span.style.transform = 'scale(1)';
+  img.addEventListener('mouseleave', () => {
+    img.style.transform = 'scale(1)';
   });
 
-  // Click handler: spawn rising + rocking emojis
-  span.addEventListener('click', () => {
-    spawnRisingEmojis(e, 20);
+  img.addEventListener('click', () => {
+    spawnRisingEmojis(src, alt, 20);
   });
 });
 
@@ -101,7 +95,7 @@ Object.assign(icon.style, {
   transition: 'opacity 0.3s ease'
 });
 
-// === Style: Panel behind circle ===
+// === Style: Panel ===
 Object.assign(panel.style, {
   position: 'fixed',
   bottom: '30px',
@@ -120,7 +114,7 @@ Object.assign(panel.style, {
   zIndex: '1000'
 });
 
-// === Functions to open/close panel ===
+// === Open/Close panel ===
 function openPanel() {
   if (panelOpen) return;
   panelOpen = true;
@@ -142,7 +136,7 @@ function closePanel() {
   panel.style.padding = '0px';
 }
 
-// === Hover Behavior on circle and panel ===
+// === Hover Behavior ===
 emojiCircle.addEventListener('mouseenter', openPanel);
 emojiCircle.addEventListener('mouseleave', () => {
   setTimeout(() => {
@@ -161,26 +155,26 @@ panel.addEventListener('mouseleave', () => {
   }, 100);
 });
 
-// === Spawn rising emojis with alternating rocking direction ===
-function spawnRisingEmojis(emojiChar, count) {
+// === Spawn rising images instead of text ===
+function spawnRisingEmojis(src, alt, count) {
   for (let i = 0; i < count; i++) {
-    const e = document.createElement('div');
-    e.textContent = emojiChar;
+    const e = document.createElement('img');
+    e.src = src;
+    e.alt = alt;
+    e.width = 50;
+    e.height = 50;
     const startX = Math.random() * window.innerWidth;
     const delay = Math.random() * 600;
 
-    const alternate = Math.random() < 0.5 ? 'riseAndRockLeft' : 'riseAndRockRight';
-
     Object.assign(e.style, {
       position: 'fixed',
-      bottom: '-30px',
+      bottom: '-50px',
       left: `${startX}px`,
-      fontSize: '24px',
       pointerEvents: 'none',
       opacity: '1',
       userSelect: 'none',
       zIndex: '2000',
-      animation: `${alternate} 2s linear forwards`,
+      animation: `riseStraight 2s linear forwards`,
       animationDelay: `${delay}ms`
     });
 

@@ -6,25 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let isGridActive = false;
     let squareIdCounter = 0;
 
-    // Workspace pan offset
-    let workspaceOffsetX = 0;
-    let workspaceOffsetY = 0;
-
-    // Load saved workspace offset
-    loadWorkspaceOffset();
-
-    // Squares data stored here to update positions relative to workspaceOffset
-    // We'll keep squares' logical positions relative to workspace coords (without offset)
     let squaresData = [];
 
-    // Load saved squares on page load
     loadSquares();
 
     squareToolButton.addEventListener('click', function () {
         createRectangle();
     });
 
-    // --- Modify createRectangle to accept logical positions (relative to workspace) ---
     function createRectangle(props = {}) {
         const square = document.createElement('div');
         square.classList.add('centeredSquare');
@@ -33,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const initial = {
             width: props.width || 200,
             height: props.height || 200,
-            left: props.left !== undefined ? props.left : window.innerWidth / 2 - 100 - workspaceOffsetX,
-            top: props.top !== undefined ? props.top : window.innerHeight / 2 - 100 - workspaceOffsetY,
+            left: props.left !== undefined ? props.left : window.innerWidth / 2 - 100,
+            top: props.top !== undefined ? props.top : window.innerHeight / 2 - 100,
             borderRadius: props.borderRadius || 0,
         };
 
@@ -42,16 +31,12 @@ document.addEventListener('DOMContentLoaded', function () {
             position: 'absolute',
             width: `${initial.width}px`,
             height: `${initial.height}px`,
-            // Here we apply workspace offset to get screen position:
-            left: `${initial.left + workspaceOffsetX}px`,
-            top: `${initial.top + workspaceOffsetY}px`,
+            left: `${initial.left}px`,
+            top: `${initial.top}px`,
             border: '2px solid black',
             backgroundColor: 'transparent',
             borderRadius: `${initial.borderRadius}px`,
         });
-
-        // Add resize circles and drag handle like before
-        // Update their event handlers to work with workspace offset
 
         const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
         corners.forEach(corner => {
@@ -81,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const startY = e.clientY;
                 const startWidth = parseInt(square.style.width);
                 const startHeight = parseInt(square.style.height);
-                const startLeft = parseInt(square.style.left) - workspaceOffsetX; // logical pos
-                const startTop = parseInt(square.style.top) - workspaceOffsetY;
+                const startLeft = parseInt(square.style.left);
+                const startTop = parseInt(square.style.top);
 
                 function resize(e) {
                     const dx = e.clientX - startX;
@@ -96,17 +81,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (corner === 'top-left') {
                             square.style.width = `${snapToGrid(startWidth - dx)}px`;
                             square.style.height = `${snapToGrid(startHeight - dy)}px`;
-                            // Update logical position (screen pos - workspace offset)
-                            square.style.left = `${snapToGrid(startLeft + dx) + workspaceOffsetX}px`;
-                            square.style.top = `${snapToGrid(startTop + dy) + workspaceOffsetY}px`;
+                            square.style.left = `${snapToGrid(startLeft + dx)}px`;
+                            square.style.top = `${snapToGrid(startTop + dy)}px`;
                         } else if (corner === 'top-right') {
                             square.style.width = `${snapToGrid(startWidth + dx)}px`;
                             square.style.height = `${snapToGrid(startHeight - dy)}px`;
-                            square.style.top = `${snapToGrid(startTop + dy) + workspaceOffsetY}px`;
+                            square.style.top = `${snapToGrid(startTop + dy)}px`;
                         } else if (corner === 'bottom-left') {
                             square.style.width = `${snapToGrid(startWidth - dx)}px`;
                             square.style.height = `${snapToGrid(startHeight + dy)}px`;
-                            square.style.left = `${snapToGrid(startLeft + dx) + workspaceOffsetX}px`;
+                            square.style.left = `${snapToGrid(startLeft + dx)}px`;
                         } else if (corner === 'bottom-right') {
                             square.style.width = `${snapToGrid(startWidth + dx)}px`;
                             square.style.height = `${snapToGrid(startHeight + dy)}px`;
@@ -146,16 +130,16 @@ document.addEventListener('DOMContentLoaded', function () {
             e.stopPropagation();
             const startX = e.clientX;
             const startY = e.clientY;
-            const startLeft = parseInt(square.style.left) - workspaceOffsetX; // logical pos
-            const startTop = parseInt(square.style.top) - workspaceOffsetY;
+            const startLeft = parseInt(square.style.left);
+            const startTop = parseInt(square.style.top);
 
             function drag(e) {
                 const dx = e.clientX - startX;
                 const dy = e.clientY - startY;
                 const newLeft = snapToGrid(startLeft + dx);
                 const newTop = snapToGrid(startTop + dy);
-                square.style.left = `${newLeft + workspaceOffsetX}px`;
-                square.style.top = `${newTop + workspaceOffsetY}px`;
+                square.style.left = `${newLeft}px`;
+                square.style.top = `${newTop}px`;
                 saveSquare(square);
             }
 
@@ -187,11 +171,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.body.appendChild(square);
 
-        // Save the logical position (left - workspaceOffsetX) etc in squaresData and localStorage
         saveSquare(square);
     }
 
-    // Snap to grid function same as before
     function snapToGrid(value) {
         return isGridActive ? Math.round(value / gridSize) * gridSize : value;
     }
@@ -212,26 +194,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function toggleGrid() {
-        isGridActive = !isGridActive;
-    }
-
-    // Save a square's logical position (subtract workspace offset)
     function saveSquare(square) {
         const id = square.dataset.id;
-        const leftLogical = parseInt(square.style.left) - workspaceOffsetX;
-        const topLogical = parseInt(square.style.top) - workspaceOffsetY;
+        const left = parseInt(square.style.left);
+        const top = parseInt(square.style.top);
 
         const squareData = {
             id,
-            left: leftLogical,
-            top: topLogical,
+            left,
+            top,
             width: parseInt(square.style.width),
             height: parseInt(square.style.height),
             borderRadius: parseInt(square.style.borderRadius) || 0,
         };
 
-        // Update squaresData array
         const existingIndex = squaresData.findIndex(s => s.id === id);
         if (existingIndex !== -1) {
             squaresData[existingIndex] = squareData;
@@ -252,66 +228,63 @@ document.addEventListener('DOMContentLoaded', function () {
         squaresData.forEach(s => createRectangle(s));
     }
 
-    // --- Workspace dragging implementation ---
-    let isWorkspaceDragging = false;
-    let workspaceDragStartX = 0;
-    let workspaceDragStartY = 0;
+    // --- Right-click drag to pan all squares ---
+    let isPanning = false;
+    let panStartX = 0;
+    let panStartY = 0;
 
     document.body.addEventListener('mousedown', function (e) {
+        // Don't start pan if clicked on square or controls
         if (e.target.closest('.centeredSquare') || e.target.closest('.resize-circle') || e.target.closest('.drag-handle')) {
-            // If clicking on square or controls, don't start dragging workspace
             return;
         }
-
-        // Only start dragging workspace on right mouse button (buttons=2)
-        if (e.buttons === 2) {
-            isWorkspaceDragging = true;
-            workspaceDragStartX = e.clientX;
-            workspaceDragStartY = e.clientY;
+        if (e.button === 2) {  // Right mouse button only
+            isPanning = true;
+            panStartX = e.clientX;
+            panStartY = e.clientY;
             e.preventDefault();
         }
     });
 
     document.body.addEventListener('mousemove', function (e) {
-        if (!isWorkspaceDragging) return;
+        if (!isPanning) return;
 
-        const dx = e.clientX - workspaceDragStartX;
-        const dy = e.clientY - workspaceDragStartY;
+        const dx = e.clientX - panStartX;
+        const dy = e.clientY - panStartY;
 
-        workspaceOffsetX += dx;
-        workspaceOffsetY += dy;
+        panStartX = e.clientX;
+        panStartY = e.clientY;
 
-        workspaceDragStartX = e.clientX;
-        workspaceDragStartY = e.clientY;
-
+        // Move all squares by dx, dy
         document.querySelectorAll('.centeredSquare').forEach(square => {
-            const id = square.dataset.id;
-            const data = squaresData.find(s => s.id === id);
-            if (!data) return;
+            const left = parseInt(square.style.left);
+            const top = parseInt(square.style.top);
+            const newLeft = snapToGrid(left + dx);
+            const newTop = snapToGrid(top + dy);
+            square.style.left = `${newLeft}px`;
+            square.style.top = `${newTop}px`;
 
-            square.style.left = `${data.left + workspaceOffsetX}px`;
-            square.style.top = `${data.top + workspaceOffsetY}px`;
+            // Update data in squaresData
+            const id = square.dataset.id;
+            const idx = squaresData.findIndex(s => s.id === id);
+            if (idx !== -1) {
+                squaresData[idx].left = newLeft;
+                squaresData[idx].top = newTop;
+            }
         });
+
+        // Save updated positions
+        localStorage.setItem('squares', JSON.stringify(squaresData));
     });
 
     document.body.addEventListener('mouseup', function (e) {
-        if (isWorkspaceDragging) {
-            isWorkspaceDragging = false;
-            saveWorkspaceOffset();
+        if (isPanning && e.button === 2) {
+            isPanning = false;
         }
     });
 
-    // Save/load workspace offset in localStorage
-    function saveWorkspaceOffset() {
-        localStorage.setItem('workspaceOffset', JSON.stringify({ x: workspaceOffsetX, y: workspaceOffsetY }));
-    }
-
-    function loadWorkspaceOffset() {
-        const saved = localStorage.getItem('workspaceOffset');
-        if (saved) {
-            const pos = JSON.parse(saved);
-            workspaceOffsetX = pos.x || 0;
-            workspaceOffsetY = pos.y || 0;
-        }
-    }
+    // Disable context menu on right click to prevent interference
+    document.body.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
 });
