@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Coming Soon</title>
   
   <!-- Favicon -->
@@ -102,7 +103,7 @@
     .badge.olivia {
       background-color: #ff7ca8; /* stronger pink */
       top: -40px;
-      right: -45%; /* moved further right */
+      right: -55%; /* moved further right */
       animation: float2 5.5s ease-in-out infinite;
     }
     .badge.olivia::before {
@@ -123,8 +124,8 @@
     /* 李新 */
     .badge.lixīn {
       background-color: #ffb14c; /* stronger orange */
-      bottom: -50px;
-      right: -30%; /* moved further right */
+      bottom: -60px;
+      right: -40%; /* moved further right */
       animation: float4 5s ease-in-out infinite;
     }
     .badge.lixīn::before {
@@ -272,7 +273,7 @@
 <body>
   <!-- Center content with floating badges -->
   <div class="center-text">
-    <h1>coming soon</h1>
+    <h1>Coming Soon</h1>
     <p>pathways</p>
 
     <!-- Floating badges -->
@@ -284,80 +285,18 @@
     </div>
   </div>
 
-  <!-- Bottom left -->
-  <div class="bottom-left">
-    <a id="moreLink">I want to know more</a>
-  </div>
+    <!-- Bottom left -->
+    <div class="bottom-left">
+        <span id="moreLink">Pathways - Coming Soon</span>
+    </div>
 
   <!-- Bottom right icons -->
   <div class="bottom-right">
     <a href="https://x.com/pathways_hq" target="_blank"><i class="fab fa-x-twitter"></i></a>
     <a href="https://instagram.com/pathways_hq" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://linkedin.com/in/pathways_hq" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="https://www.linkedin.com/company/pathwayshq" target="_blank"><i class="fab fa-linkedin"></i></a>
     <a href="https://youtube.com/@pathways_hq" target="_blank"><i class="fab fa-youtube"></i></a>
   </div>
 
-  <!-- Main Menu Modal -->
-  <div class="modal" id="infoModal">
-    <span class="close" id="closeModal">&times;</span>
-    <div class="modal-content">
-      <button id="adminBtn">admin sign in</button>
-      <button>about us</button>
-    </div>
-  </div>
-
-  <!-- Admin Password Modal -->
-  <div class="modal" id="adminModal">
-    <span class="close" id="closeAdmin">&times;</span>
-    <div class="modal-content">
-      <input type="password" id="passwordField" class="password-input" placeholder="enter password">
-      <button id="submitPassword">submit</button>
-      <div id="feedback"></div>
-    </div>
-  </div>
-
-  <script>
-    const infoModal = document.getElementById("infoModal");
-    const adminModal = document.getElementById("adminModal");
-
-    const openMore = document.getElementById("moreLink");
-    const closeMore = document.getElementById("closeModal");
-    const adminBtn = document.getElementById("adminBtn");
-
-    const closeAdmin = document.getElementById("closeAdmin");
-    const submitPassword = document.getElementById("submitPassword");
-    const passwordField = document.getElementById("passwordField");
-    const feedback = document.getElementById("feedback");
-
-    // Open info modal
-    openMore.onclick = () => infoModal.style.display = "flex";
-    closeMore.onclick = () => infoModal.style.display = "none";
-
-    // Open admin password modal
-    adminBtn.onclick = () => {
-      infoModal.style.display = "none";
-      adminModal.style.display = "flex";
-    };
-
-    // Close admin modal
-    closeAdmin.onclick = () => adminModal.style.display = "none";
-
-    // Password validation
-    submitPassword.onclick = () => {
-      if (passwordField.value === "pathwaysaccess123!") {
-        feedback.textContent = "access granted ✅";
-        feedback.className = "success";
-      } else {
-        feedback.textContent = "incorrect password ❌";
-        feedback.className = "error";
-      }
-    };
-
-    // Close when clicking outside
-    window.onclick = (e) => {
-      if (e.target === infoModal) infoModal.style.display = "none";
-      if (e.target === adminModal) adminModal.style.display = "none";
-    };
-  </script>
 </body>
 </html>
