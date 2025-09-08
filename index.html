@@ -1,103 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pathways │ Pave Your Way</title>
-  <link rel="stylesheet" href="evo/chat.css">
-  <link rel="stylesheet" href="evo/index_el.css">
-  <link rel="stylesheet" href="website/footer.css">
-  <link rel="icon" href="images/favicon.png" type="image/png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f3;
+      color: #333333;
+      position: relative;
+      text-align: center;
+    }
+
+    .center-text {
+      position: relative; /* badges float relative to this container */
+      display: inline-block;
+    }
+
+    .center-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      margin: 0;
+      font-weight: normal;
+      position: relative;
+      z-index: 2;
+    }
+
+    .center-text p {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      margin-top: 0.5rem;
+      text-transform: lowercase;
+    }
+
+    /* Floating badges */
+    .collab-badges {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .badge {
+      position: absolute;
+      padding: 8px 16px;
+      border-radius: 999px; /* pill shape */
+      color: #fff;
+      font-weight: bold;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      pointer-events: auto;
+      white-space: nowrap;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+
+    /* Top-left triangle arrow for badges */
+    .badge::before {
+    content: "";
+    position: absolute;
+    top: -10px;       /* moved further up */
+    left: -10px;      /* moved further left */
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 12px 12px 0 0; /* larger triangle */
+    pointer-events: none;
+    }
+
+    /* Lucas */
+    .badge.lucas {
+      background-color: #5aa0ff; /* stronger blue */
+      top: -40px;
+      left: 5%;
+      animation: float1 4s ease-in-out infinite;
+    }
+    .badge.lucas::before {
+      border-color: #5aa0ff transparent transparent transparent;
+    }
+
+    /* Olivia */
+    .badge.olivia {
+      background-color: #ff7ca8; /* stronger pink */
+      top: -40px;
+      right: -45%; /* moved further right */
+      animation: float2 5.5s ease-in-out infinite;
+    }
+    .badge.olivia::before {
+      border-color: #ff7ca8 transparent transparent transparent;
+    }
+
+    /* Tamar */
+    .badge.tamar {
+      background-color: #70d47f; /* stronger green */
+      bottom: -50px;
+      left: -20%;
+      animation: float3 6s ease-in-out infinite;
+    }
+    .badge.tamar::before {
+      border-color: #70d47f transparent transparent transparent;
+    }
+
+    /* 李新 */
+    .badge.lixīn {
+      background-color: #ffb14c; /* stronger orange */
+      bottom: -50px;
+      right: -30%; /* moved further right */
+      animation: float4 5s ease-in-out infinite;
+    }
+    .badge.lixīn::before {
+      border-color: #ffb14c transparent transparent transparent;
+    }
+
+    /* Floating animations */
+    @keyframes float1 {
+      0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+      50%  { transform: translate(-50%, -50%) translate(4px, -6px); }
+      100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+    }
+
+    @keyframes float2 {
+      0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+      50%  { transform: translate(-50%, -50%) translate(-5px, 5px); }
+      100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+    }
+
+    @keyframes float3 {
+      0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+      50%  { transform: translate(-50%, -50%) translate(6px, 3px); }
+      100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+    }
+
+    @keyframes float4 {
+      0%   { transform: translate(-50%, -50%) translate(0px, 0px); }
+      50%  { transform: translate(-50%, -50%) translate(-3px, -5px); }
+      100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+    }
+
+    .bottom-left {
+      position: absolute;
+      bottom: 60px;
+      left: 60px;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+    }
+
+    .bottom-left a {
+      color: #333333;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .bottom-left a:hover {
+      text-decoration: underline;
+    }
+
+    .bottom-right {
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      display: flex;
+      gap: 20px;
+      font-size: clamp(1.2rem, 4vw, 1.6rem);
+    }
+
+    .bottom-right a {
+      color: #333333;
+      text-decoration: none;
+    }
+
+    .bottom-right a:hover {
+      color: #555555;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 2.5rem 3rem;
+      border-radius: 16px;
+      text-align: center;
+      min-width: 260px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-content button {
+      padding: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #333333;
+      color: #fff;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      width: 100%;
+      text-transform: lowercase;
+    }
+
+    .modal-content button:hover {
+      background: #555555;
+      transform: translateY(-2px);
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Password modal */
+    .password-input {
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+    }
+
+    .success {
+      color: green;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
+  <!-- Center content with floating badges -->
+  <div class="center-text">
+    <h1>coming soon</h1>
+    <p>pathways</p>
 
-<header class="site-header">
-  <a href="index.html"><img src="images/Pathwaystl.png" alt="Logo" class="logo"/></a>
-  <nav>
-    <div class="nav-container">
-      <ul class="nav-links">
-        <li class="dropdown">
-          <a href="#">Pathways <i class="fa-solid fa-angle-down"></i></a>
-          <div class="dropdown-content wide-dropdown">
-            <ul>
-              <li><a href="#">Career Roadmaps</a></li>
-              <li><a href="#">Skill Development</a></li>
-              <li><a href="#">Certifications</a></li>
-            </ul>
-          </div>
-        </li>
-        <li><a href="price.html">Pricing</a></li>
-        <li><a href="hub.html">Hub</a></li>
-        <li class="dropdown">
-          <a href="about.html">About <i class="fa-solid fa-angle-down"></i></a>
-          <div class="dropdown-content wide-dropdown">
-            <ul>
-              <li><a href="#">Our Story</a></li>
-              <li><a href="#">Mission</a></li>
-              <li><a href="#">Team</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="#">Business <i class="fa-solid fa-angle-down"></i></a>
-          <div class="dropdown-content wide-dropdown">
-            <ul>
-              <li><a href="#">Partnerships</a></li>
-              <li><a href="#">Enterprise Tools</a></li>
-              <li><a href="#">Use Cases</a></li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  <a href="login.html" class="btn sign-in">Sign In</a>
-</header> 
-
-<div class="main-wrapper-with-image">
-  <img src="https://imgs.search.brave.com/3_AExDOoPVhvvqQviqXPMQVmW1L_YPTTpoRKONTj-Mw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjQv/MjM4Lzg2MC9zbWFs/bC9ibG9icy1tZXNo/LWdyYWRpZW50LXRy/YW5zcGFyZW50LXRo/YXQtZmFkZWQtcG5n/LnBuZw" alt="Light Leak" class="behind-image" />
-
-  <main class="center-content">
-    <h1 class="main-title">Pave your way</h1>
-    <p class="subtitle">What will you create today?</p>
-
-    <div class="input-wrapper">
-      <input type="text" placeholder="Type your idea..." class="idea-input">
-      <button class="send-icon" onclick="goToCreatePage()">
-        <i class="fa-solid fa-rocket"></i>
-      </button>
-      <div class="input-actions">
-        <button class="icon-only"><i class="fa-solid fa-plus"></i></button>
-        <button class="icon-only"><i class="fa-solid fa-gear"></i></button>
-      </div>
-    </div>
-
-    <div class="sign-in-prompt">
-      Got a Pathways account? <a href="login.html">sign in here</a>
-    </div>
-  </main>
-</div>
-
-<div class="motivational-container">
-  <div class="motivational-columns">
-    <div class="motivational-text">
-      <h2>Work smarter,<br>not harder</h2>
-    </div>
-    <div class="pathways-message">
-      <p>
-        Take control of your time with <strong>Pathways</strong> — the flexible workspace for projects, plans, and all your big ideas. Organize effortlessly, collaborate seamlessly, and keep your goals in clear view so you can focus on what really matters: getting things done your way.
-      </p>
-      <div class="button-wrapper">
-        <a href="create.html" class="create-workspace-btn">Create a workspace today</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="collaborate-section">
-  <div class="collab-wrapper">
-    <h2>Collaborate with your team</h2>
+    <!-- Floating badges -->
     <div class="collab-badges">
       <div class="badge lucas">Lucas</div>
       <div class="badge olivia">Olivia</div>
@@ -105,117 +283,81 @@
       <div class="badge lixīn">李新</div>
     </div>
   </div>
-</div>
 
-<div class="invite-text">
-  Invite your team to collaborate with ease. Work together seamlessly in the same <em>workspace</em>. Everything you need is just one click away. Share ideas, track progress, and celebrate success as a team. Boost your productivity and keep everyone connected.
-</div>
+  <!-- Bottom left -->
+  <div class="bottom-left">
+    <a id="moreLink">I want to know more</a>
+  </div>
 
-<footer>
-  <div class="footer-container">
-    <div class="footer-left">
-      <img src="images/favicon.png" alt="Favicon" class="footer-logo">
-      <div class="social-links">
-        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="social-icon"><i class="far fa-envelope"></i></a>
-        <a href="#" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
-        <a href="#" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
-      </div>
-      <p class="disclaimer">Pathways will never sell your information <a href="about.html">terms and conditions</a>.</p>
-    </div>
-    <div class="footer-right">
-      <div class="footer-section">
-        <strong>Company</strong>
-        <ul>
-          <li><a href="about.html">About</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Press</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <strong>Download</strong>
-        <ul>
-          <li><a href="#">iOS</a></li>
-          <li><a href="#">Android</a></li>
-          <li><a href="#">Desktop</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <strong>Pricing</strong>
-        <ul>
-          <li><a href="#">Plans</a></li>
-          <li><a href="#">Enterprise</a></li>
-          <li><a href="#">Education</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <strong>Help</strong>
-        <ul>
-          <li><a href="#">Support</a></li>
-          <li><a href="#">Documentation</a></li>
-          <li><a href="#">Community</a></li>
-          <li><a href="#">Status</a></li>
-          <li><a href="#">Privacy</a></li>
-        </ul>
-      </div>
+  <!-- Bottom right icons -->
+  <div class="bottom-right">
+    <a href="https://x.com/pathways_hq" target="_blank"><i class="fab fa-x-twitter"></i></a>
+    <a href="https://instagram.com/pathways_hq" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://linkedin.com/in/pathways_hq" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="https://youtube.com/@pathways_hq" target="_blank"><i class="fab fa-youtube"></i></a>
+  </div>
+
+  <!-- Main Menu Modal -->
+  <div class="modal" id="infoModal">
+    <span class="close" id="closeModal">&times;</span>
+    <div class="modal-content">
+      <button id="adminBtn">admin sign in</button>
+      <button>about us</button>
     </div>
   </div>
-</footer>
 
-<script>
-  const input = document.querySelector('.idea-input');
-  const phrases = [
-    "Side hustle plan",
-    "Roadmap for personal goals",
-    "Snack schedule",
-    "Big idea mind map",
-    "Daily progress tracker",
-    "Weekend plans brainstorm",
-    "Doable goal list",
-    "Simple to-do list",
-    "Vacation itinerary",
-    "Organizing chaos notes"
-  ];
+  <!-- Admin Password Modal -->
+  <div class="modal" id="adminModal">
+    <span class="close" id="closeAdmin">&times;</span>
+    <div class="modal-content">
+      <input type="password" id="passwordField" class="password-input" placeholder="enter password">
+      <button id="submitPassword">submit</button>
+      <div id="feedback"></div>
+    </div>
+  </div>
 
-  let currentPhraseIndex = 0;
-  let currentCharIndex = 0;
-  let deleting = false;
-  let delayBetweenPhrases = 1500;
+  <script>
+    const infoModal = document.getElementById("infoModal");
+    const adminModal = document.getElementById("adminModal");
 
-  function typePlaceholder() {
-    const currentPhrase = phrases[currentPhraseIndex];
-    
-    if (!deleting) {
-      input.placeholder = currentPhrase.slice(0, currentCharIndex + 1);
-      currentCharIndex++;
-      if (currentCharIndex === currentPhrase.length) {
-        deleting = true;
-        setTimeout(typePlaceholder, delayBetweenPhrases);
-        return;
+    const openMore = document.getElementById("moreLink");
+    const closeMore = document.getElementById("closeModal");
+    const adminBtn = document.getElementById("adminBtn");
+
+    const closeAdmin = document.getElementById("closeAdmin");
+    const submitPassword = document.getElementById("submitPassword");
+    const passwordField = document.getElementById("passwordField");
+    const feedback = document.getElementById("feedback");
+
+    // Open info modal
+    openMore.onclick = () => infoModal.style.display = "flex";
+    closeMore.onclick = () => infoModal.style.display = "none";
+
+    // Open admin password modal
+    adminBtn.onclick = () => {
+      infoModal.style.display = "none";
+      adminModal.style.display = "flex";
+    };
+
+    // Close admin modal
+    closeAdmin.onclick = () => adminModal.style.display = "none";
+
+    // Password validation
+    submitPassword.onclick = () => {
+      if (passwordField.value === "pathwaysaccess123!") {
+        feedback.textContent = "access granted ✅";
+        feedback.className = "success";
+      } else {
+        feedback.textContent = "incorrect password ❌";
+        feedback.className = "error";
       }
-    } else {
-      input.placeholder = currentPhrase.slice(0, currentCharIndex - 1);
-      currentCharIndex--;
-      if (currentCharIndex === 0) {
-        deleting = false;
-        currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
-      }
-    }
-    
-    setTimeout(typePlaceholder, deleting ? 50 : 150);
-  }
+    };
 
-  typePlaceholder();
-
-  function goToCreatePage() {
-    const value = encodeURIComponent(input.value.trim());
-    const url = value ? `create.html?name=${value}` : `create.html`;
-    window.location.href = url;
-  }
-</script>
-
+    // Close when clicking outside
+    window.onclick = (e) => {
+      if (e.target === infoModal) infoModal.style.display = "none";
+      if (e.target === adminModal) adminModal.style.display = "none";
+    };
+  </script>
 </body>
 </html>
