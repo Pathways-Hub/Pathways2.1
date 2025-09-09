@@ -11,12 +11,6 @@ body {
     cursor: grab;
     transition: background-image 0.3s;
 
-    background-image:
-        linear-gradient(to right, #ddd 1px, transparent 1px),
-        linear-gradient(to bottom, #ddd 1px, transparent 1px),
-        linear-gradient(to right, #aaa 2px, transparent 2px),
-        linear-gradient(to bottom, #aaa 2px, transparent 2px);
-
     background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
     background-position: 0 0;
 }
@@ -132,14 +126,6 @@ header h1 {
     font-family: Arial, sans-serif; /* Font family */
     outline: none; /* Remove focus outline */
     padding: 0; /* No padding */
-}
-
-/* Grid and hide header button styling */
-.grid-toggle-button, .hide-header-button {
-    background: transparent; /* Transparent background */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 18px; /* Font size */
 }
 
 /* Input area and text preview styling */
