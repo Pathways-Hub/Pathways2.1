@@ -1,37 +1,95 @@
-.center-square {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160px;
-  height: 160px;
-  background-color: #ccc;
-  border-radius: 20px;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  text-decoration: none;
+/* Hide dashboard content by default */
+.dashboard-container {
+  display: none;
+  margin-left: 2vw; /* slightly off to the left */
+  margin-top: 2vw;
+}
+
+/* Show dashboard when active */
+.main-content.dashboard-active .dashboard-container {
+  display: block;
+}
+
+/* Hide hub when dashboard is active */
+.hub-container {
+  display: block;
+}
+.main-content.dashboard-active .hub-container {
+  display: none;
+}
+
+/* Dashboard title */
+.dashboard-title {
+  font-size: 2vw;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Dashboard descriptive text */
+.dashboard-subtext {
+  font-size: 0.9vw;
+  color: #666;
+  max-width: 50%;
+  line-height: 1.4;
+  margin-top: 1vw;
+}
+
+/* Dashboard link */
+.dashboard-link {
+  display: inline-block;
+  margin-top: 0.5vw;
+  font-size: 0.9vw;
+  color: #007BFF;
+  text-decoration: underline;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.2s ease;
 }
 
-.center-square:hover {
-  background-color: #bbb;
+/* Dashboard container */
+.dashboard-container {
+  display: none;
+  margin-top: 2vw;
+  margin-left: 2vw;
+  text-align: left;
 }
 
-.center-square .circle {
-  width: 60px;
-  height: 60px;
-  background-color: #777;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Show when dashboard is active */
+.main-content.dashboard-active .dashboard-container {
+  display: block;
 }
 
-.center-square .circle i {
-  color: white;
-  font-size: 24px;
+/* Dashboard title */
+.dashboard-title {
+  font-size: 2vw;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1vw;
+}
+
+/* Outlined curved box */
+.dashboard-box {
+  border: 2px solid #ccc;
+  border-radius: 1.5vw;
+  padding: 2vw;
+  width: 95%;       /* almost full width */
+  max-width: 1200px; /* keeps it from being too huge on big screens */
+  background: none;  /* no background */
+  text-align: left;  /* align content left */
+  margin-left: 0;    /* flush with dashboard title */
+}
+
+/* Dashboard descriptive text */
+.dashboard-subtext {
+  font-size: 0.9vw;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 1vw;
+}
+
+/* Dashboard link */
+.dashboard-link {
+  display: inline-block;
+  font-size: 0.9vw;
+  color: #007BFF;
+  text-decoration: underline;
+  cursor: pointer;
 }
